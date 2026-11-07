@@ -1,0 +1,12 @@
+{
+    "name": "php-concept/apps",
+    "description": "Concept 2 — runnable app assemblies (monorepo)",
+    "type": "project",
+    "license": "MIT",
+    "require": {
+        "php": "^8.4"
+    },
+    "config": {
+        "sort-packages": true
+    }
+}

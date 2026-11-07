@@ -1,0 +1,10 @@
+/.idea
+/vendor/
+/.env
+/composer-dev.json
+/composer-dev.lock
+/docker-compose.yml
+/apps/*/.env
+/apps/*/vendor/
+/apps/*/storage/
+/apps/*/public/vendor/
