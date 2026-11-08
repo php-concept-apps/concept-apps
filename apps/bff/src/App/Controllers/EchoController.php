@@ -2,19 +2,19 @@
 
 namespace Concept\App\Controllers;
 
+use Concept\App\Http\Contracts\ApiResponseFactoryInterface;
 use Concept\App\Http\Requests\EchoRequest;
-use Concept\Extensions\Http\Contracts\ResponseFactoryInterface;
 use Psr\Http\Message\ResponseInterface;
 
 final class EchoController
 {
     public function __construct(
-        private readonly ResponseFactoryInterface $response,
+        private readonly ApiResponseFactoryInterface $apiResponseFactory,
     ) {}
 
-    public function __invoke(EchoRequest $request): ResponseInterface
+    public function echo(EchoRequest $request): ResponseInterface
     {
-        return $this->response->jsonSuccess([
+        return $this->apiResponseFactory->success([
             'received' => $request->validated(),
         ]);
     }

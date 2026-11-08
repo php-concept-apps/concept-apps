@@ -10,8 +10,8 @@ use League\Route\Router;
 
 /** @var Router $router */
 $router->group('/api', function(RouteGroup $router): void {
-    $router->get('/health', HealthController::class)->setName('api.health');
-    $router->post('/echo', EchoController::class)->setName('api.echo');
+    $router->get('/health', [HealthController::class, 'check'])->setName('api.health');
+    $router->post('/echo', [EchoController::class, 'echo'])->setName('api.echo');
 })->lazyMiddlewares([
     ParseJsonBodyMiddleware::class,
     ForceJsonResponseMiddleware::class,

@@ -4,9 +4,14 @@ namespace Concept\App\Bootstrap;
 
 use Concept\App\Foundation\ConfigKey;
 use Concept\App\Foundation\PathName;
+use Concept\App\Http\Contracts\ApiResponseFactoryInterface;
+use Concept\App\Http\Error\ApiHttpErrorRenderer;
+use Concept\App\Http\Response\ApiResponseFactory;
 use Concept\Core\Container\ContainerDependency;
 use Concept\Extensions\Config\Contracts\ConfigInterface;
 use Concept\Extensions\DataMasker\Contracts\DataMaskerRuleInterface;
+use Concept\Extensions\ErrorHandlerWhoops\Contracts\HttpErrorRendererInterface;
+use Concept\Extensions\Http\Contracts\ResponseFactoryInterface;
 use Concept\Extensions\PathManager\PathManager;
 use Concept\Extensions\ValidationRakit\Contracts\RuleInterface;
 use Concept\Stack\Bricks\Casting\CastingBrick;
@@ -17,6 +22,7 @@ use Concept\Stack\Bricks\Masking\MaskingBrick;
 use Concept\Stack\Bricks\Validation\ValidationBrick;
 use Concept\Stack\ConceptStack;
 use League\Container\Container;
+use League\Container\DefinitionContainerInterface;
 
 /**
  * BFF stack: HTTP + validation + masking. No DB / session / view.
@@ -67,10 +73,21 @@ final class ApplicationStackBootstrap
         $stack->add(new ErrorHandlingBrick())->builder()
             ->setDebug($debug)
             ->setLogReporting()
-            ->withJsonRenderer();
+            ->setRenderer(static function(DefinitionContainerInterface $container): HttpErrorRendererInterface {
+                return new ApiHttpErrorRenderer(
+                    ContainerDependency::get($container, ApiResponseFactoryInterface::class),
+                );
+            });
 
         foreach ($stack->providers() as $provider) {
             $container->addServiceProvider($provider);
         }
+
+        $container->add(
+            ApiResponseFactoryInterface::class,
+            static fn(): ApiResponseFactory => new ApiResponseFactory(
+                ContainerDependency::get($container, ResponseFactoryInterface::class),
+            ),
+        )->setShared(true);
     }
 }

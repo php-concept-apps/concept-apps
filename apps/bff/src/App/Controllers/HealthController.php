@@ -2,17 +2,17 @@
 
 namespace Concept\App\Controllers;
 
-use Concept\Extensions\Http\Contracts\ResponseFactoryInterface;
+use Concept\App\Http\Contracts\ApiResponseFactoryInterface;
 use Psr\Http\Message\ResponseInterface;
 
 final class HealthController
 {
     public function __construct(
-        private readonly ResponseFactoryInterface $response,
+        private readonly ApiResponseFactoryInterface $apiResponseFactory,
     ) {}
 
-    public function __invoke(): ResponseInterface
+    public function check(): ResponseInterface
     {
-        return $this->response->jsonSuccess(['status' => 'ok']);
+        return $this->apiResponseFactory->success(['status' => 'ok']);
     }
 }
