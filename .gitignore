@@ -6,5 +6,7 @@
 /docker-compose.yml
 /apps/*/.env
 /apps/*/vendor/
+/apps/*/composer-dev.json
+/apps/*/composer-dev.lock
 /apps/*/storage/
 /apps/*/public/vendor/

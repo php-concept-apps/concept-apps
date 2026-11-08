@@ -1,0 +1,28 @@
+{
+    "name": "php-concept/app-bff",
+    "description": "Concept 2 — BFF assembly (HTTP API + validation + masking, no DB/session/view)",
+    "type": "project",
+    "license": "MIT",
+    "require": {
+        "php": "^8.4",
+        "php-concept/core-2": "^1.0",
+        "php-concept/stack": "^2.0",
+        "php-concept/extension-config": "^1.0",
+        "php-concept/extension-path-manager": "^1.0",
+        "php-concept/extension-json": "^1.0",
+        "php-concept/brick-casting-valinor": "^1.0",
+        "php-concept/brick-data-masker": "^1.0",
+        "php-concept/brick-error-handler-whoops": "^1.0",
+        "php-concept/brick-http": "^1.0",
+        "php-concept/brick-logger-monolog": "^1.0",
+        "php-concept/brick-validation-rakit": "^1.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "Concept\\": "src/"
+        }
+    },
+    "config": {
+        "sort-packages": true
+    }
+}

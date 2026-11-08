@@ -50,4 +50,10 @@ Two Compose examples (same as recipes):
 | `docker-compose.yml.example` | Local run via Packagist (`composer.json`) |
 | `docker-compose.dev.yml.example` | Local run + sibling symlinks (`composer-dev.json`) |
 
-Copy either to `docker-compose.yml` (gitignored). Services now: `php` + `db` (host port **3306**). HTTP app services appear when assemblies are added.
+Copy either to `docker-compose.yml` (gitignored).
+
+| Service | Role |
+|---------|------|
+| `php` | shell / Composer at monorepo root |
+| `bff` | HTTP → `apps/bff` on host port **8080** |
+| `db` | MySQL on host port **3306** |

@@ -13,6 +13,24 @@ services:
     depends_on:
       - db
 
+  bff:
+    build: .
+    container_name: concept_apps_bff
+    restart: unless-stopped
+    user: "${UID:-1000}:${GID:-1000}"
+    working_dir: /var/www/html/apps/bff
+    ports:
+      - "8080:80"
+    volumes:
+      - .:/var/www/html
+      - ./docker/apache/vhost-bff.conf:/etc/apache2/sites-available/000-default.conf
+      - ./docker/php/error-reporting.ini:/usr/local/etc/php/conf.d/error-reporting.ini
+    environment:
+      APP_ENV: dev
+      APP_DEBUG: "true"
+    depends_on:
+      - db
+
   db:
     image: mysql:8.4
     command: --mysql-native-password=ON

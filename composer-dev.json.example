@@ -1,6 +1,6 @@
 {
     "name": "php-concept/apps",
-    "description": "Concept 2 — runnable app assemblies (monorepo)",
+    "description": "Concept 2 \u2014 runnable app assemblies (monorepo)",
     "type": "project",
     "license": "MIT",
     "repositories": [
@@ -72,7 +72,8 @@
                     "php-concept/brick-session-symfony": "1.0.0",
                     "php-concept/brick-telemetry": "1.0.0",
                     "php-concept/brick-validation-rakit": "1.0.0",
-                    "php-concept/brick-view": "1.0.0"
+                    "php-concept/brick-view": "1.0.0",
+                    "php-concept/brick-view-twig": "1.0.0"
                 }
             }
         }
