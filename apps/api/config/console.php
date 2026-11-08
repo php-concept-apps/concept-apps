@@ -1,5 +1,6 @@
 <?php declare(strict_types=1);
 
+use Concept\App\Console\Commands\CreateUserCommand;
 use Concept\App\Console\Commands\FillCatalogCommand;
 use Concept\Extensions\DatabaseEloquent\Console\Commands\DbMigrateCommand;
 use Concept\Extensions\DatabaseEloquent\Console\Commands\DbMigrationListCommand;
@@ -16,6 +17,7 @@ return [
             DbRollbackCommand::class,
             RouteListCommand::class,
             FillCatalogCommand::class,
+            CreateUserCommand::class,
         ],
     ],
 ];

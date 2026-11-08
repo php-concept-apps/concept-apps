@@ -8,6 +8,7 @@ use Concept\App\Foundation\PathName;
 use Concept\App\Http\Contracts\ApiResponseFactoryInterface;
 use Concept\App\Http\Error\ApiHttpErrorRenderer;
 use Concept\App\Http\Response\ApiResponseFactory;
+use Concept\App\Http\Routing\UserArgumentResolver;
 use Concept\Core\Container\ContainerDependency;
 use Concept\Extensions\Config\Contracts\ConfigInterface;
 use Concept\Extensions\DataMasker\Contracts\DataMaskerRuleInterface;
@@ -86,7 +87,10 @@ final class ApplicationStackBootstrap
         $stack->add(new HttpBrick())->builder()
             ->setRoutes($pathManager->rootList($routeFiles))
             ->withFormRequests()
-            ->withTypedRouteParameters();
+            ->withTypedRouteParameters()
+            ->appendResolvers([
+                new UserArgumentResolver(),
+            ]);
 
         $stack->add(new ConsoleBrick())->builder()
             ->setName($config->getString(ConfigKey::APP_NAME, 'Concept API'))
