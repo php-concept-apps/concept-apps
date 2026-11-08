@@ -16,6 +16,20 @@ final class JsonEnvelope
     public const string CODE = 'code';
     public const string DETAILS = 'details';
 
+    public const string ITEMS = 'items';
+    public const string META = 'meta';
+    public const string LINKS = 'links';
+    public const string META_CURRENT_PAGE = 'current_page';
+    public const string META_PER_PAGE = 'per_page';
+    public const string META_TOTAL = 'total';
+    public const string META_LAST_PAGE = 'last_page';
+    public const string META_FROM = 'from';
+    public const string META_TO = 'to';
+    public const string LINK_FIRST = 'first';
+    public const string LINK_LAST = 'last';
+    public const string LINK_PREV = 'prev';
+    public const string LINK_NEXT = 'next';
+
     /**
      * @return array{ok: true, payload: mixed}
      */

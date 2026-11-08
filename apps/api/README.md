@@ -11,6 +11,7 @@ Catalog schema for load tests: `categories` (tree) → `products` (+ JSON attrs)
 |--------|------|--------|
 | `GET` | `/api/health` | liveness |
 | `GET` | `/api/db` | DB probe + catalog row counts |
+| `GET` | `/api/products` | paginated catalog (`page`, `per_page`, `status`, `category_id`, `q`) |
 | `POST` | `/api/echo` | FormRequest (`name`, `email`) |
 
 ## Console
@@ -39,6 +40,7 @@ docker compose exec api composer phpstan
 
 curl -s http://localhost:8081/api/health
 curl -s http://localhost:8081/api/db
+curl -s 'http://localhost:8081/api/products?page=1&per_page=5&status=active'
 curl -s -X POST http://localhost:8081/api/echo \
   -H 'Content-Type: application/json' \
   -d '{"name":"Ada","email":"ada@example.com"}'

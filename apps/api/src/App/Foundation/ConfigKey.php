@@ -47,4 +47,7 @@ final class ConfigKey
 
     public const string MIGRATIONS_TABLE = 'migrations.table';
     public const string MIGRATIONS_PATHS = 'migrations.paths';
+
+    public const string PAGINATION_PER_PAGE = 'pagination.per_page';
+    public const string PAGINATION_MAX_PER_PAGE = 'pagination.max_per_page';
 }
