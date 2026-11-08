@@ -10,7 +10,9 @@
         "php-concept/extension-config": "^1.0",
         "php-concept/extension-path-manager": "^1.0",
         "php-concept/extension-json": "^1.0",
+        "fakerphp/faker": "^1.24",
         "php-concept/brick-casting-valinor": "^1.0",
+        "php-concept/brick-console-symfony": "^1.0",
         "php-concept/brick-data-masker": "^1.0",
         "php-concept/brick-database-eloquent": "^1.0",
         "php-concept/brick-error-handler-whoops": "^1.0",
@@ -27,6 +29,7 @@
         }
     },
     "scripts": {
+        "console": "php bin/console.php",
         "phpstan": "vendor/bin/phpstan analyze --memory-limit=512M"
     },
     "config": {

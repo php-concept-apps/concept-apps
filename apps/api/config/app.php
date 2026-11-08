@@ -3,6 +3,7 @@
 return [
     'app' => [
         'name' => 'Concept API',
+        'version' => '0.1.0',
         'timezone' => 'UTC',
         'debug' => false,
     ],

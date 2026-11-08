@@ -16,6 +16,7 @@ use Concept\Extensions\Http\Contracts\ResponseFactoryInterface;
 use Concept\Extensions\PathManager\PathManager;
 use Concept\Extensions\ValidationRakit\Contracts\RuleInterface;
 use Concept\Stack\Bricks\Casting\CastingBrick;
+use Concept\Stack\Bricks\Console\ConsoleBrick;
 use Concept\Stack\Bricks\Database\DatabaseBrick;
 use Concept\Stack\Bricks\ErrorHandling\ErrorHandlingBrick;
 use Concept\Stack\Bricks\Http\HttpBrick;
@@ -25,6 +26,7 @@ use Concept\Stack\Bricks\Validation\ValidationBrick;
 use Concept\Stack\ConceptStack;
 use League\Container\Container;
 use League\Container\DefinitionContainerInterface;
+use Symfony\Component\Console\Command\Command;
 
 /**
  * API stack: HTTP + validation + masking + database. No session / view.
@@ -85,6 +87,11 @@ final class ApplicationStackBootstrap
             ->setRoutes($pathManager->rootList($routeFiles))
             ->withFormRequests()
             ->withTypedRouteParameters();
+
+        $stack->add(new ConsoleBrick())->builder()
+            ->setName($config->getString(ConfigKey::APP_NAME, 'Concept API'))
+            ->setVersion($config->getString(ConfigKey::APP_VERSION, '0.1.0'))
+            ->setCommands($config->getClassList(ConfigKey::COMMANDS, Command::class));
 
         $stack->add(new ErrorHandlingBrick())->builder()
             ->setDebug($debug)

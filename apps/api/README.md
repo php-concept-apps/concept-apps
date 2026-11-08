@@ -1,15 +1,28 @@
 # API
 
-JSON API assembly: HTTP + validation + log masking + Eloquent database.  
+JSON API assembly: HTTP + validation + log masking + Eloquent database + console.  
 No session or views. App-owned JSON envelope (`ApiResponseFactory`).
+
+Catalog schema for load tests: `categories` (tree) → `products` (+ JSON attrs) ↔ `tags` (M2M).
 
 ## Endpoints
 
 | Method | Path | Notes |
 |--------|------|--------|
 | `GET` | `/api/health` | liveness |
-| `GET` | `/api/db` | DB connection probe (`SELECT 1`) |
+| `GET` | `/api/db` | DB probe + catalog row counts |
 | `POST` | `/api/echo` | FormRequest (`name`, `email`) |
+
+## Console
+
+```bash
+docker compose exec api composer console db:migrate
+docker compose exec api composer console db:fill-catalog 1000
+# load test volume:
+docker compose exec api composer console db:fill-catalog 100000 --chunk=1000
+```
+
+`db:fill-catalog` uses Faker and chunked bulk inserts (products + `product_tag`).
 
 ## Run (maintainer)
 

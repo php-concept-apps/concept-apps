@@ -7,9 +7,12 @@ final class ConfigKey
 {
     public const string APP_DEBUG = 'app.debug';
     public const string APP_NAME = 'app.name';
+    public const string APP_VERSION = 'app.version';
     public const string APP_TIMEZONE = 'app.timezone';
 
     public const string ROUTES_LIST = 'routes.list';
+
+    public const string COMMANDS = 'console.commands';
 
     public const string LOG_FILE = 'log.file';
     public const string LOG_NAME = 'log.name';
