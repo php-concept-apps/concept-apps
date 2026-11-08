@@ -17,10 +17,16 @@
         "php-concept/brick-logger-monolog": "^1.0",
         "php-concept/brick-validation-rakit": "^1.0"
     },
+    "require-dev": {
+        "phpstan/phpstan": "^2.1"
+    },
     "autoload": {
         "psr-4": {
             "Concept\\": "src/"
         }
+    },
+    "scripts": {
+        "phpstan": "vendor/bin/phpstan analyze --memory-limit=512M"
     },
     "config": {
         "sort-packages": true

@@ -19,8 +19,9 @@ Symlink DX is intended **inside Docker** (`composer-dev.json` path repos → `/v
 cp docker-compose.dev.yml.example docker-compose.yml
 cp apps/bff/composer-dev.json.example apps/bff/composer-dev.json
 cp apps/bff/.env.example apps/bff/.env
-docker compose up -d --build
+docker compose up -d --build bff   # bff + depends_on db (not api/php)
 docker compose exec bff composer install
+docker compose exec bff composer phpstan
 
 curl -s http://localhost:8080/api/health
 curl -s -X POST http://localhost:8080/api/echo \
