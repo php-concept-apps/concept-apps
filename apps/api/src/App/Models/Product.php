@@ -2,16 +2,13 @@
 
 namespace Concept\App\Models;
 
+use Concept\App\Enums\ProductStatus;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
 final class Product extends Model
 {
-    public const string STATUS_DRAFT = 'draft';
-    public const string STATUS_ACTIVE = 'active';
-    public const string STATUS_ARCHIVED = 'archived';
-
     protected $table = 'products';
 
     /** @var list<string> */
@@ -37,6 +34,7 @@ final class Product extends Model
             'price' => 'decimal:2',
             'attributes' => 'array',
             'published_at' => 'datetime',
+            'status' => ProductStatus::class,
         ];
     }
 

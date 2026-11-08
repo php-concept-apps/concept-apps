@@ -2,7 +2,7 @@
 
 namespace Concept\App\Console\Commands;
 
-use Concept\App\Models\Product;
+use Concept\App\Enums\ProductStatus;
 use Concept\Extensions\DatabaseEloquent\Contracts\DatabaseInterface;
 use Faker\Factory as FakerFactory;
 use Faker\Generator;
@@ -30,13 +30,6 @@ final class FillCatalogCommand extends Command
     private const int DEFAULT_CHUNK = 500;
     private const int DEFAULT_CATEGORIES = 40;
     private const int DEFAULT_TAGS = 80;
-
-    /** @var list<string> */
-    private const array STATUSES = [
-        Product::STATUS_DRAFT,
-        Product::STATUS_ACTIVE,
-        Product::STATUS_ARCHIVED,
-    ];
 
     /** @var list<string> */
     private const array CURRENCIES = ['USD', 'EUR', 'UAH', 'GBP'];
@@ -109,7 +102,8 @@ final class FillCatalogCommand extends Command
             for ($i = 0; $i < $batchSize; $i++) {
                 $n = $inserted + $i + 1;
                 $name = $this->words($faker, 3);
-                $status = self::STATUSES[array_rand(self::STATUSES)];
+                $statuses = ProductStatus::cases();
+                $status = $statuses[array_rand($statuses)];
                 $products[] = [
                     'category_id' => $categoryIds[array_rand($categoryIds)],
                     'sku' => sprintf('%s-%07d', $skuPrefix, $n),
@@ -119,7 +113,7 @@ final class FillCatalogCommand extends Command
                     'price' => $faker->randomFloat(2, 1, 5000),
                     'currency' => self::CURRENCIES[array_rand(self::CURRENCIES)],
                     'stock' => $faker->numberBetween(0, 5000),
-                    'status' => $status,
+                    'status' => $status->value,
                     'weight_grams' => $faker->optional(0.7)->numberBetween(50, 25000),
                     'attributes' => json_encode([
                         'brand' => $faker->company(),
@@ -127,7 +121,7 @@ final class FillCatalogCommand extends Command
                         'warranty_months' => $faker->randomElement([0, 6, 12, 24, 36]),
                         'origin' => $faker->countryCode(),
                     ], JSON_THROW_ON_ERROR),
-                    'published_at' => $status === Product::STATUS_ACTIVE
+                    'published_at' => $status === ProductStatus::Active
                         ? $faker->dateTimeBetween('-2 years')->format('Y-m-d H:i:s')
                         : null,
                     'created_at' => $now,

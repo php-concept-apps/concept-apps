@@ -1,5 +1,6 @@
 <?php declare(strict_types=1);
 
+use Concept\App\Enums\ProductStatus;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Capsule\Manager as CapsuleManager;
@@ -37,7 +38,7 @@ return new class extends Migration
             $table->decimal('price', 12, 2);
             $table->char('currency', 3)->default('USD');
             $table->unsignedInteger('stock')->default(0);
-            $table->string('status', 16)->default('draft');
+            $table->string('status', 16)->default(ProductStatus::Draft->value);
             $table->unsignedInteger('weight_grams')->nullable();
             $table->json('attributes')->nullable();
             $table->timestamp('published_at')->nullable();
