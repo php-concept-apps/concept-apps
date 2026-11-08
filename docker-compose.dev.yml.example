@@ -4,8 +4,11 @@
 #   cp docker-compose.dev.yml.example docker-compose.yml
 #   cp apps/bff/composer-dev.json.example apps/bff/composer-dev.json
 #   cp apps/bff/.env.example apps/bff/.env
+#   cp apps/api/composer-dev.json.example apps/api/composer-dev.json
+#   cp apps/api/.env.example apps/api/.env
 #   docker compose up -d --build
 #   docker compose exec bff composer install
+#   docker compose exec api composer install
 services:
   php:
     build: .
@@ -40,6 +43,29 @@ services:
       - ../concept-extensions:/var/www/concept-extensions
       - ../concept-bricks:/var/www/concept-bricks
       - ./docker/apache/vhost-bff.conf:/etc/apache2/sites-available/000-default.conf
+      - ./docker/php/error-reporting.ini:/usr/local/etc/php/conf.d/error-reporting.ini
+    environment:
+      COMPOSER: composer-dev.json
+      APP_ENV: dev
+      APP_DEBUG: "true"
+    depends_on:
+      - db
+
+  api:
+    build: .
+    container_name: concept_apps_api
+    restart: unless-stopped
+    user: "${UID:-1000}:${GID:-1000}"
+    working_dir: /var/www/html/apps/api
+    ports:
+      - "8081:80"
+    volumes:
+      - .:/var/www/html
+      - ../concept-core-2:/var/www/concept-core-2
+      - ../concept-stack:/var/www/concept-stack
+      - ../concept-extensions:/var/www/concept-extensions
+      - ../concept-bricks:/var/www/concept-bricks
+      - ./docker/apache/vhost-api.conf:/etc/apache2/sites-available/000-default.conf
       - ./docker/php/error-reporting.ini:/usr/local/etc/php/conf.d/error-reporting.ini
     environment:
       COMPOSER: composer-dev.json

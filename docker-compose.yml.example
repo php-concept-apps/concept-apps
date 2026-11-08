@@ -31,6 +31,24 @@ services:
     depends_on:
       - db
 
+  api:
+    build: .
+    container_name: concept_apps_api
+    restart: unless-stopped
+    user: "${UID:-1000}:${GID:-1000}"
+    working_dir: /var/www/html/apps/api
+    ports:
+      - "8081:80"
+    volumes:
+      - .:/var/www/html
+      - ./docker/apache/vhost-api.conf:/etc/apache2/sites-available/000-default.conf
+      - ./docker/php/error-reporting.ini:/usr/local/etc/php/conf.d/error-reporting.ini
+    environment:
+      APP_ENV: dev
+      APP_DEBUG: "true"
+    depends_on:
+      - db
+
   db:
     image: mysql:8.4
     command: --mysql-native-password=ON

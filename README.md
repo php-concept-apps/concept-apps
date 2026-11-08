@@ -6,7 +6,7 @@ Each app under `apps/<name>` is a complete stack recipe — not a step-by-step t
 
 | Repo | Role |
 |------|------|
-| **concept-apps** (this) | Ready-made assemblies (`apps/bff`, `apps/cli`, …) |
+| **concept-apps** (this) | Ready-made assemblies (`apps/bff`, `apps/api`, …) |
 | [concept-recipes](https://github.com/php-concept/concept-recipes) | Archived linear “create an app” walkthrough |
 
 ## Layout
@@ -30,7 +30,10 @@ composer install
 ```bash
 cp composer-dev.json.example composer-dev.json
 cp docker-compose.dev.yml.example docker-compose.yml
-docker compose up -d --build
+docker compose up -d --build          # all services
+# or only what you need, e.g.:
+# docker compose up -d --build bff    # + db via depends_on
+# docker compose up -d --build api
 docker compose exec php composer install   # COMPOSER=composer-dev.json from compose
 ```
 
@@ -40,7 +43,8 @@ docker compose exec php composer install   # COMPOSER=composer-dev.json from com
 
 ```bash
 cp docker-compose.yml.example docker-compose.yml
-docker compose up -d --build
+docker compose up -d --build          # all services in the file
+# docker compose up -d --build api    # one app (+ db)
 ```
 
 Two Compose examples (same as recipes):
@@ -56,4 +60,7 @@ Copy either to `docker-compose.yml` (gitignored).
 |---------|------|
 | `php` | shell / Composer at monorepo root |
 | `bff` | HTTP → `apps/bff` on host port **8080** |
+| `api` | HTTP → `apps/api` on host port **8081** |
 | `db` | MySQL on host port **3306** |
+
+`docker compose up` without a service name starts **everything**. Name the service (`bff`, `api`, …) to limit the set; `depends_on` still pulls `db`.
