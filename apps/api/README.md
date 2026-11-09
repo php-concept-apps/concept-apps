@@ -10,17 +10,19 @@ Auth component `AuthApiToken`: Bearer opaque tokens (`users` + `api_tokens`, sha
 
 | Method | Path | Auth | Notes |
 |--------|------|------|--------|
-| `GET` | `/api/health` | — | liveness |
-| `GET` | `/api/db` | — | DB probe + catalog row counts |
-| `GET` | `/api/products` | — | paginated catalog (`page`, `per_page`, `status`, `category_id`, `q`) |
-| `GET` | `/api/products/{id}` | — | show product |
+| `GET` | `/api/health` | optional | liveness |
+| `GET` | `/api/db` | optional | DB probe + catalog row counts |
+| `GET` | `/api/products` | optional | paginated catalog (`page`, `per_page`, `status`, `category_id`, `q`) |
+| `GET` | `/api/products/{id}` | optional | show product (+ `viewer` when Bearer present) |
 | `POST` | `/api/products` | Bearer | create product (+ optional `tag_ids`) |
 | `PATCH` | `/api/products/{id}` | Bearer | update product |
 | `DELETE` | `/api/products/{id}` | Bearer | delete product |
-| `POST` | `/api/auth/login` | — | issue token (`email`, `password`, optional `token_name`) |
+| `POST` | `/api/auth/login` | optional | issue token (`email`, `password`, optional `token_name`) |
 | `GET` | `/api/auth/me` | Bearer | current user (`User` arg resolver) |
 | `POST` | `/api/auth/logout` | Bearer | revoke current token |
-| `POST` | `/api/echo` | — | FormRequest (`name`, `email`) |
+| `POST` | `/api/echo` | optional | FormRequest (`name`, `email`) |
+
+Public group uses optional Bearer (no header → anonymous; invalid token → 401). Write/`me`/`logout` require Bearer.
 
 ## Console
 
@@ -104,8 +106,9 @@ curl -s -X POST http://localhost:8081/api/products \
     "tag_ids": [1, 2]
   }'
 
-# show — public
+# show — public (optional Bearer → payload.viewer)
 curl -s http://localhost:8081/api/products/1
+curl -s http://localhost:8081/api/products/1 -H "Authorization: Bearer $TOKEN"
 
 # update (PATCH — only sent fields)
 curl -s -X PATCH http://localhost:8081/api/products/1 \

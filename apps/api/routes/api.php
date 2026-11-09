@@ -8,6 +8,7 @@ use Concept\App\Controllers\ProductController;
 use Concept\App\Middleware\HandleJsonValidationExceptionMiddleware;
 use Concept\App\Middleware\HandleUnauthorizedExceptionMiddleware;
 use Concept\Components\AuthApiToken\Middleware\AuthenticateBearerMiddleware;
+use Concept\Components\AuthApiToken\Middleware\OptionalAuthenticateBearerMiddleware;
 use Concept\Extensions\Json\Middleware\ForceJsonResponseMiddleware;
 use Concept\Extensions\Json\Middleware\ParseJsonBodyMiddleware;
 use League\Route\RouteGroup;
@@ -28,7 +29,7 @@ $router->group('/api', function(RouteGroup $router): void {
     $router->get('/products/{id}', [ProductController::class, 'show'])->setName('api.products.show');
     $router->post('/echo', [EchoController::class, 'echo'])->setName('api.echo');
     $router->post('/auth/login', [AuthController::class, 'login'])->setName('api.auth.login');
-});
+})->lazyMiddleware(OptionalAuthenticateBearerMiddleware::class);
 
 $router->group('/api', function(RouteGroup $router): void {
     $router->post('/products', [ProductController::class, 'store'])->setName('api.products.store');

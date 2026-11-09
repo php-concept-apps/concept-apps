@@ -10,6 +10,7 @@ use Concept\App\Http\Requests\UpdateProductRequest;
 use Concept\App\Models\Category;
 use Concept\App\Models\Product;
 use Concept\App\Models\Tag;
+use Concept\Components\AuthApiToken\Models\User;
 use Concept\Extensions\Config\Contracts\ConfigInterface;
 use Concept\Extensions\Http\Protocol\HttpStatusCode;
 use Illuminate\Database\Eloquent\Builder;
@@ -83,14 +84,17 @@ final class ProductController
         return $this->apiResponseFactory->paginated($paginator);
     }
 
-    public function show(int $id): ResponseInterface
+    public function show(int $id, ?User $user = null): ResponseInterface
     {
         $product = $this->findProduct($id);
         if ($product === null) {
             return $this->apiResponseFactory->error(self::ERR_NOT_FOUND, HttpStatusCode::NOT_FOUND);
         }
 
-        return $this->apiResponseFactory->success($product->toArray());
+        $payload = $product->toArray();
+        $payload['viewer'] = $this->viewerPayload($user);
+
+        return $this->apiResponseFactory->success($payload);
     }
 
     public function store(StoreProductRequest $request): ResponseInterface
@@ -302,5 +306,26 @@ final class ProductController
         }
 
         return max(1, min((int) $requested, max(1, $max)));
+    }
+
+    /**
+     * @return array{id: int|string, email: string}|null
+     */
+    private function viewerPayload(?User $user): ?array
+    {
+        if ($user === null) {
+            return null;
+        }
+
+        $id = $user->getKey();
+        $email = $user->getAttribute('email');
+        if ((!is_int($id) && !is_string($id)) || !is_string($email)) {
+            return null;
+        }
+
+        return [
+            'id' => $id,
+            'email' => $email,
+        ];
     }
 }
