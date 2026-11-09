@@ -1,6 +1,6 @@
 <?php declare(strict_types=1);
 
-namespace Concept\App\Models;
+namespace Concept\Components\AuthApiToken\Models;
 
 use DateTimeInterface;
 use Illuminate\Database\Eloquent\Model;

@@ -12,6 +12,7 @@
         "php-concept/extension-json": "^1.0",
         "fakerphp/faker": "^1.24",
         "php-concept/brick-casting-valinor": "^1.0",
+        "php-concept/brick-components": "^1.0",
         "php-concept/brick-console-symfony": "^1.0",
         "php-concept/brick-data-masker": "^1.0",
         "php-concept/brick-database-eloquent": "^1.0",

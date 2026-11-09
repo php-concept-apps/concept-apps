@@ -1,9 +1,10 @@
 <?php declare(strict_types=1);
 
-namespace Concept\App\Auth;
+namespace Concept\Components\AuthApiToken\Services;
 
-use Concept\App\Models\ApiToken;
-use Concept\App\Models\User;
+use Concept\Components\AuthApiToken\Models\ApiToken;
+use Concept\Components\AuthApiToken\Models\User;
+use Concept\Components\AuthApiToken\Support\IssuedToken;
 use DateTimeImmutable;
 
 final class TokenAuthService

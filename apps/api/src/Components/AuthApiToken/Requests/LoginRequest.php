@@ -1,6 +1,6 @@
 <?php declare(strict_types=1);
 
-namespace Concept\App\Http\Requests;
+namespace Concept\Components\AuthApiToken\Requests;
 
 use Concept\Extensions\FormRequest\Requests\FormRequest;
 

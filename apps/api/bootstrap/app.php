@@ -1,6 +1,7 @@
 <?php declare(strict_types=1);
 
 use Concept\App\Bootstrap\ApplicationRuntimeBootstrap;
+use Concept\App\Bootstrap\ApplicationServiceProvidersBootstrap;
 use Concept\App\Bootstrap\ApplicationStackBootstrap;
 use Concept\App\Bootstrap\EarlyErrorHandlingBootstrap;
 use Concept\App\Bootstrap\FoundationBootstrap;
@@ -20,6 +21,7 @@ $fallbackFilePath = $root . '/' . PathName::ERRORS_FALLBACK . '/500.php';
 
 (new FoundationBootstrap($root, PathName::map()))->boot($container);
 (new ApplicationStackBootstrap())->boot($container);
+(new ApplicationServiceProvidersBootstrap())->boot($app);
 (new ApplicationRuntimeBootstrap())->boot($container);
 
 return $app;

@@ -7,16 +7,16 @@ use Concept\App\Foundation\ConfigKey;
 use Concept\App\Foundation\PathName;
 use Concept\App\Http\Contracts\ApiResponseFactoryInterface;
 use Concept\App\Http\Error\ApiHttpErrorRenderer;
-use Concept\App\Http\Response\ApiResponseFactory;
-use Concept\App\Http\Routing\UserArgumentResolver;
 use Concept\Core\Container\ContainerDependency;
+use Concept\Core\Http\Contracts\ArgumentResolverInterface;
+use Concept\Extensions\Components\Contracts\ComponentInterface;
 use Concept\Extensions\Config\Contracts\ConfigInterface;
 use Concept\Extensions\DataMasker\Contracts\DataMaskerRuleInterface;
 use Concept\Extensions\ErrorHandlerWhoops\Contracts\HttpErrorRendererInterface;
-use Concept\Extensions\Http\Contracts\ResponseFactoryInterface;
 use Concept\Extensions\PathManager\PathManager;
 use Concept\Extensions\ValidationRakit\Contracts\RuleInterface;
 use Concept\Stack\Bricks\Casting\CastingBrick;
+use Concept\Stack\Bricks\Components\ComponentsBrick;
 use Concept\Stack\Bricks\Console\ConsoleBrick;
 use Concept\Stack\Bricks\Database\DatabaseBrick;
 use Concept\Stack\Bricks\ErrorHandling\ErrorHandlingBrick;
@@ -88,9 +88,7 @@ final class ApplicationStackBootstrap
             ->setRoutes($pathManager->rootList($routeFiles))
             ->withFormRequests()
             ->withTypedRouteParameters()
-            ->appendResolvers([
-                new UserArgumentResolver(),
-            ]);
+            ->appendResolvers($config->getClassList(ConfigKey::ROUTES_RESOLVERS, ArgumentResolverInterface::class));
 
         $stack->add(new ConsoleBrick())->builder()
             ->setName($config->getString(ConfigKey::APP_NAME, 'Concept API'))
@@ -106,15 +104,14 @@ final class ApplicationStackBootstrap
                 );
             });
 
+        $stack->add(new ComponentsBrick())->builder()
+            ->setClasses($config->getClassList(ConfigKey::COMPONENTS, ComponentInterface::class))
+            ->withDatabase()
+            ->withConsole()
+            ->withHttp();
+
         foreach ($stack->providers() as $provider) {
             $container->addServiceProvider($provider);
         }
-
-        $container->add(
-            ApiResponseFactoryInterface::class,
-            static fn(): ApiResponseFactory => new ApiResponseFactory(
-                ContainerDependency::get($container, ResponseFactoryInterface::class),
-            ),
-        )->setShared(true);
     }
 }

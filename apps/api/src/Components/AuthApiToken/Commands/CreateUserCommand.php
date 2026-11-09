@@ -1,8 +1,8 @@
 <?php declare(strict_types=1);
 
-namespace Concept\App\Console\Commands;
+namespace Concept\Components\AuthApiToken\Commands;
 
-use Concept\App\Models\User;
+use Concept\Components\AuthApiToken\Models\User;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;

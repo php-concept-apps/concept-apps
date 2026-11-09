@@ -1,6 +1,6 @@
 <?php declare(strict_types=1);
 
-namespace Concept\App\Auth;
+namespace Concept\Components\AuthApiToken\Support;
 
 /**
  * PSR-7 request attributes set by bearer auth middleware.

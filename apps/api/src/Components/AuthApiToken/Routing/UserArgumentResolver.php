@@ -1,9 +1,9 @@
 <?php declare(strict_types=1);
 
-namespace Concept\App\Http\Routing;
+namespace Concept\Components\AuthApiToken\Routing;
 
-use Concept\App\Auth\AuthAttribute;
-use Concept\App\Models\User;
+use Concept\Components\AuthApiToken\Models\User;
+use Concept\Components\AuthApiToken\Support\AuthAttribute;
 use Concept\Core\Http\Contracts\ArgumentResolverInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use ReflectionNamedType;

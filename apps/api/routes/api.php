@@ -5,8 +5,9 @@ use Concept\App\Controllers\DbController;
 use Concept\App\Controllers\EchoController;
 use Concept\App\Controllers\HealthController;
 use Concept\App\Controllers\ProductController;
-use Concept\App\Middleware\AuthenticateBearerMiddleware;
 use Concept\App\Middleware\HandleJsonValidationExceptionMiddleware;
+use Concept\App\Middleware\HandleUnauthorizedExceptionMiddleware;
+use Concept\Components\AuthApiToken\Middleware\AuthenticateBearerMiddleware;
 use Concept\Extensions\Json\Middleware\ForceJsonResponseMiddleware;
 use Concept\Extensions\Json\Middleware\ParseJsonBodyMiddleware;
 use League\Route\RouteGroup;
@@ -17,6 +18,7 @@ $router->lazyMiddlewares([
     ParseJsonBodyMiddleware::class,
     ForceJsonResponseMiddleware::class,
     HandleJsonValidationExceptionMiddleware::class,
+    HandleUnauthorizedExceptionMiddleware::class,
 ]);
 
 $router->group('/api', function(RouteGroup $router): void {

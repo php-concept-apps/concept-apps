@@ -11,6 +11,9 @@ final class ConfigKey
     public const string APP_TIMEZONE = 'app.timezone';
 
     public const string ROUTES_LIST = 'routes.list';
+    public const string ROUTES_RESOLVERS = 'routes.resolvers';
+
+    public const string COMPONENTS = 'components.list';
 
     public const string COMMANDS = 'console.commands';
 

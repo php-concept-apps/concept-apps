@@ -1,9 +1,9 @@
 <?php declare(strict_types=1);
 
-namespace Concept\App\Auth;
+namespace Concept\Components\AuthApiToken\Support;
 
-use Concept\App\Models\ApiToken;
-use Concept\App\Models\User;
+use Concept\Components\AuthApiToken\Models\ApiToken;
+use Concept\Components\AuthApiToken\Models\User;
 
 /**
  * Plaintext token is returned only at issue time; only the hash is stored.

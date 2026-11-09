@@ -1,10 +1,10 @@
 # API
 
-JSON API assembly: HTTP + validation + log masking + Eloquent database + console + bearer token auth.  
+JSON API assembly: HTTP + validation + log masking + Eloquent database + console + Components.  
 No session or views. App-owned JSON envelope (`ApiResponseFactory`).
 
 Catalog schema for load tests: `categories` (tree) → `products` (+ JSON attrs) ↔ `tags` (M2M).  
-Auth: `users` + `api_tokens` (sha256 hash stored; plaintext token returned once at login).
+Auth component `AuthApiToken`: Bearer opaque tokens (`users` + `api_tokens`, sha256 hash; plaintext once at login).
 
 ## Endpoints
 

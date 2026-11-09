@@ -2,13 +2,13 @@
 
 namespace Concept\App\Controllers;
 
-use Concept\App\Auth\AuthAttribute;
-use Concept\App\Auth\TokenAuthService;
 use Concept\App\Http\Contracts\ApiResponseFactoryInterface;
-use Concept\App\Http\Requests\LoginRequest;
-use Concept\App\Models\ApiToken;
-use Concept\App\Models\User;
-use Concept\Extensions\Http\Protocol\HttpStatusCode;
+use Concept\Components\AuthApiToken\Exceptions\UnauthorizedException;
+use Concept\Components\AuthApiToken\Models\ApiToken;
+use Concept\Components\AuthApiToken\Models\User;
+use Concept\Components\AuthApiToken\Requests\LoginRequest;
+use Concept\Components\AuthApiToken\Services\TokenAuthService;
+use Concept\Components\AuthApiToken\Support\AuthAttribute;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 
@@ -29,10 +29,7 @@ final class AuthController
         $email = $data['email'] ?? null;
         $password = $data['password'] ?? null;
         if (!is_string($email) || !is_string($password)) {
-            return $this->apiResponseFactory->error(
-                self::ERR_INVALID_CREDENTIALS,
-                HttpStatusCode::UNAUTHORIZED,
-            );
+            throw new UnauthorizedException(self::ERR_INVALID_CREDENTIALS);
         }
 
         $tokenName = $data['token_name'] ?? null;
@@ -42,10 +39,7 @@ final class AuthController
 
         $issued = $this->tokenAuth->attempt($email, $password, $tokenName);
         if ($issued === null) {
-            return $this->apiResponseFactory->error(
-                self::ERR_INVALID_CREDENTIALS,
-                HttpStatusCode::UNAUTHORIZED,
-            );
+            throw new UnauthorizedException(self::ERR_INVALID_CREDENTIALS);
         }
 
         return $this->apiResponseFactory->success([
