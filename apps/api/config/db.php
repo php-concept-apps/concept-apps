@@ -6,7 +6,7 @@ return [
         'driver' => 'mysql',
         'host' => 'db',
         'port' => 3306,
-        'database' => 'concept_apps',
+        'database' => 'concept_api',
         'username' => 'root',
         'password' => 'root',
         'charset' => 'utf8mb4',

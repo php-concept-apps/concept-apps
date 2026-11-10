@@ -1,0 +1,109 @@
+{
+    "name": "php-concept/app-cli",
+    "description": "Concept 2 \u2014 CLI assembly (console + database, no HTTP/session/view)",
+    "type": "project",
+    "license": "MIT",
+    "repositories": [
+        {
+            "type": "path",
+            "url": "/var/www/concept-core-2",
+            "options": {
+                "symlink": true,
+                "versions": {
+                    "php-concept/core-2": "1.0.0"
+                }
+            }
+        },
+        {
+            "type": "path",
+            "url": "/var/www/concept-stack",
+            "options": {
+                "symlink": true,
+                "versions": {
+                    "php-concept/stack": "2.0.0"
+                }
+            }
+        },
+        {
+            "type": "path",
+            "url": "/var/www/concept-extensions/packages/*",
+            "options": {
+                "symlink": true,
+                "versions": {
+                    "php-concept/extension-casting-valinor": "1.0.0",
+                    "php-concept/extension-components": "1.0.0",
+                    "php-concept/extension-config": "1.0.0",
+                    "php-concept/extension-console-symfony": "1.0.0",
+                    "php-concept/extension-csrf": "1.0.0",
+                    "php-concept/extension-data-masker": "1.0.0",
+                    "php-concept/extension-database-eloquent": "1.0.0",
+                    "php-concept/extension-error-handler-whoops": "1.0.0",
+                    "php-concept/extension-event": "1.0.0",
+                    "php-concept/extension-form-request": "1.0.0",
+                    "php-concept/extension-http": "1.0.0",
+                    "php-concept/extension-json": "1.0.0",
+                    "php-concept/extension-logger-monolog": "1.0.0",
+                    "php-concept/extension-path-manager": "1.0.0",
+                    "php-concept/extension-session-symfony": "1.0.0",
+                    "php-concept/extension-support": "1.0.0",
+                    "php-concept/extension-telemetry": "1.0.0",
+                    "php-concept/extension-validation-rakit": "1.0.0",
+                    "php-concept/extension-view": "1.0.0",
+                    "php-concept/extension-view-plates": "1.0.0",
+                    "php-concept/extension-view-twig": "1.0.0"
+                }
+            }
+        },
+        {
+            "type": "path",
+            "url": "/var/www/concept-bricks/packages/*",
+            "options": {
+                "symlink": true,
+                "versions": {
+                    "php-concept/brick-casting-valinor": "1.0.0",
+                    "php-concept/brick-components": "1.0.0",
+                    "php-concept/brick-console-symfony": "1.0.0",
+                    "php-concept/brick-database-eloquent": "1.0.0",
+                    "php-concept/brick-data-masker": "1.0.0",
+                    "php-concept/brick-error-handler-whoops": "1.0.0",
+                    "php-concept/brick-event": "1.0.0",
+                    "php-concept/brick-http": "1.0.0",
+                    "php-concept/brick-logger-monolog": "1.0.0",
+                    "php-concept/brick-session-symfony": "1.0.0",
+                    "php-concept/brick-telemetry": "1.0.0",
+                    "php-concept/brick-validation-rakit": "1.0.0",
+                    "php-concept/brick-view": "1.0.0",
+                    "php-concept/brick-view-twig": "1.0.0",
+                    "php-concept/brick-view-plates": "1.0.0"
+                }
+            }
+        }
+    ],
+    "require": {
+        "php": "^8.4",
+        "php-concept/brick-console-symfony": "^1.0",
+        "php-concept/brick-database-eloquent": "^1.0",
+        "php-concept/brick-error-handler-whoops": "^1.0",
+        "php-concept/brick-logger-monolog": "^1.0",
+        "php-concept/core-2": "^1.0",
+        "php-concept/extension-config": "^1.0",
+        "php-concept/extension-path-manager": "^1.0",
+        "php-concept/stack": "^2.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "Concept\\": "src/",
+            "Concept\\Components\\": "../../components/"
+        }
+    },
+    "config": {
+        "sort-packages": true
+    },
+    "require-dev": {
+        "phpstan/phpstan": "^2.1"
+    },
+    "scripts": {
+        "console": "php bin/console.php",
+        "phpstan": "vendor/bin/phpstan analyze --memory-limit=512M"
+    }
+}
