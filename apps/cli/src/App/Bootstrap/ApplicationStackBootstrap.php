@@ -50,7 +50,8 @@ final class ApplicationStackBootstrap
         $stack->add(new ConsoleBrick())->builder()
             ->setName($config->getString(ConfigKey::APP_NAME, 'Concept CLI'))
             ->setVersion($config->getString(ConfigKey::APP_VERSION, '0.1.0'))
-            ->setCommands($config->getClassList(ConfigKey::COMMANDS, Command::class));
+            ->setCommands($config->getClassList(ConfigKey::COMMANDS, Command::class))
+            ->withLogging();
 
         foreach ($stack->providers() as $provider) {
             $container->addServiceProvider($provider);
