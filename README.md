@@ -12,7 +12,8 @@ Each app under `apps/<name>` is a complete stack recipe — not a step-by-step t
 ## Layout
 
 ```
-apps/           # one directory = one assembly (added later)
+apps/           # one directory = one assembly
+components/     # shared Concept\Components\* scaffolds (opt-in per app)
 docker/         # shared Apache/PHP config
 composer.json   # Packagist (readers / CI)
 ```
