@@ -46,8 +46,6 @@ services:
       - ./docker/php/error-reporting.ini:/usr/local/etc/php/conf.d/error-reporting.ini
     environment:
       COMPOSER: composer-dev.json
-      APP_ENV: dev
-      APP_DEBUG: "true"
     depends_on:
       - db
 
@@ -69,8 +67,6 @@ services:
       - ./docker/php/error-reporting.ini:/usr/local/etc/php/conf.d/error-reporting.ini
     environment:
       COMPOSER: composer-dev.json
-      APP_ENV: dev
-      APP_DEBUG: "true"
     depends_on:
       - db
 

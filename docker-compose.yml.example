@@ -25,9 +25,6 @@ services:
       - .:/var/www/html
       - ./docker/apache/vhost-bff.conf:/etc/apache2/sites-available/000-default.conf
       - ./docker/php/error-reporting.ini:/usr/local/etc/php/conf.d/error-reporting.ini
-    environment:
-      APP_ENV: dev
-      APP_DEBUG: "true"
     depends_on:
       - db
 
@@ -43,9 +40,21 @@ services:
       - .:/var/www/html
       - ./docker/apache/vhost-api.conf:/etc/apache2/sites-available/000-default.conf
       - ./docker/php/error-reporting.ini:/usr/local/etc/php/conf.d/error-reporting.ini
-    environment:
-      APP_ENV: dev
-      APP_DEBUG: "true"
+    depends_on:
+      - db
+
+  web:
+    build: .
+    container_name: concept_apps_web
+    restart: unless-stopped
+    user: "${UID:-1000}:${GID:-1000}"
+    working_dir: /var/www/html/apps/web
+    ports:
+      - "8082:80"
+    volumes:
+      - .:/var/www/html
+      - ./docker/apache/vhost-web.conf:/etc/apache2/sites-available/000-default.conf
+      - ./docker/php/error-reporting.ini:/usr/local/etc/php/conf.d/error-reporting.ini
     depends_on:
       - db
 

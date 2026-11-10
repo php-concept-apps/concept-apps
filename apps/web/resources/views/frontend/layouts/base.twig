@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{% block title %}PHP Concept{% endblock %}</title>
+  <meta name="description" content="{% block meta_description %}PHP Concept 2 — a modular PSR-based PHP runtime: Core, Extensions, and Stack without a forced full stack{% endblock %}">
+
+  <link href="/assets/img/favicon.png" rel="icon">
+  <link href="/assets/img/apple-touch-icon.png" rel="apple-touch-icon">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&family=Lato:ital,wght@0,100;0,300;0,400;0,700;0,900;1,100;1,300;1,400;1,700;1,900&family=Raleway:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet">
+
+  <link href="/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+  <link href="/vendor/bootstrap-icons/bootstrap-icons.min.css" rel="stylesheet">
+  <link href="/libs/aos/aos.css" rel="stylesheet">
+  <link href="/assets/css/main.css" rel="stylesheet">
+
+  {% block head %}{% endblock %}
+</head>
+<body class="{% block body_class %}index-page{% endblock %}">
+
+  {% block header %}
+  <header id="header" class="header d-flex align-items-center sticky-top">
+    <div class="container position-relative d-flex align-items-center justify-content-between">
+      <a href="{{ uri('home') }}" class="logo d-flex align-items-center me-auto me-xl-0">
+        <h1 class="sitename">Concept</h1><span>.</span>
+      </a>
+
+      <nav id="navmenu" class="navmenu">
+        <ul>
+          <li><a href="{{ uri('home') }}#hero">Home</a></li>
+          <li><a href="{{ uri('home') }}#about">Architecture</a></li>
+          <li><a href="{{ uri('home') }}#services">Advantages</a></li>
+          <li><a href="{{ uri('home') }}#principles">Principles</a></li>
+          <li><a href="{{ uri('home') }}#contact">Try it</a></li>
+        </ul>
+        <i class="mobile-nav-toggle d-xl-none bi bi-list" aria-label="Toggle navigation"></i>
+      </nav>
+
+      <a class="btn-getstarted" href="{{ uri('home') }}#contact">Get Started</a>
+    </div>
+  </header>
+  {% endblock %}
+
+  <main class="main">
+    {% block content %}{% endblock %}
+  </main>
+
+  {% block footer %}
+  <footer id="footer" class="footer light-background">
+    <div class="container footer-top">
+      <div class="row gy-4">
+        <div class="col-lg-4 col-md-6 footer-info">
+          <a href="{{ uri('home') }}" class="logo d-flex align-items-center mb-4">
+            <span class="sitename">Concept</span>
+          </a>
+          <p>A modular PHP&nbsp;8.4+ runtime on PSR: a thin Core, separate Extensions, and an explicit Stack — assemble only what your product needs.</p>
+        </div>
+
+        <div class="col-lg-2 col-md-6 footer-links">
+          <h4>Navigate</h4>
+          <ul>
+            <li><a href="{{ uri('home') }}#about">Architecture</a></li>
+            <li><a href="{{ uri('home') }}#services">Advantages</a></li>
+            <li><a href="{{ uri('home') }}#principles">Principles</a></li>
+            <li><a href="{{ uri('home') }}#contact">Try FormRequest</a></li>
+          </ul>
+        </div>
+
+        <div class="col-lg-3 col-md-6 footer-links">
+          <h4>Layers</h4>
+          <ul>
+            <li><a href="{{ uri('home') }}#about">Core</a></li>
+            <li><a href="{{ uri('home') }}#about">Extensions</a></li>
+            <li><a href="{{ uri('home') }}#principles">Stack</a></li>
+            <li><a href="{{ uri('hello', {name: 'Ada'}) }}">Hello route</a></li>
+          </ul>
+        </div>
+
+        <div class="col-lg-3 col-md-6 footer-links">
+          <h4>This assembly</h4>
+          <ul>
+            <li><a href="{{ uri('home') }}#contact">FormRequest</a></li>
+            <li><a href="{{ uri('home') }}#contact">Validation + flash</a></li>
+            <li><a href="{{ uri('home') }}#services">Twig + Orbit UI</a></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <div class="container footer-bottom">
+      <div class="row gy-3">
+        <div class="col-md-6 order-2 order-md-1">
+          <div class="copyright">
+            <p>© <span>Copyright</span> <strong class="sitename">PHP Concept</strong>. All Rights Reserved.</p>
+          </div>
+          <div class="credits">
+            Designed by <a href="https://bootstrapmade.com/">BootstrapMade</a> (Orbit)
+          </div>
+        </div>
+        <div class="col-md-6 order-1 order-md-2">
+          <div class="legal-links">
+            <a href="{{ uri('home') }}#about">Core · Extensions · Stack</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </footer>
+  {% endblock %}
+
+  <a href="{{ uri('home') }}#hero" id="scroll-top" class="scroll-top d-flex align-items-center justify-content-center" aria-label="Scroll to top">
+    <i class="bi bi-arrow-up-short"></i>
+  </a>
+
+  <div id="preloader"></div>
+
+  <script src="/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+  <script src="/libs/aos/aos.js"></script>
+  <script src="/assets/js/main.js"></script>
+  {% block scripts %}{% endblock %}
+</body>
+</html>

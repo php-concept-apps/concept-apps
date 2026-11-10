@@ -1,0 +1,19 @@
+{% extends '@frontend/layouts/base.twig' %}
+
+{% block title %}422 · Unprocessable{% endblock %}
+{% block body_class %}page-404{% endblock %}
+
+{% block content %}
+<section id="error-404" class="error-404 section">
+  <div class="container" data-aos="fade-up">
+    <div class="error-content text-center">
+      <span class="error-badge">422</span>
+      <h1 class="error-heading">Unprocessable Entity</h1>
+      <p class="error-text">The submitted data could not be processed.</p>
+      <div class="action-buttons justify-content-center">
+        <a href="{{ uri('home') }}" class="btn-home"><i class="bi bi-arrow-left"></i> Return Home</a>
+      </div>
+    </div>
+  </div>
+</section>
+{% endblock %}

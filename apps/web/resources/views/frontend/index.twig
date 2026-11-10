@@ -1,0 +1,446 @@
+{% extends '@frontend/layouts/base.twig' %}
+
+{% block title %}PHP Concept — Modular PHP Runtime{% endblock %}
+{% block meta_description %}PHP Concept 2: Core, Extensions, and Stack — assemble capabilities explicitly on PHP 8.4+ and PSR standards{% endblock %}
+
+{% block content %}
+
+{# Hero #}
+<section id="hero" class="hero section">
+  <div class="container" data-aos="fade-up" data-aos-delay="100">
+    <div class="row align-items-center gy-5">
+      <div class="col-lg-6" data-aos="fade-right" data-aos-delay="200">
+        <div class="hero-content">
+          <div class="hero-tag" data-aos="fade-up" data-aos-delay="250">
+            <span class="tag-dot"></span>
+            <span class="tag-text">PHP 8.4+ · PSR · Explicit wiring</span>
+          </div>
+
+          <h1 class="hero-headline" data-aos="fade-up" data-aos-delay="300">Build your runtime. Zero hidden magic.</h1>
+
+          <p class="hero-text" data-aos="fade-up" data-aos-delay="350">
+            A modular PHP system where capabilities exist only if you explicitly invite them.
+            From thin APIs to classic web sites — you control every brick.
+          </p>
+
+          <div class="hero-cta" data-aos="fade-up" data-aos-delay="400">
+            <a href="#about" class="cta-button">
+              <span>See Architecture</span>
+              <i class="bi bi-arrow-right"></i>
+            </a>
+            <a href="#contact" class="cta-link">
+              <i class="bi bi-ui-checks"></i>
+              <span>Try FormRequest</span>
+            </a>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-lg-6" data-aos="fade-left" data-aos-delay="300">
+        <div class="stats-grid">
+          <div class="stat-card stat-card-primary" data-aos="zoom-in" data-aos-delay="350">
+            <div class="stat-icon-wrap"><i class="bi bi-cpu"></i></div>
+            <div class="stat-info">
+              <span class="stat-value">Core</span>
+              <span class="stat-title">Thin HTTP kernel</span>
+            </div>
+          </div>
+          <div class="stat-card" data-aos="zoom-in" data-aos-delay="400">
+            <div class="stat-icon-wrap"><i class="bi bi-puzzle"></i></div>
+            <div class="stat-info">
+              <span class="stat-value">Extensions</span>
+              <span class="stat-title">Composer packages</span>
+            </div>
+          </div>
+          <div class="stat-card stat-card-accent" data-aos="zoom-in" data-aos-delay="450">
+            <div class="stat-icon-wrap"><i class="bi bi-boxes"></i></div>
+            <div class="stat-info">
+              <span class="stat-value">Stack</span>
+              <span class="stat-title">Fluent assembly</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+{# About / Architecture #}
+<section id="about" class="about section">
+  <div class="container" data-aos="fade-up" data-aos-delay="100">
+    <div class="row gy-5 align-items-center">
+      <div class="col-xl-6" data-aos="fade-right" data-aos-delay="200">
+        <div class="about-images-wrapper">
+          <div class="image-main">
+            <img src="/assets/img/about/typing-at-night.jpg" alt="Working at night" class="img-fluid">
+          </div>
+          <div class="image-offset">
+            <img src="/assets/img/about/workspace.jpg" alt="Workspace" class="img-fluid">
+          </div>
+          <div class="experience-badge">
+            <span class="years">3</span>
+            <span class="text">Clear<br>Layers</span>
+          </div>
+          <div class="shape-pattern"></div>
+        </div>
+      </div>
+
+      <div class="col-xl-6" data-aos="fade-left" data-aos-delay="300">
+        <div class="about-content">
+          <div class="section-subtitle">Architecture</div>
+          <h2>Core, Extensions, and Stack — not a forced monolith</h2>
+          <p class="lead-text">
+            Nothing turns on by itself. If a capability is not in the Stack, its services are not in the container.
+          </p>
+          <p class="mb-4 description">
+            Core stays thin (container + routing + dispatch). Extensions are Composer packages with constructor params.
+            ConceptStack turns chosen bricks into an ordered provider list.
+          </p>
+
+          <div class="features-grid">
+            <div class="feature-card"><i class="bi bi-check-circle-fill"></i><span>App + HttpKernel</span></div>
+            <div class="feature-card"><i class="bi bi-check-circle-fill"></i><span>Explicit providers</span></div>
+            <div class="feature-card"><i class="bi bi-check-circle-fill"></i><span>Constructor params</span></div>
+            <div class="feature-card"><i class="bi bi-check-circle-fill"></i><span>PSR-first runtime</span></div>
+          </div>
+
+          <div class="stats-row">
+            <div class="stat-box">
+              <span class="number">PSR</span>
+              <span class="label">7 · 11 · 15 · 3</span>
+            </div>
+            <div class="stat-box">
+              <span class="number">8.4</span>
+              <span class="label">PHP baseline</span>
+            </div>
+            <div class="stat-box">
+              <span class="number">0</span>
+              <span class="label">Hidden magic</span>
+            </div>
+          </div>
+
+          <div class="action-buttons">
+            <a href="#principles" class="btn btn-primary-custom">
+              See principles <i class="bi bi-arrow-right"></i>
+            </a>
+            <div class="contact-info">
+              <div class="icon-box"><i class="bi bi-code-slash"></i></div>
+              <div class="text">
+                <span>Also try</span>
+                <a href="{{ uri('hello', {name: 'Ada'}) }}">/hello/Ada</a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+{# Services / Advantages #}
+<section id="services" class="services section">
+  <div class="container section-title" data-aos="fade-up">
+    <h2>Advantages</h2>
+    <p>Why assemble by capability instead of inheriting a monolith.</p>
+  </div>
+
+  <div class="container" data-aos="fade-up" data-aos-delay="100">
+    <div class="row g-4">
+      {% set advantages = [
+        {icon: 'bi-sliders', title: 'Opt-in capabilities', text: 'API without Twig, CLI without HTTP, tests without a “full framework”. You choose the surface area.'},
+        {icon: 'bi-eye', title: 'Visible wiring', text: 'Bootstrap shows exactly what lands in the container. No silent auto-discovery of half the ecosystem.'},
+        {icon: 'bi-file-earmark-code', title: 'Explicit parameters', text: 'Paths, flags, and connections are arguments from glue — not hidden discovery inside packages.', featured: true},
+        {icon: 'bi-diagram-3', title: 'PSR-first runtime', text: 'HTTP, Container, Logging stay interoperable. Emit lives at the entry point so App is testable without SAPI.'},
+        {icon: 'bi-shield-check', title: 'Fail early on deps', text: 'Stack builders require() related capabilities before runtime “class not found”.'},
+        {icon: 'bi-layers', title: 'Grow when ready', text: 'Start FormSite-thin, add Database or Components later as a conscious Stack change.'}
+      ] %}
+      {% for a in advantages %}
+      <div class="col-lg-4 col-md-6" data-aos="fade-up" data-aos-delay="{{ (loop.index0 % 3 + 1) * 100 }}">
+        <div class="service-card{% if a.featured|default(false) %} featured{% endif %}">
+          {% if a.featured|default(false) %}
+          <div class="featured-badge"><i class="bi bi-star-fill"></i><span>Key</span></div>
+          {% endif %}
+          <div class="icon-wrapper"><i class="bi {{ a.icon }}"></i></div>
+          <h3>{{ a.title }}</h3>
+          <p>{{ a.text }}</p>
+          <a href="#principles" class="service-link"><span>Principles</span><i class="bi bi-arrow-right"></i></a>
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+
+    <div class="stats-row" data-aos="fade-up" data-aos-delay="400">
+      <div class="row g-4 justify-content-center">
+        <div class="col-6 col-md-3">
+          <div class="stat-item">
+            <span class="stat-number">Core</span>
+            <span class="stat-label">HTTP kernel</span>
+          </div>
+        </div>
+        <div class="col-6 col-md-3">
+          <div class="stat-item">
+            <span class="stat-number">Extensions</span>
+            <span class="stat-label">Composer packages</span>
+          </div>
+        </div>
+        <div class="col-6 col-md-3">
+          <div class="stat-item">
+            <span class="stat-number">Stack</span>
+            <span class="stat-label">Fluent recipe</span>
+          </div>
+        </div>
+        <div class="col-6 col-md-3">
+          <div class="stat-item">
+            <span class="stat-number">PSR</span>
+            <span class="stat-label">7 · 11 · 15 · 3</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+{# Principles #}
+<section id="principles" class="why-us section light-background">
+  <div class="container section-title" data-aos="fade-up">
+    <h2>Principles</h2>
+    <p>Rules that keep Bootstrap honest and the container predictable.</p>
+  </div>
+
+  <div class="container" data-aos="fade-up" data-aos-delay="100">
+    <div class="row g-5">
+      <div class="col-lg-5" data-aos="fade-right" data-aos-delay="200">
+        <div class="sidebar-content">
+          <div class="badge-wrapper">
+            <span class="section-badge"><i class="bi bi-stars"></i> ConceptStack</span>
+          </div>
+          <h2>Explicit recipe, ordered providers</h2>
+          <p class="description">
+            <code>add(new XxxBrick())</code> enables a capability; configure via <code>builder()</code>.
+            After assembly, <code>$stack-&gt;providers()</code> returns the ordered list for League Container.
+          </p>
+
+          <div class="stat-cards">
+            <div class="stat-card" data-aos="zoom-in" data-aos-delay="300">
+              <div class="stat-value">add()</div>
+              <div class="stat-text">Enable capability</div>
+            </div>
+            <div class="stat-card" data-aos="zoom-in" data-aos-delay="350">
+              <div class="stat-value">set*</div>
+              <div class="stat-text">Configure values</div>
+            </div>
+            <div class="stat-card" data-aos="zoom-in" data-aos-delay="400">
+              <div class="stat-value">with*</div>
+              <div class="stat-text">Opt-in features</div>
+            </div>
+          </div>
+
+          <div class="action-buttons">
+            <a href="#contact" class="btn-main">Try FormRequest</a>
+            <a href="#about" class="btn-outline">Back to layers</a>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-lg-7" data-aos="fade-left" data-aos-delay="200">
+        <div class="features-grid">
+          <div class="feature-box highlight" data-aos="fade-up" data-aos-delay="250">
+            <div class="feature-ribbon">Core</div>
+            <div class="feature-icon"><i class="bi bi-cpu"></i></div>
+            <div class="feature-content">
+              <h4>Thin kernel</h4>
+              <p>Container + Route + Dispatch. No View, Session, or Database inside the kernel.</p>
+              <a href="#about" class="feature-link">Architecture <i class="bi bi-chevron-right"></i></a>
+            </div>
+          </div>
+          <div class="feature-box" data-aos="fade-up" data-aos-delay="300">
+            <div class="feature-icon"><i class="bi bi-puzzle"></i></div>
+            <div class="feature-content">
+              <h4>Extensions</h4>
+              <p>Separate Composer packages. Add them when the pain appears — not “just in case”.</p>
+              <a href="#services" class="feature-link">Advantages <i class="bi bi-chevron-right"></i></a>
+            </div>
+          </div>
+          <div class="feature-box" data-aos="fade-up" data-aos-delay="350">
+            <div class="feature-icon"><i class="bi bi-boxes"></i></div>
+            <div class="feature-content">
+              <h4>Stack glue</h4>
+              <p>Fluent builders become providers — an explicit assembly recipe, not a hidden bootstrap.</p>
+              <a href="#contact" class="feature-link">Smoke it <i class="bi bi-chevron-right"></i></a>
+            </div>
+          </div>
+        </div>
+
+        <div class="process-timeline" data-aos="fade-up" data-aos-delay="400">
+          <h5 class="timeline-title"><i class="bi bi-diagram-3-fill"></i> How a request flows</h5>
+          <div class="timeline-steps">
+            <div class="timeline-step">
+              <div class="step-marker">1</div>
+              <div class="step-info"><strong>Bootstrap</strong><span>Stack → providers</span></div>
+            </div>
+            <div class="timeline-connector"></div>
+            <div class="timeline-step">
+              <div class="step-marker">2</div>
+              <div class="step-info"><strong>Dispatch</strong><span>App::handle()</span></div>
+            </div>
+            <div class="timeline-connector"></div>
+            <div class="timeline-step">
+              <div class="step-marker">3</div>
+              <div class="step-info"><strong>Strategy</strong><span>Resolvers → handler</span></div>
+            </div>
+            <div class="timeline-connector"></div>
+            <div class="timeline-step">
+              <div class="step-marker">4</div>
+              <div class="step-info"><strong>Emit</strong><span>SAPI entry only</span></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="capabilities-section" data-aos="fade-up" data-aos-delay="450">
+          <h5 class="capabilities-heading">The three layers</h5>
+          <div class="capabilities-grid">
+            <div class="capability-card">
+              <div class="capability-icon"><i class="bi bi-cpu"></i></div>
+              <h6>Core</h6>
+              <p>Container, routing, and dispatch — nothing more in the kernel.</p>
+            </div>
+            <div class="capability-card">
+              <div class="capability-icon"><i class="bi bi-puzzle"></i></div>
+              <h6>Extensions</h6>
+              <p>Separate Composer packages you add when the product needs them.</p>
+            </div>
+            <div class="capability-card">
+              <div class="capability-icon"><i class="bi bi-boxes"></i></div>
+              <h6>Stack</h6>
+              <p>Fluent bricks → ordered providers. An explicit assembly recipe.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+{# Contact / FormRequest smoke #}
+<section id="contact" class="contact section">
+  <div class="container section-title" data-aos="fade-up">
+    <h2>Try FormRequest</h2>
+    <p>Validation, flash, and redirect-back — a small FormSite surface on this assembly.</p>
+  </div>
+
+  <div class="container" data-aos="fade-up" data-aos-delay="100">
+    <div class="row gy-5 align-items-stretch">
+      <div class="col-lg-5" data-aos="fade-right" data-aos-delay="200">
+        <div class="info-panel">
+          <div class="panel-header">
+            <span class="section-badge"><i class="bi bi-chat-dots-fill"></i> Live smoke</span>
+            <h3>What this exercises</h3>
+            <p>Submit empty fields for validation redirect. Valid submit flashes success back to this section.</p>
+          </div>
+
+          <div class="contact-methods">
+            <div class="method-item">
+              <div class="method-icon"><i class="bi bi-shield-check"></i></div>
+              <div class="method-details">
+                <span class="method-label">FormRequest</span>
+                <span><code>required|min:3</code> · <code>required|email</code></span>
+              </div>
+            </div>
+            <div class="method-item">
+              <div class="method-icon"><i class="bi bi-arrow-return-left"></i></div>
+              <div class="method-details">
+                <span class="method-label">Redirect back</span>
+                <span>Errors + old input via flash</span>
+              </div>
+            </div>
+            <div class="method-item">
+              <div class="method-icon"><i class="bi bi-chat-quote"></i></div>
+              <div class="method-details">
+                <span class="method-label">Success flash</span>
+                <span>Valid submit returns here with a message</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="stats-strip">
+            <div class="stat-item"><span class="stat-number">POST</span><span class="stat-text">/echo</span></div>
+            <div class="stat-item"><span class="stat-number">GET</span><span class="stat-text">/hello/{name}</span></div>
+            <div class="stat-item"><span class="stat-number">No</span><span class="stat-text">Database</span></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-lg-7" data-aos="fade-left" data-aos-delay="300">
+        <div class="form-card">
+          <div class="form-card-header">
+            <div class="header-icon"><i class="bi bi-send-fill"></i></div>
+            <div class="header-text">
+              <h4>Submit /echo</h4>
+              <p>Name + email through FormRequest.</p>
+            </div>
+          </div>
+
+          {% if flashes.success is defined and flashes.success %}
+            <div class="alert alert-success" role="status">
+              {% for message in flashes.success %}<p class="mb-0">{{ message }}</p>{% endfor %}
+            </div>
+          {% endif %}
+          {% if flashes.error is defined and flashes.error %}
+            <div class="alert alert-danger" role="alert">
+              {% for message in flashes.error %}<p class="mb-0">{{ message }}</p>{% endfor %}
+            </div>
+          {% endif %}
+
+          <form action="{{ uri('echo') }}#contact" method="post" class="php-email-form" novalidate>
+            <input type="hidden" name="_csrf_token" value="{{ csrf_token }}">
+
+            <div class="row g-4">
+              <div class="col-md-6">
+                <div class="input-group-custom">
+                  <label for="echo-name">Your Name</label>
+                  <div class="input-wrapper{% if errors.name is defined %} is-invalid{% endif %}">
+                    <i class="bi bi-person"></i>
+                    <input id="echo-name" type="text" name="name" value="{{ old.name|default('') }}" placeholder="At least 3 characters" autocomplete="name">
+                  </div>
+                  {% if errors.name is defined %}
+                    <div class="text-danger small mt-1">
+                      {% for rule, message in errors.name %}{{ message }}{% if not loop.last %}, {% endif %}{% endfor %}
+                    </div>
+                  {% endif %}
+                </div>
+              </div>
+
+              <div class="col-md-6">
+                <div class="input-group-custom">
+                  <label for="echo-email">Email Address</label>
+                  <div class="input-wrapper{% if errors.email is defined %} is-invalid{% endif %}">
+                    <i class="bi bi-envelope"></i>
+                    <input id="echo-email" type="email" name="email" value="{{ old.email|default('') }}" placeholder="you@example.com" autocomplete="email">
+                  </div>
+                  {% if errors.email is defined %}
+                    <div class="text-danger small mt-1">
+                      {% for rule, message in errors.email %}{{ message }}{% if not loop.last %}, {% endif %}{% endfor %}
+                    </div>
+                  {% endif %}
+                </div>
+              </div>
+            </div>
+
+            <div class="form-actions">
+              <button type="submit" class="btn-submit">
+                <span>Submit /echo</span>
+                <i class="bi bi-arrow-right-circle-fill"></i>
+              </button>
+              <div class="secure-note">
+                <i class="bi bi-lock-fill"></i>
+                <span>FormRequest validated · flash on redirect</span>
+              </div>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+{% endblock %}

@@ -1,0 +1,6 @@
+/vendor/
+/public/vendor/
+/.env
+/composer-dev.json
+/composer-dev.lock
+/storage

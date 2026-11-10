@@ -1,0 +1,33 @@
+{% extends '@frontend/layouts/base.twig' %}
+
+{% block title %}Hello, {{ name }} — PHP Concept{% endblock %}
+{% block body_class %}starter-page{% endblock %}
+
+{% block content %}
+<section class="hero section">
+  <div class="container" data-aos="fade-up">
+    <div class="row justify-content-center">
+      <div class="col-lg-8 text-center">
+        <div class="hero-tag justify-content-center mb-3">
+          <span class="tag-dot"></span>
+          <span class="tag-text">Route parameter → Twig</span>
+        </div>
+        <h1 class="hero-headline">Hello, {{ name }}</h1>
+        <p class="hero-text">
+          Route parameter <code>{{ name }}</code> was resolved and passed into Twig — no FormRequest needed for this GET.
+        </p>
+        <div class="hero-cta justify-content-center">
+          <a href="{{ uri('home') }}#contact" class="cta-button">
+            <span>Try the form</span>
+            <i class="bi bi-arrow-right"></i>
+          </a>
+          <a href="{{ uri('home') }}" class="cta-link">
+            <i class="bi bi-house"></i>
+            <span>Home</span>
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+{% endblock %}

@@ -6,6 +6,7 @@ One directory = one assembly.
 |-----------|--------|--------|
 | `bff/` | ready (minimal) | HTTP JSON + validation + masking; no DB/session/view |
 | `api/` | ready (minimal) | JSON API + Eloquent; no session/view |
+| `web/` | ready (minimal) | Session + CSRF + Twig views + FormRequest; no DB |
 | `cli/` | — | Console-only |
 | `worker/` | — | Persistent / queue worker entry |
 

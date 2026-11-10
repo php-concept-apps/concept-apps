@@ -1,0 +1,47 @@
+{% extends '@frontend/layouts/base.twig' %}
+
+{% block title %}404 · Page Not Found{% endblock %}
+{% block meta_description %}The page you requested was not found.{% endblock %}
+{% block body_class %}page-404{% endblock %}
+
+{% block content %}
+<section id="error-404" class="error-404 section">
+  <div class="container" data-aos="fade-up" data-aos-delay="100">
+    <div class="row align-items-center g-5">
+      <div class="col-lg-6" data-aos="fade-right" data-aos-delay="200">
+        <div class="error-visual">
+          <div class="error-code">
+            <span class="digit">4</span>
+            <span class="digit middle"><i class="bi bi-emoji-frown"></i></span>
+            <span class="digit">4</span>
+          </div>
+          <div class="error-decoration">
+            <div class="circle circle-1"></div>
+            <div class="circle circle-2"></div>
+            <div class="circle circle-3"></div>
+          </div>
+        </div>
+      </div>
+      <div class="col-lg-6" data-aos="fade-left" data-aos-delay="300">
+        <div class="error-content">
+          <span class="error-badge">Oops!</span>
+          <h1 class="error-heading">Page not found</h1>
+          <p class="error-text">
+            The page you are looking for might have been removed, renamed, or is temporarily unavailable.
+          </p>
+          <div class="action-buttons">
+            <a href="{{ uri('home') }}" class="btn-home">
+              <i class="bi bi-arrow-left"></i>
+              Return Home
+            </a>
+            <button type="button" class="btn-report" onclick="history.back()">
+              <i class="bi bi-arrow-counterclockwise"></i>
+              Go Back
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+{% endblock %}

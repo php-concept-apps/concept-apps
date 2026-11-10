@@ -1,0 +1,32 @@
+{% extends '@frontend/layouts/base.twig' %}
+
+{% block title %}500 · Server Error{% endblock %}
+{% block body_class %}page-404{% endblock %}
+
+{% block content %}
+<section id="error-404" class="error-404 section">
+  <div class="container" data-aos="fade-up">
+    <div class="row align-items-center g-5">
+      <div class="col-lg-6">
+        <div class="error-visual">
+          <div class="error-code">
+            <span class="digit">5</span>
+            <span class="digit middle"><i class="bi bi-exclamation-triangle"></i></span>
+            <span class="digit">0</span>
+          </div>
+        </div>
+      </div>
+      <div class="col-lg-6">
+        <div class="error-content">
+          <span class="error-badge">Error</span>
+          <h1 class="error-heading">Something went wrong</h1>
+          <p class="error-text">Our engineers have been notified. Please try again later.</p>
+          <div class="action-buttons">
+            <a href="{{ uri('home') }}" class="btn-home"><i class="bi bi-arrow-left"></i> Return Home</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+{% endblock %}

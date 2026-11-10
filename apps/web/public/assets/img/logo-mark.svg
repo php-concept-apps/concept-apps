@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg"
+     width="128" height="128"
+     viewBox="0 0 148 128"
+     role="img"
+     aria-label="PHP Concept">
+    <!-- Three nestled isometric cubes in a triangle — compact Concept mark. -->
+    <g fill="#344761" stroke="#ffffff" stroke-width="2" stroke-linejoin="miter">
+        <!-- Top cube -->
+        <path d="M74 6 L98 20 L74 34 L50 20 Z"/>
+        <path d="M50 20 L74 34 L74 58 L50 44 Z"/>
+        <path d="M74 34 L98 20 L98 44 L74 58 Z"/>
+
+        <!-- Bottom-left cube (touches top + right neighbor) -->
+        <path d="M44 50 L68 64 L44 78 L20 64 Z"/>
+        <path d="M20 64 L44 78 L44 102 L20 88 Z"/>
+        <path d="M44 78 L68 64 L68 88 L44 102 Z"/>
+
+        <!-- Bottom-right cube -->
+        <path d="M104 50 L128 64 L104 78 L80 64 Z"/>
+        <path d="M80 64 L104 78 L104 102 L80 88 Z"/>
+        <path d="M104 78 L128 64 L128 88 L104 102 Z"/>
+    </g>
+
+    <g fill="#344761" stroke="#344761" stroke-width="1.8" stroke-linecap="round">
+        <line x1="74" y1="0" x2="74" y2="6"/>
+        <circle cx="74" cy="0" r="2.6" stroke="none"/>
+
+        <line x1="20" y1="88" x2="6" y2="108"/>
+        <line x1="128" y1="88" x2="142" y2="108"/>
+    </g>
+</svg>
