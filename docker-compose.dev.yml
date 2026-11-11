@@ -115,6 +115,24 @@ services:
     depends_on:
       - db
 
+  worker:
+    build: .
+    container_name: concept_apps_worker
+    restart: unless-stopped
+    user: "${UID:-1000}:${GID:-1000}"
+    working_dir: /var/www/html/apps/worker
+    volumes:
+      - .:/var/www/html
+      - ../concept-core-2:/var/www/concept-core-2
+      - ../concept-stack:/var/www/concept-stack
+      - ../concept-extensions:/var/www/concept-extensions
+      - ../concept-bricks:/var/www/concept-bricks
+      - ./docker/php/error-reporting.ini:/usr/local/etc/php/conf.d/error-reporting.ini
+    environment:
+      COMPOSER: composer-dev.json
+    depends_on:
+      - db
+
   db:
     image: mysql:8.4
     command: --mysql-native-password=ON

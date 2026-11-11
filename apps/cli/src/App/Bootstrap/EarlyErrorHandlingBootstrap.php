@@ -4,7 +4,7 @@ namespace Concept\App\Bootstrap;
 
 use Concept\Extensions\ErrorHandlerWhoops\EarlyWhoopsServiceProvider;
 use Concept\Extensions\ErrorHandlerWhoops\Handlers\ReportExceptionHandler;
-use Concept\Stack\Bricks\ErrorHandling\Reporting\PhpErrorLogReporter;
+use Concept\Extensions\ErrorHandlerWhoops\Reporting\PhpErrorLogReporter;
 use League\Container\Container;
 use Whoops\Handler\PlainTextHandler;
 use Whoops\Run as Whoops;

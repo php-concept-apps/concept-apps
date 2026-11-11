@@ -7,10 +7,10 @@
         "php": "^8.4",
         "php-concept/brick-console-symfony": "^1.0",
         "php-concept/brick-database-eloquent": "^1.0",
-        "php-concept/brick-error-handler-whoops": "^1.0",
         "php-concept/brick-logger-monolog": "^1.0",
         "php-concept/core-2": "^1.0",
         "php-concept/extension-config": "^1.0",
+        "php-concept/extension-error-handler-whoops": "^1.0",
         "php-concept/extension-path-manager": "^1.0",
         "php-concept/stack": "^2.0"
     },

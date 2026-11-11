@@ -65,6 +65,7 @@ Copy either to `docker-compose.yml` (gitignored).
 | `api` | HTTP → `apps/api` on host port **8081** |
 | `web` | HTTP → `apps/web` on host port **8082** |
 | `cli` | Console / migrate entry → `apps/cli` (no published ports) |
+| `worker` | Background tick / loop → `apps/worker` (no published ports) |
 | `db` | MySQL on host port **3306** |
 
-`docker compose up` without a service name starts **everything**. Name the service (`bff`, `api`, `web`, `cli`, …) to limit the set; `depends_on` still pulls `db`.
+`docker compose up` without a service name starts **everything**. Name the service (`bff`, `api`, `web`, `cli`, `worker`, …) to limit the set; `depends_on` still pulls `db`.

@@ -8,7 +8,7 @@ One directory = one assembly.
 | `api/` | ready (minimal) | JSON API + Eloquent; no session/view |
 | `web/` | ready (minimal) | Session + CSRF + Twig views + FormRequest; no DB |
 | `cli/` | ready (minimal) | Console + DB; shared API migrations; no HTTP |
-| `worker/` | — | Persistent / queue worker entry |
+| `worker/` | ready (minimal) | Background tick/loop + DB; logging + masking; no HTTP |
 
 Each app owns its `composer.json`, `bootstrap/`, `routes/`, and entrypoint.
 
