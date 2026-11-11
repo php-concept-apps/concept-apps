@@ -6,8 +6,8 @@
 #   cp apps/bff/.env.example apps/bff/.env
 #   cp apps/api/composer-dev.json.example apps/api/composer-dev.json
 #   cp apps/api/.env.example apps/api/.env
-#   cp apps/web/composer-dev.json.example apps/web/composer-dev.json
-#   cp apps/web/.env.example apps/web/.env
+#   cp apps/landing/composer-dev.json.example apps/landing/composer-dev.json
+#   cp apps/landing/.env.example apps/landing/.env
 #   cp apps/cli/composer-dev.json.example apps/cli/composer-dev.json
 #   cp apps/cli/.env.example apps/cli/.env
 #   cp apps/worker/composer-dev.json.example apps/worker/composer-dev.json
@@ -15,7 +15,7 @@
 #   docker compose up -d --build
 #   docker compose exec bff composer install
 #   docker compose exec api composer install
-#   docker compose exec web composer install
+#   docker compose exec landing composer install
 #   docker compose exec cli composer install
 #   docker compose exec worker composer install
 services:
@@ -79,12 +79,12 @@ services:
     depends_on:
       - db
 
-  web:
+  landing:
     build: .
-    container_name: concept_apps_web
+    container_name: concept_apps_landing
     restart: unless-stopped
     user: "${UID:-1000}:${GID:-1000}"
-    working_dir: /var/www/html/apps/web
+    working_dir: /var/www/html/apps/landing
     ports:
       - "8082:80"
     volumes:
@@ -93,7 +93,7 @@ services:
       - ../concept-stack:/var/www/concept-stack
       - ../concept-extensions:/var/www/concept-extensions
       - ../concept-bricks:/var/www/concept-bricks
-      - ./docker/apache/vhost-web.conf:/etc/apache2/sites-available/000-default.conf
+      - ./docker/apache/vhost-landing.conf:/etc/apache2/sites-available/000-default.conf
       - ./docker/php/error-reporting.ini:/usr/local/etc/php/conf.d/error-reporting.ini
     environment:
       COMPOSER: composer-dev.json

@@ -3,7 +3,7 @@
 Long-running background process against the shared API database.  
 Stack: Masking + Logging + Database. No HTTP, console, session, or view.
 
-**Purpose:** consume work in a loop (jobs, pipelines, outbox, sync) — not one-shot ops (`cli`) and not request/response (`api`/`web`).
+**Purpose:** consume work in a loop (jobs, pipelines, outbox, sync) — not one-shot ops (`cli`) and not request/response (`api`/`landing`).
 
 Smoke entry runs one DB tick; `--loop` repeats every 5s.
 

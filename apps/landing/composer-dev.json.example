@@ -1,6 +1,6 @@
 {
-    "name": "php-concept/app-web",
-    "description": "Concept 2 — classic web assembly (session + CSRF + Twig views, no DB)",
+    "name": "php-concept/app-landing",
+    "description": "Concept 2 — landing assembly (session + CSRF + Twig views, no DB)",
     "type": "project",
     "license": "MIT",
     "repositories": [

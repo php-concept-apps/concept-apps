@@ -2,7 +2,7 @@
 
 return [
     'app' => [
-        'name' => 'Concept Web',
+        'name' => 'Concept Landing',
         'timezone' => 'UTC',
         'debug' => false,
     ],

@@ -2,7 +2,7 @@
 
 namespace Concept\App\Foundation;
 
-/** Config keys used by the web assembly. */
+/** Config keys used by the landing assembly. */
 final class ConfigKey
 {
     public const string APP_DEBUG = 'app.debug';

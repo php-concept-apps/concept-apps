@@ -2,8 +2,8 @@
 
 return [
     'log' => [
-        'file' => 'web.log',
-        'name' => 'web',
+        'file' => 'landing.log',
+        'name' => 'landing',
         'level' => 'INFO',
         'max_files' => 14,
     ],

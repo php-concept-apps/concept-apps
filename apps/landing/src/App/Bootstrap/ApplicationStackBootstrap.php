@@ -24,7 +24,7 @@ use League\Container\Container;
 use Whoops\Handler\PrettyPageHandler;
 
 /**
- * Classic web stack: session + CSRF + Twig views. No DB.
+ * Landing stack: session + CSRF + Twig views. No DB.
  */
 final class ApplicationStackBootstrap
 {
@@ -42,11 +42,11 @@ final class ApplicationStackBootstrap
             ->setKeyPatterns($config->getStringList(ConfigKey::MASKING_KEY_PATTERNS))
             ->setRules($config->getClassList(ConfigKey::MASKING_RULES, DataMaskerRuleInterface::class));
 
-        $logFileName = $config->getString(ConfigKey::LOG_FILE, 'web.log');
+        $logFileName = $config->getString(ConfigKey::LOG_FILE, 'landing.log');
         $logMaxFiles = $config->getInt(ConfigKey::LOG_MAX_FILES, 14);
         $stack->add(new LoggingBrick())->builder()
             ->setLevel($config->getString(ConfigKey::LOG_LEVEL, 'INFO'))
-            ->setChannel($config->getString(ConfigKey::LOG_NAME, 'web'))
+            ->setChannel($config->getString(ConfigKey::LOG_NAME, 'landing'))
             ->toRotatingFile($pathManager->get(PathName::LOGS, $logFileName), $logMaxFiles)
             ->withMasking();
 
