@@ -1,0 +1,9 @@
+{% extends '@frontend/layouts/base.twig' %}
+
+{% block title %}503 · {{ config('app.name') }}{% endblock %}
+
+{% block content %}
+<h1>Service unavailable</h1>
+<p>Please try again in a moment.</p>
+<p class="meta"><a href="{{ uri('home') }}">Back home</a></p>
+{% endblock %}

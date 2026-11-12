@@ -7,7 +7,7 @@ One directory = one assembly.
 | `bff/` | ready (minimal) | HTTP JSON + validation + masking; no DB/session/view |
 | `api/` | ready (minimal) | JSON API + Eloquent; no session/view |
 | `landing/` | ready (minimal) | Marketing HTML + session/CSRF/Twig/FormRequest; no DB |
-| `web/` | — | Reserved: fullstack HTML + session + DB |
+| `web/` | scaffold | Browser app: session/CSRF/Twig + DB (`concept_web`); blog domain next |
 | `cli/` | ready (minimal) | Console + DB; shared API migrations; no HTTP |
 | `worker/` | ready (minimal) | Background tick/loop + DB; logging + masking; no HTTP |
 

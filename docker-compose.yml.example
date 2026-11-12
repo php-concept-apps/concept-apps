@@ -58,6 +58,21 @@ services:
     depends_on:
       - db
 
+  web:
+    build: .
+    container_name: concept_apps_web
+    restart: unless-stopped
+    user: "${UID:-1000}:${GID:-1000}"
+    working_dir: /var/www/html/apps/web
+    ports:
+      - "8083:80"
+    volumes:
+      - .:/var/www/html
+      - ./docker/apache/vhost-web.conf:/etc/apache2/sites-available/000-default.conf
+      - ./docker/php/error-reporting.ini:/usr/local/etc/php/conf.d/error-reporting.ini
+    depends_on:
+      - db
+
   cli:
     build: .
     container_name: concept_apps_cli
@@ -92,3 +107,5 @@ services:
       MYSQL_ROOT_PASSWORD: root
     ports:
       - "3306:3306"
+    volumes:
+      - ./docker/mysql/init:/docker-entrypoint-initdb.d:ro

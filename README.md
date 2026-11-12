@@ -36,6 +36,7 @@ docker compose up -d --build          # all services
 # docker compose up -d --build bff    # + db via depends_on
 # docker compose up -d --build api
 # docker compose up -d --build landing
+# docker compose up -d --build web
 docker compose exec php composer install   # COMPOSER=composer-dev.json from compose
 ```
 
@@ -64,8 +65,9 @@ Copy either to `docker-compose.yml` (gitignored).
 | `bff` | HTTP → `apps/bff` on host port **8080** |
 | `api` | HTTP → `apps/api` on host port **8081** |
 | `landing` | HTTP → `apps/landing` on host port **8082** |
+| `web` | HTTP → `apps/web` on host port **8083** |
 | `cli` | Console / migrate entry → `apps/cli` (no published ports) |
 | `worker` | Background tick / loop → `apps/worker` (no published ports) |
-| `db` | MySQL on host port **3306** |
+| `db` | MySQL on host port **3306** (`concept_api`, `concept_web`, …) |
 
-`docker compose up` without a service name starts **everything**. Name the service (`bff`, `api`, `landing`, `cli`, `worker`, …) to limit the set; `depends_on` still pulls `db`.
+`docker compose up` without a service name starts **everything**. Name the service (`bff`, `api`, `landing`, `web`, `cli`, `worker`, …) to limit the set; `depends_on` still pulls `db`.

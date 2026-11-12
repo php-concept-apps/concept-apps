@@ -1,0 +1,9 @@
+{% extends '@frontend/layouts/base.twig' %}
+
+{% block title %}422 · {{ config('app.name') }}{% endblock %}
+
+{% block content %}
+<h1>Unprocessable request</h1>
+<p>Validation failed for this request.</p>
+<p class="meta"><a href="{{ uri('home') }}">Back home</a></p>
+{% endblock %}

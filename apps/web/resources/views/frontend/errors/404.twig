@@ -1,0 +1,9 @@
+{% extends '@frontend/layouts/base.twig' %}
+
+{% block title %}404 · {{ config('app.name') }}{% endblock %}
+
+{% block content %}
+<h1>Page not found</h1>
+<p>The page you requested does not exist.</p>
+<p class="meta"><a href="{{ uri('home') }}">Back home</a></p>
+{% endblock %}
