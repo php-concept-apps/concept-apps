@@ -1,9 +1,29 @@
 {% extends '@frontend/layouts/base.twig' %}
 
 {% block title %}501 · {{ config('app.name') }}{% endblock %}
+{% block body_class %}page-404{% endblock %}
+
+{% block page_title %}
+  {% include '@frontend/partials/page-title.twig' with {
+    page_heading: '501',
+    breadcrumbs: [
+      { label: 'Home', url: uri('home') },
+      { label: '501', current: true },
+    ],
+  } %}
+{% endblock %}
 
 {% block content %}
-<h1>Not implemented</h1>
-<p>This capability is not available yet.</p>
-<p class="meta"><a href="{{ uri('home') }}">Back home</a></p>
+<section id="error-501" class="error-404 section">
+  <div class="container" data-aos="fade-up">
+    <div class="text-center">
+      <h1 class="error-code mb-4">501</h1>
+      <h2 class="error-title mb-3">Not implemented</h2>
+      <p class="error-text mb-4">This capability is not available yet.</p>
+      <div class="error-action">
+        <a href="{{ uri('home') }}" class="btn btn-primary">Back to Home</a>
+      </div>
+    </div>
+  </div>
+</section>
 {% endblock %}

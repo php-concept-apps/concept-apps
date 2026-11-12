@@ -2,7 +2,12 @@
 
 Browser app assembly scaffold: session + CSRF + Twig + Eloquent.  
 Own database `concept_web` (same MySQL container as other apps, separate schema).  
-Blog domain comes later — this step is bootable glue only.
+UI: [Arsha](https://bootstrapmade.com/arsha-free-bootstrap-html-template-corporate/) — Twig partials under `resources/views/frontend/partials/`.  
+Assets layout (same as skeleton/landing):
+- `public/vendor/` — Composer publish (`twbs/bootstrap`, `twbs/bootstrap-icons`; gitignored)
+- `public/libs/` — template third-party needed now (AOS, GLightbox, php-email-form; tracked)
+- `public/assets/` — Arsha `main.css`/`main.js`/img + app overlays `app.css`/`app.js`
+Blog domain comes later — this step is bootable glue + template shell.
 
 ## Endpoints
 

@@ -1,0 +1,23 @@
+{#
+  Expects:
+    page_heading (string)
+    breadcrumbs (list of {label, url?, current?}) — optional
+#}
+<div class="page-title" data-aos="fade">
+  <div class="container">
+    {% if breadcrumbs is defined and breadcrumbs %}
+      <nav class="breadcrumbs">
+        <ol>
+          {% for crumb in breadcrumbs %}
+            {% if crumb.current|default(false) %}
+              <li class="current">{{ crumb.label }}</li>
+            {% else %}
+              <li><a href="{{ crumb.url|default(uri('home')) }}">{{ crumb.label }}</a></li>
+            {% endif %}
+          {% endfor %}
+        </ol>
+      </nav>
+    {% endif %}
+    <h1>{{ page_heading }}</h1>
+  </div>
+</div>

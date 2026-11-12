@@ -94,7 +94,9 @@
         "php-concept/core-2": "^1.0",
         "php-concept/extension-config": "^1.0",
         "php-concept/extension-path-manager": "^1.0",
-        "php-concept/stack": "^2.0"
+        "php-concept/stack": "^2.0",
+        "twbs/bootstrap": "^5.3",
+        "twbs/bootstrap-icons": "^1.13"
     },
     "autoload": {
         "psr-4": {
@@ -109,6 +111,18 @@
         "phpstan/phpstan": "^2.1"
     },
     "scripts": {
+        "post-install-cmd": [
+            "@publish-assets"
+        ],
+        "post-update-cmd": [
+            "@publish-assets"
+        ],
+        "publish-assets": [
+            "mkdir -p public/vendor/bootstrap",
+            "cp -R vendor/twbs/bootstrap/dist/. public/vendor/bootstrap/",
+            "mkdir -p public/vendor/bootstrap-icons",
+            "cp -R vendor/twbs/bootstrap-icons/font/. public/vendor/bootstrap-icons/"
+        ],
         "phpstan": "vendor/bin/phpstan analyze --memory-limit=512M"
     }
 }

@@ -1,9 +1,22 @@
 {% extends '@frontend/layouts/base.twig' %}
 
 {% block title %}Home · {{ config('app.name') }}{% endblock %}
+{% block meta_description %}Concept 2 web assembly scaffold{% endblock %}
+{% block body_class %}starter-page-page{% endblock %}
+
+{% block page_title %}
+  {% include '@frontend/partials/page-title.twig' with {
+    page_heading: 'Home',
+    breadcrumbs: [
+      { label: 'Home', current: true },
+    ],
+  } %}
+{% endblock %}
 
 {% block content %}
-<h1>Web scaffold</h1>
-<p>Browser assembly is up: session, CSRF, Twig, and Eloquent against <code>concept_web</code>.</p>
-<p class="meta">Blog domain comes next. This page only proves the app boots.</p>
+<section id="starter-section" class="starter-section section">
+  <div class="container" data-aos="fade-up">
+    <p>Web scaffold is running on the Arsha template. Blog domain comes next.</p>
+  </div>
+</section>
 {% endblock %}
