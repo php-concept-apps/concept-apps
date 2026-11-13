@@ -1,0 +1,44 @@
+{% extends '@dashboard/layouts/base.twig' %}
+
+{% set is_edit = tag is not null %}
+{% block title %}{{ is_edit ? 'Edit tag' : 'New tag' }} · {{ config('app.name') }}{% endblock %}
+
+{% block content_header %}
+  {% include '@dashboard/partials/content-header.twig' with {
+    page_heading: is_edit ? 'Edit tag' : 'New tag',
+    breadcrumbs: [
+      { label: 'Home', url: uri('admin.home') },
+      { label: 'Tags', url: uri('admin.tags') },
+      { label: is_edit ? 'Edit' : 'Create', current: true },
+    ],
+  } %}
+{% endblock %}
+
+{% block content %}
+<div class="card">
+  <form
+    action="{{ is_edit ? uri('admin.tags.update', {id: tag.id}) : uri('admin.tags.store') }}"
+    method="post"
+  >
+    <input type="hidden" name="_csrf_token" value="{{ csrf_token }}">
+    <div class="card-body">
+      <div class="row g-3">
+        <div class="col-md-6">
+          <label class="form-label" for="name">Name <span class="text-danger">*</span></label>
+          <input id="name" type="text" name="name" class="form-control {{ errors.name is defined and errors.name ? 'is-invalid' : '' }}" value="{{ old.name|default(tag ? tag.name : '') }}" required>
+          {% include '@dashboard/partials/_field_errors.twig' with { field: 'name' } %}
+        </div>
+        <div class="col-md-6">
+          <label class="form-label" for="slug">Slug</label>
+          <input id="slug" type="text" name="slug" class="form-control {{ errors.slug is defined and errors.slug ? 'is-invalid' : '' }}" value="{{ old.slug|default(tag ? tag.slug : '') }}" placeholder="auto from name">
+          {% include '@dashboard/partials/_field_errors.twig' with { field: 'slug' } %}
+        </div>
+      </div>
+    </div>
+    <div class="card-footer d-flex gap-2">
+      <button type="submit" class="btn btn-primary">{{ is_edit ? 'Save' : 'Create' }}</button>
+      <a href="{{ uri('admin.tags') }}" class="btn btn-outline-secondary">Cancel</a>
+    </div>
+  </form>
+</div>
+{% endblock %}

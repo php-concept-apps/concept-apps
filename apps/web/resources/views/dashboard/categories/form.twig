@@ -1,0 +1,54 @@
+{% extends '@dashboard/layouts/base.twig' %}
+
+{% set is_edit = category is not null %}
+{% block title %}{{ is_edit ? 'Edit category' : 'New category' }} · {{ config('app.name') }}{% endblock %}
+
+{% block content_header %}
+  {% include '@dashboard/partials/content-header.twig' with {
+    page_heading: is_edit ? 'Edit category' : 'New category',
+    breadcrumbs: [
+      { label: 'Home', url: uri('admin.home') },
+      { label: 'Categories', url: uri('admin.categories') },
+      { label: is_edit ? 'Edit' : 'Create', current: true },
+    ],
+  } %}
+{% endblock %}
+
+{% block content %}
+<div class="card">
+  <form
+    action="{{ is_edit ? uri('admin.categories.update', {id: category.id}) : uri('admin.categories.store') }}"
+    method="post"
+  >
+    <input type="hidden" name="_csrf_token" value="{{ csrf_token }}">
+    <div class="card-body">
+      <div class="row g-3">
+        <div class="col-md-6">
+          <label class="form-label" for="name">Name <span class="text-danger">*</span></label>
+          <input id="name" type="text" name="name" class="form-control {{ errors.name is defined and errors.name ? 'is-invalid' : '' }}" value="{{ old.name|default(category ? category.name : '') }}" required>
+          {% include '@dashboard/partials/_field_errors.twig' with { field: 'name' } %}
+        </div>
+        <div class="col-md-4">
+          <label class="form-label" for="slug">Slug</label>
+          <input id="slug" type="text" name="slug" class="form-control {{ errors.slug is defined and errors.slug ? 'is-invalid' : '' }}" value="{{ old.slug|default(category ? category.slug : '') }}" placeholder="auto from name">
+          {% include '@dashboard/partials/_field_errors.twig' with { field: 'slug' } %}
+        </div>
+        <div class="col-md-2">
+          <label class="form-label" for="sort_order">Sort</label>
+          <input id="sort_order" type="number" name="sort_order" class="form-control {{ errors.sort_order is defined and errors.sort_order ? 'is-invalid' : '' }}" value="{{ old.sort_order|default(category ? category.sort_order : 0) }}">
+          {% include '@dashboard/partials/_field_errors.twig' with { field: 'sort_order' } %}
+        </div>
+        <div class="col-12">
+          <label class="form-label" for="description">Description</label>
+          <textarea id="description" name="description" rows="3" class="form-control {{ errors.description is defined and errors.description ? 'is-invalid' : '' }}">{{ old.description|default(category ? category.description : '') }}</textarea>
+          {% include '@dashboard/partials/_field_errors.twig' with { field: 'description' } %}
+        </div>
+      </div>
+    </div>
+    <div class="card-footer d-flex gap-2">
+      <button type="submit" class="btn btn-primary">{{ is_edit ? 'Save' : 'Create' }}</button>
+      <a href="{{ uri('admin.categories') }}" class="btn btn-outline-secondary">Cancel</a>
+    </div>
+  </form>
+</div>
+{% endblock %}

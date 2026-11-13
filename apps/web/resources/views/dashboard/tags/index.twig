@@ -1,0 +1,72 @@
+{% extends '@dashboard/layouts/base.twig' %}
+
+{% block title %}Tags · {{ config('app.name') }}{% endblock %}
+
+{% block content_header %}
+  {% include '@dashboard/partials/content-header.twig' with {
+    page_heading: 'Tags',
+    breadcrumbs: [
+      { label: 'Home', url: uri('admin.home') },
+      { label: 'Tags', current: true },
+    ],
+  } %}
+{% endblock %}
+
+{% block content %}
+<div class="row mb-3">
+  <div class="col-12 text-end">
+    <a class="btn btn-primary" href="{{ uri('admin.tags.create') }}">
+      <i class="bi bi-plus-lg me-1"></i> New tag
+    </a>
+  </div>
+</div>
+
+<div class="card">
+  <div class="card-header">
+    <h3 class="card-title">All tags</h3>
+    {% if tags.total > 0 %}
+      <span class="badge text-bg-primary ms-2">{{ tags.total }}</span>
+    {% endif %}
+  </div>
+  <div class="card-body table-responsive p-0">
+    <table class="table table-striped table-hover mb-0">
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Name</th>
+          <th>Slug</th>
+          <th class="text-end">Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for tag in tags %}
+          <tr>
+            <td>#{{ tag.id }}</td>
+            <td><a href="{{ uri('admin.tags.edit', {id: tag.id}) }}">{{ tag.name }}</a></td>
+            <td>{{ tag.slug }}</td>
+            <td class="text-end text-nowrap">
+              <a class="btn btn-outline-secondary btn-sm" href="{{ uri('admin.tags.edit', {id: tag.id}) }}">Edit</a>
+              <form action="{{ uri('admin.tags.destroy', {id: tag.id}) }}" method="post" class="d-inline" onsubmit="return confirm('Delete this tag?')">
+                <input type="hidden" name="_csrf_token" value="{{ csrf_token }}">
+                <button type="submit" class="btn btn-outline-danger btn-sm">Delete</button>
+              </form>
+            </td>
+          </tr>
+        {% else %}
+          <tr>
+            <td colspan="4" class="text-center text-muted py-4">No tags yet.</td>
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+  {% if tags.total > 0 %}
+    <div class="card-footer clearfix">
+      <span class="float-start text-muted">
+        Showing <strong>{{ tags.firstItem }}–{{ tags.lastItem }}</strong> of {{ tags.total }}
+      </span>
+      {% include '@dashboard/partials/_pagination.twig' with { items: tags } %}
+    </div>
+  {% endif %}
+</div>
+{% endblock %}

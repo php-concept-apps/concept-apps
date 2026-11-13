@@ -1,0 +1,82 @@
+{% extends '@dashboard/layouts/base.twig' %}
+
+{% block title %}Posts · {{ config('app.name') }}{% endblock %}
+
+{% block content_header %}
+  {% include '@dashboard/partials/content-header.twig' with {
+    page_heading: 'Posts',
+    breadcrumbs: [
+      { label: 'Home', url: uri('admin.home') },
+      { label: 'Posts', current: true },
+    ],
+  } %}
+{% endblock %}
+
+{% block content %}
+<div class="row mb-3">
+  <div class="col-12 text-end">
+    <a class="btn btn-primary" href="{{ uri('admin.posts.create') }}">
+      <i class="bi bi-plus-lg me-1"></i> New post
+    </a>
+  </div>
+</div>
+
+<div class="card">
+  <div class="card-header">
+    <h3 class="card-title">All posts</h3>
+    {% if posts.total > 0 %}
+      <span class="badge text-bg-primary ms-2">{{ posts.total }}</span>
+    {% endif %}
+  </div>
+  <div class="card-body table-responsive p-0">
+    <table class="table table-striped table-hover mb-0">
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Title</th>
+          <th>Category</th>
+          <th>Status</th>
+          <th>Published</th>
+          <th class="text-end">Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for post in posts %}
+          <tr>
+            <td>#{{ post.id }}</td>
+            <td>
+              <a href="{{ uri('admin.posts.edit', {id: post.id}) }}">{{ post.title }}</a>
+              <div class="small text-muted">{{ post.slug }}</div>
+            </td>
+            <td>{{ post.category ? post.category.name : '—' }}</td>
+            <td>
+              {% set badge = post.status.value == 'published' ? 'success' : (post.status.value == 'archived' ? 'secondary' : 'warning') %}
+              <span class="badge text-bg-{{ badge }}">{{ post.status.value }}</span>
+            </td>
+            <td>{{ post.published_at ? post.published_at|date('Y-m-d H:i') : '—' }}</td>
+            <td class="text-end text-nowrap">
+              <a class="btn btn-outline-secondary btn-sm" href="{{ uri('admin.posts.edit', {id: post.id}) }}">Edit</a>
+              <form action="{{ uri('admin.posts.destroy', {id: post.id}) }}" method="post" class="d-inline" onsubmit="return confirm('Delete this post?')">
+                <input type="hidden" name="_csrf_token" value="{{ csrf_token }}">
+                <button type="submit" class="btn btn-outline-danger btn-sm">Delete</button>
+              </form>
+            </td>
+          </tr>
+        {% else %}
+          <tr>
+            <td colspan="6" class="text-center text-muted py-4">No posts yet.</td>
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+  {% if posts.total > 0 %}
+    <div class="card-footer clearfix">
+      <span class="float-start text-muted">
+        Showing <strong>{{ posts.firstItem }}–{{ posts.lastItem }}</strong> of {{ posts.total }}
+      </span>
+      {% include '@dashboard/partials/_pagination.twig' with { items: posts } %}
+    </div>
+  {% endif %}
+</div>
+{% endblock %}

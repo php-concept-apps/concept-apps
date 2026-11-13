@@ -26,9 +26,21 @@
         </li>
         <li class="nav-header">CONTENT</li>
         <li class="nav-item">
-          <a href="{{ uri('admin.home') }}" class="nav-link{% if admin_nav|default('') == 'posts' %} active{% endif %}">
+          <a href="{{ uri('admin.posts') }}" class="nav-link{% if admin_nav|default('') == 'posts' %} active{% endif %}">
             <i class="nav-icon bi bi-journal-text"></i>
             <p>Posts</p>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a href="{{ uri('admin.categories') }}" class="nav-link{% if admin_nav|default('') == 'categories' %} active{% endif %}">
+            <i class="nav-icon bi bi-folder"></i>
+            <p>Categories</p>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a href="{{ uri('admin.tags') }}" class="nav-link{% if admin_nav|default('') == 'tags' %} active{% endif %}">
+            <i class="nav-icon bi bi-tags"></i>
+            <p>Tags</p>
           </a>
         </li>
       </ul>

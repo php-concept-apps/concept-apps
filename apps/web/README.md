@@ -19,6 +19,9 @@ Authoring UI: `/admin` (AdminLTE). Auth + posts CRUD come next.
 | `POST` | `/admin/login` | authenticate |
 | `GET` | `/admin` | authoring dashboard (auth required) |
 | `POST` | `/admin/logout` | sign out |
+| `*` | `/admin/posts` | posts CRUD |
+| `*` | `/admin/categories` | categories CRUD |
+| `*` | `/admin/tags` | tags CRUD |
 
 Demo user: `ada@example.com` / `secret`.
 

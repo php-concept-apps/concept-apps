@@ -14,14 +14,37 @@
 
 {% block content %}
 <div class="row">
-  <div class="col-12">
-    <div class="card">
-      <div class="card-header">
-        <h3 class="card-title">Admin scaffold</h3>
+  <div class="col-md-4">
+    <div class="small-box text-bg-primary">
+      <div class="inner">
+        <h3>{{ posts_count }}</h3>
+        <p>Posts</p>
       </div>
-      <div class="card-body">
-        AdminLTE shell is up. Auth and posts CRUD come next.
+      <a href="{{ uri('admin.posts') }}" class="small-box-footer link-light link-underline-opacity-0">
+        Manage <i class="bi bi-link-45deg"></i>
+      </a>
+    </div>
+  </div>
+  <div class="col-md-4">
+    <div class="small-box text-bg-success">
+      <div class="inner">
+        <h3>{{ categories_count }}</h3>
+        <p>Categories</p>
       </div>
+      <a href="{{ uri('admin.categories') }}" class="small-box-footer link-light link-underline-opacity-0">
+        Manage <i class="bi bi-link-45deg"></i>
+      </a>
+    </div>
+  </div>
+  <div class="col-md-4">
+    <div class="small-box text-bg-warning">
+      <div class="inner">
+        <h3>{{ tags_count }}</h3>
+        <p>Tags</p>
+      </div>
+      <a href="{{ uri('admin.tags') }}" class="small-box-footer link-light link-underline-opacity-0">
+        Manage <i class="bi bi-link-45deg"></i>
+      </a>
     </div>
   </div>
 </div>

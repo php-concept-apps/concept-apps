@@ -1,0 +1,135 @@
+{% extends '@dashboard/layouts/base.twig' %}
+
+{% set is_edit = post is not null %}
+{% block title %}{{ is_edit ? 'Edit post' : 'New post' }} · {{ config('app.name') }}{% endblock %}
+
+{% block content_header %}
+  {% include '@dashboard/partials/content-header.twig' with {
+    page_heading: is_edit ? 'Edit post' : 'New post',
+    breadcrumbs: [
+      { label: 'Home', url: uri('admin.home') },
+      { label: 'Posts', url: uri('admin.posts') },
+      { label: is_edit ? 'Edit' : 'Create', current: true },
+    ],
+  } %}
+{% endblock %}
+
+{% block content %}
+<div class="card">
+  <form
+    action="{{ is_edit ? uri('admin.posts.update', {id: post.id}) : uri('admin.posts.store') }}"
+    method="post"
+  >
+    <input type="hidden" name="_csrf_token" value="{{ csrf_token }}">
+    <div class="card-body">
+      <div class="row g-3">
+        <div class="col-md-8">
+          <label class="form-label" for="title">Title <span class="text-danger">*</span></label>
+          <input
+            id="title"
+            type="text"
+            name="title"
+            class="form-control {{ errors.title is defined and errors.title ? 'is-invalid' : '' }}"
+            value="{{ old.title|default(post ? post.title : '') }}"
+            required
+          >
+          {% include '@dashboard/partials/_field_errors.twig' with { field: 'title' } %}
+        </div>
+        <div class="col-md-4">
+          <label class="form-label" for="slug">Slug</label>
+          <input
+            id="slug"
+            type="text"
+            name="slug"
+            class="form-control {{ errors.slug is defined and errors.slug ? 'is-invalid' : '' }}"
+            value="{{ old.slug|default(post ? post.slug : '') }}"
+            placeholder="auto from title"
+          >
+          {% include '@dashboard/partials/_field_errors.twig' with { field: 'slug' } %}
+        </div>
+        <div class="col-md-4">
+          <label class="form-label" for="category_id">Category</label>
+          <select id="category_id" name="category_id" class="form-select {{ errors.category_id is defined and errors.category_id ? 'is-invalid' : '' }}">
+            <option value="">— none —</option>
+            {% set current_category = old.category_id|default(post ? post.category_id : '') %}
+            {% for category in categories %}
+              <option value="{{ category.id }}" {{ current_category == category.id ? 'selected' : '' }}>{{ category.name }}</option>
+            {% endfor %}
+          </select>
+          {% include '@dashboard/partials/_field_errors.twig' with { field: 'category_id' } %}
+        </div>
+        <div class="col-md-4">
+          <label class="form-label" for="status">Status <span class="text-danger">*</span></label>
+          {% set current_status = old.status|default(post ? post.status.value : 'draft') %}
+          <select id="status" name="status" class="form-select {{ errors.status is defined and errors.status ? 'is-invalid' : '' }}" required>
+            {% for status in statuses %}
+              <option value="{{ status.value }}" {{ current_status == status.value ? 'selected' : '' }}>{{ status.value }}</option>
+            {% endfor %}
+          </select>
+          {% include '@dashboard/partials/_field_errors.twig' with { field: 'status' } %}
+        </div>
+        <div class="col-md-4">
+          <label class="form-label" for="published_at">Published at</label>
+          <input
+            id="published_at"
+            type="datetime-local"
+            name="published_at"
+            class="form-control {{ errors.published_at is defined and errors.published_at ? 'is-invalid' : '' }}"
+            value="{{ old.published_at|default(post and post.published_at ? post.published_at|date('Y-m-d\\TH:i') : '') }}"
+          >
+          {% include '@dashboard/partials/_field_errors.twig' with { field: 'published_at' } %}
+        </div>
+        <div class="col-12">
+          <label class="form-label" for="excerpt">Excerpt</label>
+          <textarea
+            id="excerpt"
+            name="excerpt"
+            rows="2"
+            class="form-control {{ errors.excerpt is defined and errors.excerpt ? 'is-invalid' : '' }}"
+          >{{ old.excerpt|default(post ? post.excerpt : '') }}</textarea>
+          {% include '@dashboard/partials/_field_errors.twig' with { field: 'excerpt' } %}
+        </div>
+        <div class="col-12">
+          <label class="form-label" for="body">Body <span class="text-danger">*</span></label>
+          <textarea
+            id="body"
+            name="body"
+            rows="12"
+            class="form-control {{ errors.body is defined and errors.body ? 'is-invalid' : '' }}"
+            required
+          >{{ old.body|default(post ? post.body : '') }}</textarea>
+          {% include '@dashboard/partials/_field_errors.twig' with { field: 'body' } %}
+        </div>
+        <div class="col-12">
+          <label class="form-label">Tags</label>
+          <div class="row g-2">
+            {% set current_tags = old.tag_ids|default(selected_tag_ids) %}
+            {% for tag in tags %}
+              <div class="col-md-3 col-sm-4 col-6">
+                <div class="form-check">
+                  <input
+                    class="form-check-input"
+                    type="checkbox"
+                    name="tag_ids[]"
+                    value="{{ tag.id }}"
+                    id="tag_{{ tag.id }}"
+                    {{ tag.id in current_tags ? 'checked' : '' }}
+                  >
+                  <label class="form-check-label" for="tag_{{ tag.id }}">{{ tag.name }}</label>
+                </div>
+              </div>
+            {% else %}
+              <div class="col-12 text-muted">No tags yet. Create some under Tags.</div>
+            {% endfor %}
+          </div>
+          {% include '@dashboard/partials/_field_errors.twig' with { field: 'tag_ids' } %}
+        </div>
+      </div>
+    </div>
+    <div class="card-footer d-flex gap-2">
+      <button type="submit" class="btn btn-primary">{{ is_edit ? 'Save' : 'Create' }}</button>
+      <a href="{{ uri('admin.posts') }}" class="btn btn-outline-secondary">Cancel</a>
+    </div>
+  </form>
+</div>
+{% endblock %}
