@@ -1,5 +1,7 @@
 <?php declare(strict_types=1);
 
+use Concept\App\Database\Seeders\UserSeeder;
+
 return [
     'db' => [
         'prefix' => '',
@@ -19,6 +21,11 @@ return [
         'table' => 'migrations',
         'paths' => [
             'database/migrations',
+        ],
+    ],
+    'seeders' => [
+        'list' => [
+            UserSeeder::class,
         ],
     ],
 ];

@@ -15,6 +15,15 @@ Blog domain comes later — this step is bootable glue + template shell.
 |--------|------|--------|
 | `GET` | `/` | scaffold home |
 
+## Database
+
+Schema lives in `concept_web` (separate from `concept_api`).
+
+| Command | Notes |
+|---------|--------|
+| `composer console db:migrate` | apply migrations |
+| `composer console db:seed` | seed users (`ada@example.com` / `secret`) |
+
 ## Run (maintainer)
 
 ```bash

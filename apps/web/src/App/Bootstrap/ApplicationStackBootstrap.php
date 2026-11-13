@@ -11,6 +11,7 @@ use Concept\Extensions\DataMasker\Contracts\DataMaskerRuleInterface;
 use Concept\Extensions\PathManager\PathManager;
 use Concept\Extensions\ValidationRakit\Contracts\RuleInterface;
 use Concept\Stack\Bricks\Casting\CastingBrick;
+use Concept\Stack\Bricks\Console\ConsoleBrick;
 use Concept\Stack\Bricks\Database\DatabaseBrick;
 use Concept\Stack\Bricks\ErrorHandling\ErrorHandlingBrick;
 use Concept\Stack\Bricks\Http\HttpBrick;
@@ -22,10 +23,11 @@ use Concept\Stack\Bricks\View\ViewBrick;
 use Concept\Stack\Bricks\ViewTwig\ViewTwigBrick;
 use Concept\Stack\ConceptStack;
 use League\Container\Container;
+use Symfony\Component\Console\Command\Command;
 use Whoops\Handler\PrettyPageHandler;
 
 /**
- * Web stack: session + CSRF + Twig + database. Browser app scaffold (blog later).
+ * Web stack: session + CSRF + Twig + database (+ console for migrate/seed).
  */
 final class ApplicationStackBootstrap
 {
@@ -69,6 +71,7 @@ final class ApplicationStackBootstrap
             ->setConnection($app->dbConnection())
             ->setMigrations($pathManager->rootList($config->getStringList(ConfigKey::MIGRATIONS_PATHS)))
             ->setMigrationsTable($config->getString(ConfigKey::MIGRATIONS_TABLE, 'migrations'))
+            ->setSeeders($config->getClassStringList(ConfigKey::SEEDERS_LIST))
             ->withMasking();
 
         if ($config->getBool(ConfigKey::DB_LOG_ENABLED)) {
@@ -102,6 +105,12 @@ final class ApplicationStackBootstrap
             ->setExtensions($viewExtensions)
             ->setRouteNamespaces($config->getStringMap(ConfigKey::VIEW_ROUTE_NAMESPACE))
             ->withEngine($twig);
+
+        $stack->add(new ConsoleBrick())->builder()
+            ->setName($config->getString(ConfigKey::APP_NAME, 'Concept Web'))
+            ->setVersion($config->getString(ConfigKey::APP_VERSION, '0.1.0'))
+            ->setCommands($config->getClassList(ConfigKey::COMMANDS, Command::class))
+            ->withLogging();
 
         $stack->add(new ErrorHandlingBrick())->builder()
             ->setDebug($debug, new PrettyPageHandler())

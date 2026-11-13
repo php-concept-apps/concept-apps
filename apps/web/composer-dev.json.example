@@ -82,6 +82,7 @@
     "require": {
         "php": "^8.4",
         "php-concept/brick-casting-valinor": "^1.0",
+        "php-concept/brick-console-symfony": "^1.0",
         "php-concept/brick-data-masker": "^1.0",
         "php-concept/brick-database-eloquent": "^1.0",
         "php-concept/brick-error-handler-whoops": "^1.0",
@@ -123,6 +124,7 @@
             "mkdir -p public/vendor/bootstrap-icons",
             "cp -R vendor/twbs/bootstrap-icons/font/. public/vendor/bootstrap-icons/"
         ],
+        "console": "php bin/console.php",
         "phpstan": "vendor/bin/phpstan analyze --memory-limit=512M"
     }
 }
