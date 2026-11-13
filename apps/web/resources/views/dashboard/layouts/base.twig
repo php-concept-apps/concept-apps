@@ -1,0 +1,44 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+  <title>{% block title %}Admin · {{ config('app.name') }}{% endblock %}</title>
+  {% include '@dashboard/partials/theme-init.twig' %}
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+  <meta name="color-scheme" content="light dark">
+  {#
+    Template: AdminLTE 4.10.1
+    https://adminlte.io — MIT License
+  #}
+  {% include '@dashboard/partials/styles.twig' %}
+  {% block head %}{% endblock %}
+</head>
+<body class="layout-fixed sidebar-expand-lg bg-body-tertiary {% block body_class %}{% endblock %}">
+  <div class="app-wrapper">
+    {% block header %}
+      {% include '@dashboard/partials/header.twig' %}
+    {% endblock %}
+
+    {% block sidebar %}
+      {% include '@dashboard/partials/sidebar.twig' %}
+    {% endblock %}
+
+    <main class="app-main">
+      {% include '@dashboard/partials/flash.twig' %}
+      {% block content_header %}{% endblock %}
+      <div class="app-content">
+        <div class="container-fluid">
+          {% block content %}{% endblock %}
+        </div>
+      </div>
+    </main>
+
+    {% block footer %}
+      {% include '@dashboard/partials/footer.twig' %}
+    {% endblock %}
+  </div>
+
+  {% include '@dashboard/partials/scripts.twig' %}
+  {% block scripts %}{% endblock %}
+</body>
+</html>

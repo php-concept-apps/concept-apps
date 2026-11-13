@@ -4,6 +4,7 @@ return [
     'routes' => [
         'list' => [
             'routes/web.php',
+            'routes/admin.php',
         ],
     ],
 ];

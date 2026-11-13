@@ -1,17 +1,21 @@
 <?php declare(strict_types=1);
 
+use Concept\App\View\Twig\AuthTwigExtension;
 use Concept\App\View\Twig\TwigAppExtension;
 
 return [
     'view' => [
         'paths' => [
             'frontend' => '/resources/views/frontend',
+            'dashboard' => '/resources/views/dashboard',
         ],
         'extensions' => [
             TwigAppExtension::class,
+            AuthTwigExtension::class,
         ],
         'route_namespace' => [
             '/' => 'frontend',
+            '/admin' => 'dashboard',
         ],
         'cache_dir' => 'views',
     ],

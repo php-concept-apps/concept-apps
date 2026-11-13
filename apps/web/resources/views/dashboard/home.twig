@@ -1,0 +1,28 @@
+{% extends '@dashboard/layouts/base.twig' %}
+
+{% block title %}Dashboard · {{ config('app.name') }}{% endblock %}
+
+{% block content_header %}
+  {% include '@dashboard/partials/content-header.twig' with {
+    page_heading: 'Dashboard',
+    breadcrumbs: [
+      { label: 'Home', url: uri('admin.home') },
+      { label: 'Dashboard', current: true },
+    ],
+  } %}
+{% endblock %}
+
+{% block content %}
+<div class="row">
+  <div class="col-12">
+    <div class="card">
+      <div class="card-header">
+        <h3 class="card-title">Admin scaffold</h3>
+      </div>
+      <div class="card-body">
+        AdminLTE shell is up. Auth and posts CRUD come next.
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

@@ -51,4 +51,9 @@ final class User extends Model
     {
         return $this->getAttribute('status') === UserStatus::Active;
     }
+
+    public function getName(): string
+    {
+        return (string) $this->getAttribute('name');
+    }
 }

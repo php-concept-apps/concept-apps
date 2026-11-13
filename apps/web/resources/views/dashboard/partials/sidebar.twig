@@ -1,0 +1,37 @@
+<aside class="app-sidebar bg-body-secondary shadow" data-bs-theme="dark">
+  <div class="sidebar-brand">
+    <a href="{{ uri('admin.home') }}" class="brand-link">
+      <img
+        src="/assets/admin/img/AdminLTELogo.png"
+        alt="Admin logo"
+        class="brand-image opacity-75 shadow"
+      >
+      <span class="brand-text fw-light">{{ config('app.name') }}</span>
+    </a>
+  </div>
+
+  <div class="sidebar-wrapper">
+    <nav class="mt-2" aria-label="Admin navigation">
+      <ul
+        class="nav sidebar-menu flex-column"
+        data-lte-toggle="treeview"
+        data-accordion="false"
+        id="navigation"
+      >
+        <li class="nav-item">
+          <a href="{{ uri('admin.home') }}" class="nav-link{% if admin_nav|default('dashboard') == 'dashboard' %} active{% endif %}">
+            <i class="nav-icon bi bi-speedometer2"></i>
+            <p>Dashboard</p>
+          </a>
+        </li>
+        <li class="nav-header">CONTENT</li>
+        <li class="nav-item">
+          <a href="{{ uri('admin.home') }}" class="nav-link{% if admin_nav|default('') == 'posts' %} active{% endif %}">
+            <i class="nav-icon bi bi-journal-text"></i>
+            <p>Posts</p>
+          </a>
+        </li>
+      </ul>
+    </nav>
+  </div>
+</aside>

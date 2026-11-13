@@ -5,15 +5,22 @@ Own database `concept_web` (same MySQL container as other apps, separate schema)
 UI: [Arsha](https://bootstrapmade.com/arsha-free-bootstrap-html-template-corporate/) — Twig partials under `resources/views/frontend/partials/`.  
 Assets layout (same as skeleton/landing):
 - `public/vendor/` — Composer publish (`twbs/bootstrap`, `twbs/bootstrap-icons`; gitignored)
-- `public/libs/` — template third-party needed now (AOS, GLightbox, php-email-form; tracked)
-- `public/assets/` — Arsha `main.css`/`main.js`/img + app overlays `app.css`/`app.js`
-Blog domain comes later — this step is bootable glue + template shell.
+- `public/libs/` — third-party (AOS/GLightbox/php-email-form for public; OverlayScrollbars for admin)
+- `public/assets/` — Arsha public UI
+- `public/assets/admin/` — AdminLTE (`adminlte.min.css/js` + `app.*` overlays)
+Authoring UI: `/admin` (AdminLTE). Auth + posts CRUD come next.
 
 ## Endpoints
 
 | Method | Path | Notes |
 |--------|------|--------|
-| `GET` | `/` | scaffold home |
+| `GET` | `/` | public scaffold (Arsha) |
+| `GET` | `/admin/login` | session login (guest) |
+| `POST` | `/admin/login` | authenticate |
+| `GET` | `/admin` | authoring dashboard (auth required) |
+| `POST` | `/admin/logout` | sign out |
+
+Demo user: `ada@example.com` / `secret`.
 
 ## Database
 

@@ -1,0 +1,92 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+  <title>Sign in · {{ config('app.name') }}</title>
+  {% include '@dashboard/partials/theme-init.twig' %}
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+  <meta name="color-scheme" content="light dark">
+  {% include '@dashboard/partials/styles.twig' %}
+</head>
+<body class="login-page bg-body-secondary">
+  <main class="login-box">
+    <h1 class="login-logo">
+      <a href="{{ uri('home') }}"><b>{{ config('app.name') }}</b></a>
+    </h1>
+
+    <div class="card">
+      <div class="card-body login-card-body">
+        <p class="login-box-msg">Sign in to start your session</p>
+
+        {% if flashes is defined and flashes %}
+          {% for type, messages in flashes %}
+            {% set alert = type == 'error' ? 'danger' : type %}
+            {% for message in messages %}
+              <div class="alert alert-{{ alert }} py-2">{{ message }}</div>
+            {% endfor %}
+          {% endfor %}
+        {% endif %}
+
+        {% if errors is defined and errors %}
+          <div class="alert alert-danger py-2">
+            {% for field, fieldErrors in errors %}
+              {% for error in fieldErrors %}
+                <div>{{ error }}</div>
+              {% endfor %}
+            {% endfor %}
+          </div>
+        {% endif %}
+
+        <form action="{{ uri('admin.login.submit') }}" method="post">
+          <input type="hidden" name="_csrf_token" value="{{ csrf_token }}">
+
+          <label class="visually-hidden" for="loginEmail">Email</label>
+          <div class="input-group mb-3">
+            <input
+              id="loginEmail"
+              type="email"
+              name="email"
+              class="form-control"
+              placeholder="Email"
+              value="{{ old.email|default('') }}"
+              required
+              autofocus
+            >
+            <div class="input-group-text"><span class="bi bi-envelope"></span></div>
+          </div>
+
+          <label class="visually-hidden" for="loginPassword">Password</label>
+          <div class="input-group mb-3">
+            <input
+              id="loginPassword"
+              type="password"
+              name="password"
+              class="form-control"
+              placeholder="Password"
+              required
+            >
+            <div class="input-group-text"><span class="bi bi-lock-fill"></span></div>
+          </div>
+
+          <div class="row">
+            <div class="col-8">
+              <div class="form-check">
+                <input class="form-check-input" type="checkbox" value="1" id="rememberMe" name="remember">
+                <label class="form-check-label" for="rememberMe">Remember Me</label>
+              </div>
+            </div>
+            <div class="col-4">
+              <div class="d-grid gap-2">
+                <button type="submit" class="btn btn-primary">Sign In</button>
+              </div>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+  </main>
+
+  <script src="/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+  <script src="/assets/admin/js/adminlte.min.js"></script>
+</body>
+</html>

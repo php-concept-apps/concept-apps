@@ -1,0 +1,29 @@
+{#
+  Expects:
+    page_heading (string)
+    breadcrumbs (list of {label, url?, current?}) — optional
+#}
+<div class="app-content-header">
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-sm-6">
+        <h1 class="mb-0 fs-3">{{ page_heading }}</h1>
+      </div>
+      <div class="col-sm-6">
+        {% if breadcrumbs is defined and breadcrumbs %}
+          <nav aria-label="breadcrumb">
+            <ol class="breadcrumb float-sm-end">
+              {% for crumb in breadcrumbs %}
+                {% if crumb.current|default(false) %}
+                  <li class="breadcrumb-item active" aria-current="page">{{ crumb.label }}</li>
+                {% else %}
+                  <li class="breadcrumb-item"><a href="{{ crumb.url|default(uri('admin.home')) }}">{{ crumb.label }}</a></li>
+                {% endif %}
+              {% endfor %}
+            </ol>
+          </nav>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+</div>
