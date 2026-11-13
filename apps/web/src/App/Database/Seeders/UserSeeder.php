@@ -12,7 +12,9 @@ final class UserSeeder extends Seeder implements SeederInterface
     public function run(): void
     {
         $connection = CapsuleManager::schema()->getConnection();
+        $connection->statement('SET FOREIGN_KEY_CHECKS=0');
         $connection->table('users')->truncate();
+        $connection->statement('SET FOREIGN_KEY_CHECKS=1');
 
         $now = date('Y-m-d H:i:s');
 

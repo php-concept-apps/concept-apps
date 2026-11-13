@@ -1,0 +1,198 @@
+<?php declare(strict_types=1);
+
+namespace Concept\App\Database\Seeders;
+
+use Concept\App\Enums\PostStatus;
+use Concept\App\Exceptions\RuntimeException;
+use Concept\Extensions\DatabaseEloquent\Contracts\SeederInterface;
+use Faker\Factory as FakerFactory;
+use Faker\Generator;
+use Illuminate\Database\Capsule\Manager as CapsuleManager;
+use Illuminate\Database\Connection;
+use Illuminate\Database\Seeder;
+
+final class BlogContentSeeder extends Seeder implements SeederInterface
+{
+    private const string ERR_FAKER_MISSING = 'Faker is required for BlogContentSeeder (install fakerphp/faker in require-dev).';
+    private const string ERR_NO_USERS = 'BlogContentSeeder requires at least one user (run UserSeeder first).';
+
+    private const int CATEGORY_COUNT = 8;
+    private const int TAG_COUNT = 18;
+    private const int POST_COUNT = 45;
+
+    public function run(): void
+    {
+        if (!class_exists(FakerFactory::class)) {
+            throw new RuntimeException(self::ERR_FAKER_MISSING);
+        }
+
+        $connection = CapsuleManager::schema()->getConnection();
+        $faker = FakerFactory::create();
+
+        $authorId = $connection->table('users')->orderBy('id')->value('id');
+        if (!is_int($authorId) && !is_string($authorId)) {
+            throw new RuntimeException(self::ERR_NO_USERS);
+        }
+        $authorId = (int) $authorId;
+
+        $this->resetBlogTables($connection);
+
+        $categoryIds = $this->seedCategories($connection, $faker);
+        $tagIds = $this->seedTags($connection, $faker);
+        $this->seedPosts($connection, $faker, $authorId, $categoryIds, $tagIds);
+    }
+
+    private function resetBlogTables(Connection $connection): void
+    {
+        $connection->statement('SET FOREIGN_KEY_CHECKS=0');
+        $connection->table('post_tag')->truncate();
+        $connection->table('posts')->truncate();
+        $connection->table('tags')->truncate();
+        $connection->table('categories')->truncate();
+        $connection->statement('SET FOREIGN_KEY_CHECKS=1');
+    }
+
+    /**
+     * @return list<int>
+     */
+    private function seedCategories(Connection $connection, Generator $faker): array
+    {
+        $now = date('Y-m-d H:i:s');
+        $ids = [];
+
+        for ($i = 1; $i <= self::CATEGORY_COUNT; $i++) {
+            $name = ucwords(implode(' ', $this->words($faker, 2)));
+            $ids[] = (int) $connection->table('categories')->insertGetId([
+                'name' => $name,
+                'slug' => $this->slug($name) . '-' . $i,
+                'description' => $faker->boolean(70) ? $faker->sentence(12) : null,
+                'sort_order' => $i,
+                'created_at' => $now,
+                'updated_at' => $now,
+            ]);
+        }
+
+        return $ids;
+    }
+
+    /**
+     * @return list<int>
+     */
+    private function seedTags(Connection $connection, Generator $faker): array
+    {
+        $now = date('Y-m-d H:i:s');
+        $ids = [];
+
+        for ($i = 1; $i <= self::TAG_COUNT; $i++) {
+            $name = ucfirst($faker->unique()->word());
+            $ids[] = (int) $connection->table('tags')->insertGetId([
+                'name' => $name,
+                'slug' => $this->slug($name) . '-' . $i,
+                'created_at' => $now,
+                'updated_at' => $now,
+            ]);
+        }
+
+        return $ids;
+    }
+
+    /**
+     * @param list<int> $categoryIds
+     * @param list<int> $tagIds
+     */
+    private function seedPosts(
+        Connection $connection,
+        Generator $faker,
+        int $authorId,
+        array $categoryIds,
+        array $tagIds,
+    ): void {
+        $now = date('Y-m-d H:i:s');
+        $statuses = [
+            PostStatus::Published,
+            PostStatus::Published,
+            PostStatus::Published,
+            PostStatus::Draft,
+            PostStatus::Archived,
+        ];
+
+        for ($i = 1; $i <= self::POST_COUNT; $i++) {
+            $title = rtrim($faker->unique()->sentence(6), '.');
+            $status = $statuses[array_rand($statuses)];
+            $publishedAt = $status === PostStatus::Published
+                ? $faker->dateTimeBetween('-1 year', 'now')->format('Y-m-d H:i:s')
+                : null;
+
+            $categoryId = $categoryIds[array_rand($categoryIds)];
+            $body = implode("\n\n", $this->paragraphs($faker, $faker->numberBetween(3, 8)));
+
+            $postId = (int) $connection->table('posts')->insertGetId([
+                'user_id' => $authorId,
+                'category_id' => $categoryId,
+                'title' => $title,
+                'slug' => $this->slug($title) . '-' . $i,
+                'excerpt' => $faker->boolean(85) ? $faker->sentence(20) : null,
+                'body' => $body,
+                'cover_image' => null,
+                'status' => $status->value,
+                'published_at' => $publishedAt,
+                'created_at' => $now,
+                'updated_at' => $now,
+            ]);
+
+            $tagCount = $faker->numberBetween(1, min(4, count($tagIds)));
+            $pickKeys = (array) array_rand($tagIds, $tagCount);
+            foreach ($pickKeys as $key) {
+                $connection->table('post_tag')->insert([
+                    'post_id' => $postId,
+                    'tag_id' => $tagIds[$key],
+                ]);
+            }
+        }
+    }
+
+    private function slug(string $value): string
+    {
+        $slug = strtolower(trim($value));
+        $slug = preg_replace('/[^a-z0-9]+/', '-', $slug) ?? '';
+        $slug = trim($slug, '-');
+
+        return $slug !== '' ? $slug : 'item';
+    }
+
+    /** @return list<string> */
+    private function words(Generator $faker, int $nb): array
+    {
+        $words = $faker->unique()->words($nb);
+        if (!is_array($words)) {
+            return [$faker->word()];
+        }
+
+        $result = [];
+        foreach ($words as $word) {
+            if (is_string($word)) {
+                $result[] = $word;
+            }
+        }
+
+        return $result !== [] ? $result : [$faker->word()];
+    }
+
+    /** @return list<string> */
+    private function paragraphs(Generator $faker, int $nb): array
+    {
+        $paragraphs = $faker->paragraphs($nb);
+        if (!is_array($paragraphs)) {
+            return [$faker->paragraph()];
+        }
+
+        $result = [];
+        foreach ($paragraphs as $paragraph) {
+            if (is_string($paragraph)) {
+                $result[] = $paragraph;
+            }
+        }
+
+        return $result !== [] ? $result : [$faker->paragraph()];
+    }
+}

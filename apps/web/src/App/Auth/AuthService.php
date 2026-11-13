@@ -2,7 +2,6 @@
 
 namespace Concept\App\Auth;
 
-use Concept\App\Enums\UserStatus;
 use Concept\App\Models\User;
 use Concept\Extensions\SessionSymfony\Contracts\SessionInterface;
 
@@ -19,7 +18,7 @@ final class AuthService
     public function attempt(string $email, string $password, bool $remember = false): bool
     {
         /** @var User|null $user */
-        $user = User::query()->where('email', $email)->first();
+        $user = User::query()->where(User::FIELD_EMAIL, $email)->first();
 
         if ($user === null || !$user->verifyPassword($password) || !$user->isActive()) {
             return false;
@@ -43,7 +42,7 @@ final class AuthService
 
         /** @var User|null $user */
         $user = User::query()->whereKey((int) $id)->first();
-        if ($user === null || $user->getAttribute('status') !== UserStatus::Active) {
+        if ($user === null || !$user->isActive()) {
             $this->logout();
 
             return null;
@@ -60,12 +59,11 @@ final class AuthService
     public function login(User $user, bool $remember = false): void
     {
         $this->session->migrate(true);
-        $this->session->set(self::SESSION_KEY, $user->getKey());
+        $this->session->set(self::SESSION_KEY, $user->getId());
         $this->user = $user;
 
         if ($remember) {
-            $token = bin2hex(random_bytes(32));
-            $user->setAttribute('remember_token', $token);
+            $user->setRememberToken(bin2hex(random_bytes(32)));
             $user->save();
         }
     }

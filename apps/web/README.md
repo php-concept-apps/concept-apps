@@ -29,7 +29,9 @@ Schema lives in `concept_web` (separate from `concept_api`).
 | Command | Notes |
 |---------|--------|
 | `composer console db:migrate` | apply migrations |
-| `composer console db:seed` | seed users (`ada@example.com` / `secret`) |
+| `composer console db:seed` | seed users; in `APP_ENV=dev` also categories/tags/posts (Faker) |
+
+Demo content (dev): ~8 categories, ~18 tags, ~45 posts. Author: Ada.
 
 ## Run (maintainer)
 
