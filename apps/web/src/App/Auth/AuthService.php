@@ -15,18 +15,18 @@ final class AuthService
         private readonly SessionInterface $session,
     ) {}
 
-    public function attempt(string $email, string $password, bool $remember = false): bool
+    public function attempt(string $email, string $password, bool $remember = false): ?User
     {
         /** @var User|null $user */
         $user = User::query()->where(User::FIELD_EMAIL, $email)->first();
 
         if ($user === null || !$user->verifyPassword($password) || !$user->isActive()) {
-            return false;
+            return null;
         }
 
         $this->login($user, $remember);
 
-        return true;
+        return $user;
     }
 
     public function user(): ?User

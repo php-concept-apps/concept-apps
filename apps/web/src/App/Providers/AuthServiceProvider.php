@@ -20,9 +20,7 @@ final class AuthServiceProvider extends AbstractServiceProvider
 
         $container->add(
             AuthService::class,
-            static fn(): AuthService => new AuthService(
-                ContainerDependency::get($container, SessionInterface::class),
-            ),
+            static fn(): AuthService => new AuthService(ContainerDependency::get($container, SessionInterface::class)),
         )->setShared(true);
     }
 }

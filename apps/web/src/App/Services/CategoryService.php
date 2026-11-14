@@ -74,7 +74,8 @@ final class CategoryService
 
     private function fill(Category $category, StoreCategoryDto|UpdateCategoryDto $dto): void
     {
-        $slug = trim($dto->slug) !== '' ? Slug::from($dto->slug) : Slug::from($dto->name);
+        $slugSource = is_string($dto->slug) ? trim($dto->slug) : '';
+        $slug = $slugSource !== '' ? Slug::from($slugSource) : Slug::from($dto->name);
         $slug = $this->uniqueSlug($slug, $category->exists ? $category->getId() : null);
 
         $category->fill([
@@ -83,7 +84,7 @@ final class CategoryService
             Category::FIELD_DESCRIPTION => $dto->description !== null && trim($dto->description) !== ''
                 ? $dto->description
                 : null,
-            Category::FIELD_SORT_ORDER => is_numeric($dto->sort_order) ? (int) $dto->sort_order : 0,
+            Category::FIELD_SORT_ORDER => $dto->sort_order ?? 0,
         ]);
     }
 

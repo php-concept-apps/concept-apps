@@ -45,7 +45,7 @@ final class PostService
         $this->fill($post, $dto);
         $post->setAttribute(Post::FIELD_USER_ID, $author->getId());
         $post->save();
-        $post->tags()->sync($this->normalizeTagIds($dto->tag_ids));
+        $post->tags()->sync($this->normalizeTagIds($dto->tag_ids ?? []));
 
         return $post;
     }
@@ -54,7 +54,7 @@ final class PostService
     {
         $this->fill($post, $dto);
         $post->save();
-        $post->tags()->sync($this->normalizeTagIds($dto->tag_ids));
+        $post->tags()->sync($this->normalizeTagIds($dto->tag_ids ?? []));
 
         return $post;
     }
@@ -66,14 +66,14 @@ final class PostService
 
     private function fill(Post $post, StorePostDto|UpdatePostDto $dto): void
     {
-        $slug = trim($dto->slug) !== '' ? Slug::from($dto->slug) : Slug::from($dto->title);
+        $slugSource = is_string($dto->slug) ? trim($dto->slug) : '';
+        $slug = $slugSource !== '' ? Slug::from($slugSource) : Slug::from($dto->title);
         $slug = $this->uniqueSlug($slug, $post->exists ? $post->getId() : null);
 
         $status = PostStatus::tryFrom($dto->status) ?? PostStatus::Draft;
-        $categoryId = is_numeric($dto->category_id) ? (int) $dto->category_id : null;
-        if ($categoryId === 0) {
-            $categoryId = null;
-        }
+        $categoryId = $dto->category_id !== null && $dto->category_id > 0
+            ? $dto->category_id
+            : null;
 
         $publishedAt = $dto->published_at !== null && trim($dto->published_at) !== ''
             ? $dto->published_at
@@ -116,18 +116,15 @@ final class PostService
     }
 
     /**
-     * @param list<int|string> $tagIds
+     * @param list<int>|null $tagIds
      * @return list<int>
      */
-    private function normalizeTagIds(array $tagIds): array
+    private function normalizeTagIds(?array $tagIds): array
     {
-        $ids = [];
-        foreach ($tagIds as $tagId) {
-            if (is_numeric($tagId)) {
-                $ids[] = (int) $tagId;
-            }
+        if ($tagIds === null || $tagIds === []) {
+            return [];
         }
 
-        return array_values(array_unique($ids));
+        return array_values(array_unique($tagIds));
     }
 }

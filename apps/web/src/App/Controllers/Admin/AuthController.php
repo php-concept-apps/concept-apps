@@ -37,9 +37,9 @@ final class AuthController
             throw new DtoException(self::ERR_LOGIN_DTO);
         }
 
-        if ($this->auth->attempt($loginDto->email, $loginDto->password, $loginDto->remember)) {
-            $userName = $this->auth->user()?->getName() ?? 'Unknown';
-            $this->flashBag->addSuccess(sprintf(self::MSG_WELCOME, $userName));
+        $user = $this->auth->attempt($loginDto->email, $loginDto->password, $loginDto->remember);
+        if ($user !== null) {
+            $this->flashBag->addSuccess(sprintf(self::MSG_WELCOME, $user->getName()));
 
             return $this->response->redirectByName('admin.home');
         }

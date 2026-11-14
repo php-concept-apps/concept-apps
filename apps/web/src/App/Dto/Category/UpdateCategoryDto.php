@@ -9,8 +9,8 @@ final class UpdateCategoryDto extends Dto implements DtoInterface
 {
     public function __construct(
         public readonly string $name,
-        public readonly string $slug = '',
+        public readonly ?string $slug = null,
         public readonly ?string $description = null,
-        public readonly int|string $sort_order = 0,
+        public readonly ?int $sort_order = null,
     ) {}
 }

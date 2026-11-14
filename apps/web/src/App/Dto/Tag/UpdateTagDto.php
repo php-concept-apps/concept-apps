@@ -9,6 +9,6 @@ final class UpdateTagDto extends Dto implements DtoInterface
 {
     public function __construct(
         public readonly string $name,
-        public readonly string $slug = '',
+        public readonly ?string $slug = null,
     ) {}
 }

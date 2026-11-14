@@ -8,16 +8,16 @@ use Concept\Extensions\CastingValinor\Dto\Dto;
 final class UpdatePostDto extends Dto implements DtoInterface
 {
     /**
-     * @param list<int|string> $tag_ids
+     * @param non-empty-list<int>|null $tag_ids
      */
     public function __construct(
         public readonly string $title,
         public readonly string $body,
         public readonly string $status,
-        public readonly string $slug = '',
+        public readonly ?string $slug = null,
         public readonly ?string $excerpt = null,
-        public readonly int|string|null $category_id = null,
+        public readonly ?int $category_id = null,
         public readonly ?string $published_at = null,
-        public readonly array $tag_ids = [],
+        public readonly ?array $tag_ids = null,
     ) {}
 }

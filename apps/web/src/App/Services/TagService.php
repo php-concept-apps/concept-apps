@@ -70,7 +70,8 @@ final class TagService
 
     private function fill(Tag $tag, StoreTagDto|UpdateTagDto $dto): void
     {
-        $slug = trim($dto->slug) !== '' ? Slug::from($dto->slug) : Slug::from($dto->name);
+        $slugSource = is_string($dto->slug) ? trim($dto->slug) : '';
+        $slug = $slugSource !== '' ? Slug::from($slugSource) : Slug::from($dto->name);
         $slug = $this->uniqueSlug($slug, $tag->exists ? $tag->getId() : null);
 
         $tag->fill([
