@@ -66,10 +66,12 @@ final class PostService
             $query->orderByDesc('posts.' . Post::FIELD_ID);
         }
 
-        /** @var LengthAwarePaginator<int, Post> $posts */
-        $posts = $query->paginate($perPage)->withQueryString();
+        return $query->paginate($perPage)->withQueryString();
+    }
 
-        return $posts;
+    public function count(): int
+    {
+        return $this->post->newQuery()->count();
     }
 
     public function findOrFail(int $id): Post

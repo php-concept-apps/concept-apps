@@ -15,34 +15,34 @@ final class TagService
     private const string ERR_NOT_FOUND = 'Tag not found.';
 
     public function __construct(
+        private readonly Tag $tag,
         private readonly SlugService $slugs,
     ) {}
 
     /** @return LengthAwarePaginator<int, Tag> */
     public function paginate(int $perPage): LengthAwarePaginator
     {
-        /** @var LengthAwarePaginator<int, Tag> $tags */
-        $tags = Tag::query()
+        return $this->tag->newQuery()
             ->orderBy(Tag::FIELD_NAME)
             ->paginate($perPage)
             ->withQueryString();
-
-        return $tags;
     }
 
     /** @return Collection<int, Tag> */
     public function all(): Collection
     {
-        /** @var Collection<int, Tag> $tags */
-        $tags = Tag::query()->orderBy(Tag::FIELD_NAME)->get();
+        /** @var Collection<int, Tag> */
+        return $this->tag->newQuery()->orderBy(Tag::FIELD_NAME)->get();
+    }
 
-        return $tags;
+    public function count(): int
+    {
+        return $this->tag->newQuery()->count();
     }
 
     public function findOrFail(int $id): Tag
     {
-        /** @var Tag|null $tag */
-        $tag = Tag::query()->whereKey($id)->first();
+        $tag = $this->tag->newQuery()->whereKey($id)->first();
         if ($tag === null) {
             throw new ModelNotFoundException(self::ERR_NOT_FOUND);
         }
@@ -52,7 +52,7 @@ final class TagService
 
     public function create(StoreTagDto $dto): Tag
     {
-        $tag = new Tag();
+        $tag = $this->tag->newInstance();
         $this->fill($tag, $dto);
         $tag->save();
 
@@ -89,7 +89,7 @@ final class TagService
 
     private function slugExists(string $slug, ?int $ignoreId): bool
     {
-        $query = Tag::query()->where(Tag::FIELD_SLUG, $slug);
+        $query = $this->tag->newQuery()->where(Tag::FIELD_SLUG, $slug);
         if ($ignoreId !== null) {
             $query->where(Tag::FIELD_ID, '!=', $ignoreId);
         }

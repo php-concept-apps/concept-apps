@@ -13,9 +13,10 @@ use Concept\App\Foundation\ConfigKey;
 use Concept\App\Http\Listing\SortQuery;
 use Concept\App\Http\Requests\Admin\StorePostRequest;
 use Concept\App\Http\Requests\Admin\UpdatePostRequest;
-use Concept\App\Models\Category;
 use Concept\App\Models\Tag;
+use Concept\App\Services\CategoryService;
 use Concept\App\Services\PostService;
+use Concept\App\Services\TagService;
 use Concept\Extensions\Config\Contracts\ConfigInterface;
 use Concept\Extensions\Http\Contracts\ResponseFactoryInterface;
 use Concept\Extensions\SessionSymfony\Contracts\FlashBagInterface;
@@ -37,6 +38,8 @@ final class PostController
         private readonly ResponseFactoryInterface $response,
         private readonly FlashBagInterface $flashBag,
         private readonly PostService $posts,
+        private readonly CategoryService $categories,
+        private readonly TagService $tags,
         private readonly AuthService $auth,
         private readonly ConfigInterface $config,
     ) {}
@@ -67,8 +70,8 @@ final class PostController
             'admin_nav' => 'posts',
             'post' => null,
             'statuses' => PostStatus::cases(),
-            'categories' => Category::query()->orderBy(Category::FIELD_SORT_ORDER)->orderBy(Category::FIELD_NAME)->get(),
-            'tags' => Tag::query()->orderBy(Tag::FIELD_NAME)->get(),
+            'categories' => $this->categories->all(),
+            'tags' => $this->tags->all(),
             'selected_tag_ids' => [],
         ]);
     }
@@ -112,8 +115,8 @@ final class PostController
             'admin_nav' => 'posts',
             'post' => $post,
             'statuses' => PostStatus::cases(),
-            'categories' => Category::query()->orderBy(Category::FIELD_SORT_ORDER)->orderBy(Category::FIELD_NAME)->get(),
-            'tags' => Tag::query()->orderBy(Tag::FIELD_NAME)->get(),
+            'categories' => $this->categories->all(),
+            'tags' => $this->tags->all(),
             'selected_tag_ids' => $selected,
         ]);
     }

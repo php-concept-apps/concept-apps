@@ -9,16 +9,16 @@ final class AuthService
 {
     private const string SESSION_KEY = 'auth_user_id';
 
-    private ?User $user = null;
+    private ?User $current = null;
 
     public function __construct(
         private readonly SessionInterface $session,
+        private readonly User $user,
     ) {}
 
     public function attempt(string $email, string $password, bool $remember = false): ?User
     {
-        /** @var User|null $user */
-        $user = User::query()->where(User::FIELD_EMAIL, $email)->first();
+        $user = $this->user->newQuery()->where(User::FIELD_EMAIL, $email)->first();
 
         if ($user === null || !$user->verifyPassword($password) || !$user->isActive()) {
             return null;
@@ -31,8 +31,8 @@ final class AuthService
 
     public function user(): ?User
     {
-        if ($this->user !== null) {
-            return $this->user;
+        if ($this->current !== null) {
+            return $this->current;
         }
 
         $id = $this->session->get(self::SESSION_KEY);
@@ -40,15 +40,14 @@ final class AuthService
             return null;
         }
 
-        /** @var User|null $user */
-        $user = User::query()->whereKey((int) $id)->first();
+        $user = $this->user->newQuery()->whereKey((int) $id)->first();
         if ($user === null || !$user->isActive()) {
             $this->logout();
 
             return null;
         }
 
-        return $this->user = $user;
+        return $this->current = $user;
     }
 
     public function check(): bool
@@ -60,7 +59,7 @@ final class AuthService
     {
         $this->session->migrate(true);
         $this->session->set(self::SESSION_KEY, $user->getId());
-        $this->user = $user;
+        $this->current = $user;
 
         if ($remember) {
             $user->setRememberToken(bin2hex(random_bytes(32)));
@@ -72,6 +71,6 @@ final class AuthService
     {
         $this->session->remove(self::SESSION_KEY);
         $this->session->migrate(true);
-        $this->user = null;
+        $this->current = null;
     }
 }

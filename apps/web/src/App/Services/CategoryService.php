@@ -15,38 +15,38 @@ final class CategoryService
     private const string ERR_NOT_FOUND = 'Category not found.';
 
     public function __construct(
+        private readonly Category $category,
         private readonly SlugService $slugs,
     ) {}
 
     /** @return LengthAwarePaginator<int, Category> */
     public function paginate(int $perPage): LengthAwarePaginator
     {
-        /** @var LengthAwarePaginator<int, Category> $categories */
-        $categories = Category::query()
+        return $this->category->newQuery()
             ->orderBy(Category::FIELD_SORT_ORDER)
             ->orderBy(Category::FIELD_NAME)
             ->paginate($perPage)
             ->withQueryString();
-
-        return $categories;
     }
 
     /** @return Collection<int, Category> */
     public function all(): Collection
     {
-        /** @var Collection<int, Category> $categories */
-        $categories = Category::query()
+        /** @var Collection<int, Category> */
+        return $this->category->newQuery()
             ->orderBy(Category::FIELD_SORT_ORDER)
             ->orderBy(Category::FIELD_NAME)
             ->get();
+    }
 
-        return $categories;
+    public function count(): int
+    {
+        return $this->category->newQuery()->count();
     }
 
     public function findOrFail(int $id): Category
     {
-        /** @var Category|null $category */
-        $category = Category::query()->whereKey($id)->first();
+        $category = $this->category->newQuery()->whereKey($id)->first();
         if ($category === null) {
             throw new ModelNotFoundException(self::ERR_NOT_FOUND);
         }
@@ -56,7 +56,7 @@ final class CategoryService
 
     public function create(StoreCategoryDto $dto): Category
     {
-        $category = new Category();
+        $category = $this->category->newInstance();
         $this->fill($category, $dto);
         $category->save();
 
@@ -97,7 +97,7 @@ final class CategoryService
 
     private function slugExists(string $slug, ?int $ignoreId): bool
     {
-        $query = Category::query()->where(Category::FIELD_SLUG, $slug);
+        $query = $this->category->newQuery()->where(Category::FIELD_SLUG, $slug);
         if ($ignoreId !== null) {
             $query->where(Category::FIELD_ID, '!=', $ignoreId);
         }

@@ -3,6 +3,7 @@
 namespace Concept\App\Providers;
 
 use Concept\App\Auth\AuthService;
+use Concept\App\Models\User;
 use Concept\Core\Container\ContainerDependency;
 use Concept\Extensions\SessionSymfony\Contracts\SessionInterface;
 use League\Container\ServiceProvider\AbstractServiceProvider;
@@ -20,7 +21,10 @@ final class AuthServiceProvider extends AbstractServiceProvider
 
         $container->add(
             AuthService::class,
-            static fn(): AuthService => new AuthService(ContainerDependency::get($container, SessionInterface::class)),
+            static fn(): AuthService => new AuthService(
+                ContainerDependency::get($container, SessionInterface::class),
+                ContainerDependency::get($container, User::class),
+            ),
         )->setShared(true);
     }
 }
