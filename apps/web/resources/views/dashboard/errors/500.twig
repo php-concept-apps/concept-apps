@@ -1,0 +1,15 @@
+{% extends '@dashboard/layouts/error.twig' %}
+
+{% block title %}500 · {{ config('app.name') }}{% endblock %}
+
+{% block body %}
+  <p class="display-1 fw-bold mb-2">500</p>
+  <p class="login-box-msg mb-3">Something went wrong</p>
+  <p class="text-body-secondary mb-4">
+    An unexpected error occurred while handling this admin request. Please try again.
+  </p>
+  <div class="d-grid gap-2">
+    <a href="javascript:location.reload()" class="btn btn-primary">Try again</a>
+    <a href="{{ uri('admin.home') }}" class="btn btn-outline-secondary">Back to dashboard</a>
+  </div>
+{% endblock %}

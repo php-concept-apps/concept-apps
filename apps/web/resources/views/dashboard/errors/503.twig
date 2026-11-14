@@ -1,0 +1,15 @@
+{% extends '@dashboard/layouts/error.twig' %}
+
+{% block title %}503 · {{ config('app.name') }}{% endblock %}
+
+{% block body %}
+  <p class="display-1 fw-bold mb-2">503</p>
+  <p class="login-box-msg mb-3">Service unavailable</p>
+  <p class="text-body-secondary mb-4">
+    The admin area is temporarily unavailable. Please try again shortly.
+  </p>
+  <div class="d-grid gap-2">
+    <a href="javascript:location.reload()" class="btn btn-primary">Try again</a>
+    <a href="{{ uri('home') }}" class="btn btn-outline-secondary">Back to site</a>
+  </div>
+{% endblock %}

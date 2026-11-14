@@ -1,0 +1,26 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+  <title>{% block title %}Error · {{ config('app.name') }}{% endblock %}</title>
+  {% include '@dashboard/partials/theme-init.twig' %}
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+  <meta name="color-scheme" content="light dark">
+  {% include '@dashboard/partials/styles.twig' %}
+  {% block head %}{% endblock %}
+</head>
+<body class="login-page bg-body-secondary">
+  <main class="login-box" style="width: 420px;">
+    <h1 class="login-logo">
+      <a href="{{ uri('admin.home') }}"><b>{{ config('app.name') }}</b></a>
+    </h1>
+    <div class="card">
+      <div class="card-body login-card-body text-center">
+        {% block body %}{% endblock %}
+      </div>
+    </div>
+  </main>
+  <script src="/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+  <script src="/assets/admin/js/adminlte.min.js"></script>
+</body>
+</html>

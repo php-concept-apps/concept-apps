@@ -1,0 +1,14 @@
+{% extends '@dashboard/layouts/error.twig' %}
+
+{% block title %}501 · {{ config('app.name') }}{% endblock %}
+
+{% block body %}
+  <p class="display-1 fw-bold mb-2">501</p>
+  <p class="login-box-msg mb-3">Not implemented</p>
+  <p class="text-body-secondary mb-4">
+    This admin feature is not available yet.
+  </p>
+  <div class="d-grid gap-2">
+    <a href="{{ uri('admin.home') }}" class="btn btn-primary">Back to dashboard</a>
+  </div>
+{% endblock %}

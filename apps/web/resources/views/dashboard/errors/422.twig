@@ -1,0 +1,15 @@
+{% extends '@dashboard/layouts/error.twig' %}
+
+{% block title %}422 · {{ config('app.name') }}{% endblock %}
+
+{% block body %}
+  <p class="display-1 fw-bold mb-2">422</p>
+  <p class="login-box-msg mb-3">Unprocessable request</p>
+  <p class="text-body-secondary mb-4">
+    The submitted data could not be processed. Please check your input and try again.
+  </p>
+  <div class="d-grid gap-2">
+    <a href="javascript:history.back()" class="btn btn-primary">Go back</a>
+    <a href="{{ uri('admin.home') }}" class="btn btn-outline-secondary">Back to dashboard</a>
+  </div>
+{% endblock %}
