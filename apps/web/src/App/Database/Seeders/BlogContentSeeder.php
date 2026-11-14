@@ -4,6 +4,7 @@ namespace Concept\App\Database\Seeders;
 
 use Concept\App\Enums\PostStatus;
 use Concept\App\Exceptions\RuntimeException;
+use Concept\App\Slug\SlugService;
 use Concept\Extensions\DatabaseEloquent\Contracts\SeederInterface;
 use Faker\Factory as FakerFactory;
 use Faker\Generator;
@@ -19,6 +20,10 @@ final class BlogContentSeeder extends Seeder implements SeederInterface
     private const int CATEGORY_COUNT = 8;
     private const int TAG_COUNT = 18;
     private const int POST_COUNT = 45;
+
+    public function __construct(
+        private readonly SlugService $slugs,
+    ) {}
 
     public function run(): void
     {
@@ -59,12 +64,15 @@ final class BlogContentSeeder extends Seeder implements SeederInterface
     {
         $now = date('Y-m-d H:i:s');
         $ids = [];
+        $taken = [];
 
         for ($i = 1; $i <= self::CATEGORY_COUNT; $i++) {
             $name = ucwords(implode(' ', $this->words($faker, 2)));
+            $slug = $this->slugs->unique($name, fn(string $candidate): bool => isset($taken[$candidate]));
+            $taken[$slug] = true;
             $ids[] = (int) $connection->table('categories')->insertGetId([
                 'name' => $name,
-                'slug' => $this->slug($name) . '-' . $i,
+                'slug' => $slug,
                 'description' => $faker->boolean(70) ? $faker->sentence(12) : null,
                 'sort_order' => $i,
                 'created_at' => $now,
@@ -82,12 +90,15 @@ final class BlogContentSeeder extends Seeder implements SeederInterface
     {
         $now = date('Y-m-d H:i:s');
         $ids = [];
+        $taken = [];
 
         for ($i = 1; $i <= self::TAG_COUNT; $i++) {
             $name = ucfirst($faker->unique()->word());
+            $slug = $this->slugs->unique($name, fn(string $candidate): bool => isset($taken[$candidate]));
+            $taken[$slug] = true;
             $ids[] = (int) $connection->table('tags')->insertGetId([
                 'name' => $name,
-                'slug' => $this->slug($name) . '-' . $i,
+                'slug' => $slug,
                 'created_at' => $now,
                 'updated_at' => $now,
             ]);
@@ -108,6 +119,7 @@ final class BlogContentSeeder extends Seeder implements SeederInterface
         array $tagIds,
     ): void {
         $now = date('Y-m-d H:i:s');
+        $taken = [];
         $statuses = [
             PostStatus::Published,
             PostStatus::Published,
@@ -125,12 +137,14 @@ final class BlogContentSeeder extends Seeder implements SeederInterface
 
             $categoryId = $categoryIds[array_rand($categoryIds)];
             $body = implode("\n\n", $this->paragraphs($faker, $faker->numberBetween(3, 8)));
+            $slug = $this->slugs->unique($title, fn(string $candidate): bool => isset($taken[$candidate]));
+            $taken[$slug] = true;
 
             $postId = (int) $connection->table('posts')->insertGetId([
                 'user_id' => $authorId,
                 'category_id' => $categoryId,
                 'title' => $title,
-                'slug' => $this->slug($title) . '-' . $i,
+                'slug' => $slug,
                 'excerpt' => $faker->boolean(85) ? $faker->sentence(20) : null,
                 'body' => $body,
                 'cover_image' => null,
@@ -149,15 +163,6 @@ final class BlogContentSeeder extends Seeder implements SeederInterface
                 ]);
             }
         }
-    }
-
-    private function slug(string $value): string
-    {
-        $slug = strtolower(trim($value));
-        $slug = preg_replace('/[^a-z0-9]+/', '-', $slug) ?? '';
-        $slug = trim($slug, '-');
-
-        return $slug !== '' ? $slug : 'item';
     }
 
     /** @return list<string> */

@@ -6,13 +6,17 @@ use Concept\App\Dto\Category\StoreCategoryDto;
 use Concept\App\Dto\Category\UpdateCategoryDto;
 use Concept\App\Exceptions\ModelNotFoundException;
 use Concept\App\Models\Category;
-use Concept\App\Support\Slug;
+use Concept\App\Slug\SlugService;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Database\Eloquent\Collection;
 
 final class CategoryService
 {
     private const string ERR_NOT_FOUND = 'Category not found.';
+
+    public function __construct(
+        private readonly SlugService $slugs,
+    ) {}
 
     /** @return LengthAwarePaginator<int, Category> */
     public function paginate(int $perPage): LengthAwarePaginator
@@ -74,9 +78,12 @@ final class CategoryService
 
     private function fill(Category $category, StoreCategoryDto|UpdateCategoryDto $dto): void
     {
+        $ignoreId = $category->exists ? $category->getId() : null;
         $slugSource = is_string($dto->slug) ? trim($dto->slug) : '';
-        $slug = $slugSource !== '' ? Slug::from($slugSource) : Slug::from($dto->name);
-        $slug = $this->uniqueSlug($slug, $category->exists ? $category->getId() : null);
+        $slug = $this->slugs->unique(
+            $slugSource !== '' ? $slugSource : $dto->name,
+            fn(string $candidate): bool => $this->slugExists($candidate, $ignoreId),
+        );
 
         $category->fill([
             Category::FIELD_NAME => $dto->name,
@@ -86,18 +93,6 @@ final class CategoryService
                 : null,
             Category::FIELD_SORT_ORDER => $dto->sort_order ?? 0,
         ]);
-    }
-
-    private function uniqueSlug(string $slug, ?int $ignoreId): string
-    {
-        $base = $slug;
-        $i = 1;
-        while ($this->slugExists($slug, $ignoreId)) {
-            $slug = $base . '-' . $i;
-            $i++;
-        }
-
-        return $slug;
     }
 
     private function slugExists(string $slug, ?int $ignoreId): bool

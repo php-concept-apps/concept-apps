@@ -8,12 +8,16 @@ use Concept\App\Enums\PostStatus;
 use Concept\App\Exceptions\ModelNotFoundException;
 use Concept\App\Models\Post;
 use Concept\App\Models\User;
-use Concept\App\Support\Slug;
+use Concept\App\Slug\SlugService;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 
 final class PostService
 {
     private const string ERR_NOT_FOUND = 'Post not found.';
+
+    public function __construct(
+        private readonly SlugService $slugs,
+    ) {}
 
     /** @return LengthAwarePaginator<int, Post> */
     public function paginate(int $perPage): LengthAwarePaginator
@@ -66,9 +70,12 @@ final class PostService
 
     private function fill(Post $post, StorePostDto|UpdatePostDto $dto): void
     {
+        $ignoreId = $post->exists ? $post->getId() : null;
         $slugSource = is_string($dto->slug) ? trim($dto->slug) : '';
-        $slug = $slugSource !== '' ? Slug::from($slugSource) : Slug::from($dto->title);
-        $slug = $this->uniqueSlug($slug, $post->exists ? $post->getId() : null);
+        $slug = $this->slugs->unique(
+            $slugSource !== '' ? $slugSource : $dto->title,
+            fn(string $candidate): bool => $this->slugExists($candidate, $ignoreId),
+        );
 
         $status = PostStatus::tryFrom($dto->status) ?? PostStatus::Draft;
         $categoryId = $dto->category_id !== null && $dto->category_id > 0
@@ -91,18 +98,6 @@ final class PostService
             Post::FIELD_STATUS => $status,
             Post::FIELD_PUBLISHED_AT => $publishedAt,
         ]);
-    }
-
-    private function uniqueSlug(string $slug, ?int $ignoreId): string
-    {
-        $base = $slug;
-        $i = 1;
-        while ($this->slugExists($slug, $ignoreId)) {
-            $slug = $base . '-' . $i;
-            $i++;
-        }
-
-        return $slug;
     }
 
     private function slugExists(string $slug, ?int $ignoreId): bool

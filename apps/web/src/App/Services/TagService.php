@@ -6,13 +6,17 @@ use Concept\App\Dto\Tag\StoreTagDto;
 use Concept\App\Dto\Tag\UpdateTagDto;
 use Concept\App\Exceptions\ModelNotFoundException;
 use Concept\App\Models\Tag;
-use Concept\App\Support\Slug;
+use Concept\App\Slug\SlugService;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Database\Eloquent\Collection;
 
 final class TagService
 {
     private const string ERR_NOT_FOUND = 'Tag not found.';
+
+    public function __construct(
+        private readonly SlugService $slugs,
+    ) {}
 
     /** @return LengthAwarePaginator<int, Tag> */
     public function paginate(int $perPage): LengthAwarePaginator
@@ -70,26 +74,17 @@ final class TagService
 
     private function fill(Tag $tag, StoreTagDto|UpdateTagDto $dto): void
     {
+        $ignoreId = $tag->exists ? $tag->getId() : null;
         $slugSource = is_string($dto->slug) ? trim($dto->slug) : '';
-        $slug = $slugSource !== '' ? Slug::from($slugSource) : Slug::from($dto->name);
-        $slug = $this->uniqueSlug($slug, $tag->exists ? $tag->getId() : null);
+        $slug = $this->slugs->unique(
+            $slugSource !== '' ? $slugSource : $dto->name,
+            fn(string $candidate): bool => $this->slugExists($candidate, $ignoreId),
+        );
 
         $tag->fill([
             Tag::FIELD_NAME => $dto->name,
             Tag::FIELD_SLUG => $slug,
         ]);
-    }
-
-    private function uniqueSlug(string $slug, ?int $ignoreId): string
-    {
-        $base = $slug;
-        $i = 1;
-        while ($this->slugExists($slug, $ignoreId)) {
-            $slug = $base . '-' . $i;
-            $i++;
-        }
-
-        return $slug;
     }
 
     private function slugExists(string $slug, ?int $ignoreId): bool

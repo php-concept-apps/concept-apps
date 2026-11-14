@@ -3,6 +3,7 @@
 namespace Concept\App\Bootstrap;
 
 use Concept\App\Providers\AuthServiceProvider;
+use Concept\App\Providers\SlugServiceProvider;
 use Concept\Core\App;
 use Concept\Extensions\DatabaseEloquent\PaginationConfiguratorServiceProvider;
 
@@ -13,6 +14,7 @@ final class ApplicationServiceProvidersBootstrap
     {
         $app->registerServiceProviders([
             new AuthServiceProvider(),
+            new SlugServiceProvider(),
             new PaginationConfiguratorServiceProvider(),
         ]);
     }

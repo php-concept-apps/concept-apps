@@ -46,6 +46,7 @@
             placeholder="auto from title"
           >
           {% include '@dashboard/partials/_field_errors.twig' with { field: 'slug' } %}
+          <div class="form-text">Leave empty to generate from title. A number is added only if the slug already exists.</div>
         </div>
         <div class="col-md-4">
           <label class="form-label" for="category_id">Category</label>
