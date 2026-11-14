@@ -7,6 +7,8 @@ use Concept\App\Dto\Category\UpdateCategoryDto;
 use Concept\App\Exceptions\DtoException;
 use Concept\App\Exceptions\ModelNotFoundException;
 use Concept\App\Foundation\ConfigKey;
+use Concept\App\Http\Listing\CategoryListFilter;
+use Concept\App\Http\Listing\SortQuery;
 use Concept\App\Http\Requests\Admin\StoreCategoryRequest;
 use Concept\App\Http\Requests\Admin\UpdateCategoryRequest;
 use Concept\App\Services\CategoryService;
@@ -15,6 +17,7 @@ use Concept\Extensions\Http\Contracts\ResponseFactoryInterface;
 use Concept\Extensions\SessionSymfony\Contracts\FlashBagInterface;
 use Concept\Extensions\View\Contracts\ViewResponseFactoryInterface;
 use Psr\Http\Message\ResponseInterface;
+use Psr\Http\Message\ServerRequestInterface;
 
 final class CategoryController
 {
@@ -32,13 +35,28 @@ final class CategoryController
         private readonly ConfigInterface $config,
     ) {}
 
-    public function index(): ResponseInterface
+    public function index(ServerRequestInterface $request): ResponseInterface
     {
+        $query = $request->getQueryParams();
+        $sort = SortQuery::from(
+            $query,
+            CategoryService::SORTABLE,
+            CategoryService::SORT_DEFAULT,
+            SortQuery::DESC,
+        );
+        $filter = CategoryListFilter::from($query);
+
         return $this->view->create('@dashboard/categories/index', [
             'admin_nav' => 'categories',
             'categories' => $this->categories->paginate(
                 $this->config->getInt(ConfigKey::PAGINATION_PER_PAGE, self::DEFAULT_PER_PAGE),
+                $sort,
+                $filter,
             ),
+            'sort_column' => $sort->column,
+            'sort_dir' => $sort->direction,
+            'filter' => $filter,
+            'filter_query' => http_build_query($filter->toQueryParams()),
         ]);
     }
 

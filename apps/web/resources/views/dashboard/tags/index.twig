@@ -13,48 +13,119 @@
 {% endblock %}
 
 {% block content %}
-<div class="row mb-3">
-  <div class="col-12 text-end">
-    <a class="btn btn-primary" href="{{ uri('admin.tags.create') }}">
-      <i class="bi bi-plus-lg me-1"></i> New tag
-    </a>
-  </div>
-</div>
+<form id="tags-filter" method="get" action="{{ uri('admin.tags') }}" class="d-none">
+  <input type="hidden" name="sort" value="{{ sort_column }}">
+  <input type="hidden" name="dir" value="{{ sort_dir }}">
+</form>
 
 <div class="card">
   <div class="card-header">
-    <h3 class="card-title">All tags</h3>
-    {% if tags.total > 0 %}
-      <span class="badge text-bg-primary ms-2">{{ tags.total }}</span>
-    {% endif %}
+    <div class="card-tools">
+      <a class="btn btn-primary btn-sm" href="{{ uri('admin.tags.create') }}">
+        <i class="bi bi-plus-lg me-1"></i> New tag
+      </a>
+    </div>
   </div>
   <div class="card-body table-responsive p-0">
-    <table class="table table-striped table-hover mb-0">
+    <table class="table table-striped table-hover mb-0 align-middle">
       <thead>
         <tr>
-          <th>ID</th>
-          <th>Name</th>
-          <th>Slug</th>
+          {% include '@dashboard/partials/_sortable_th.twig' with { column: 'id', label: 'ID', sort_column: sort_column, sort_dir: sort_dir, filter_query: filter_query, route: 'admin.tags' } %}
+          {% include '@dashboard/partials/_sortable_th.twig' with { column: 'name', label: 'Name', sort_column: sort_column, sort_dir: sort_dir, filter_query: filter_query, route: 'admin.tags' } %}
+          {% include '@dashboard/partials/_sortable_th.twig' with { column: 'slug', label: 'Slug', sort_column: sort_column, sort_dir: sort_dir, filter_query: filter_query, route: 'admin.tags' } %}
+          {% include '@dashboard/partials/_sortable_th.twig' with { column: 'updated_at', label: 'Updated', sort_column: sort_column, sort_dir: sort_dir, filter_query: filter_query, route: 'admin.tags' } %}
           <th class="text-end">Actions</th>
+        </tr>
+        <tr class="table-filters">
+          <th></th>
+          <th>
+            <input
+              form="tags-filter"
+              id="filter_name"
+              type="search"
+              name="name"
+              class="form-control form-control-sm"
+              value="{{ filter.name|default('') }}"
+              placeholder="Filter…"
+              aria-label="Filter by name"
+            >
+          </th>
+          <th>
+            <input
+              form="tags-filter"
+              id="filter_slug"
+              type="search"
+              name="slug"
+              class="form-control form-control-sm"
+              value="{{ filter.slug|default('') }}"
+              placeholder="Filter…"
+              aria-label="Filter by slug"
+            >
+          </th>
+          <th>
+            <input
+              form="tags-filter"
+              id="filter_updated_at"
+              type="date"
+              name="updated_at"
+              class="form-control form-control-sm"
+              value="{{ filter.updatedAt|default('') }}"
+              aria-label="Filter by updated date"
+              onchange="this.form.requestSubmit()"
+            >
+          </th>
+          <th class="text-end text-nowrap">
+            <button
+              form="tags-filter"
+              type="submit"
+              class="btn btn-outline-secondary btn-sm"
+              title="Apply filters"
+              aria-label="Apply filters"
+            >
+              <i class="bi bi-funnel" aria-hidden="true"></i>
+            </button>
+            {% if filter.isActive %}
+              <a
+                href="{{ uri('admin.tags') }}?sort={{ sort_column }}&dir={{ sort_dir }}"
+                class="btn btn-outline-secondary btn-sm"
+                title="Reset filters"
+                aria-label="Reset filters"
+              >
+                <i class="bi bi-x-lg" aria-hidden="true"></i>
+              </a>
+            {% endif %}
+          </th>
         </tr>
       </thead>
       <tbody>
         {% for tag in tags %}
           <tr>
-            <td>#{{ tag.id }}</td>
+            <td class="text-muted">#{{ tag.id }}</td>
             <td><a href="{{ uri('admin.tags.edit', {id: tag.id}) }}">{{ tag.name }}</a></td>
             <td>{{ tag.slug }}</td>
+            <td class="text-nowrap">{{ tag.updated_at ? tag.updated_at|date('Y-m-d H:i') : '—' }}</td>
             <td class="text-end text-nowrap">
-              <a class="btn btn-outline-secondary btn-sm" href="{{ uri('admin.tags.edit', {id: tag.id}) }}">Edit</a>
               <form action="{{ uri('admin.tags.destroy', {id: tag.id}) }}" method="post" class="d-inline" onsubmit="return confirm('Delete this tag?')">
                 <input type="hidden" name="_csrf_token" value="{{ csrf_token }}">
-                <button type="submit" class="btn btn-outline-danger btn-sm">Delete</button>
+                <button type="submit" class="btn btn-outline-danger btn-sm" title="Delete" aria-label="Delete">
+                  <i class="bi bi-trash"></i>
+                </button>
               </form>
+              <a
+                class="btn btn-outline-secondary btn-sm"
+                href="{{ uri('admin.tags.edit', {id: tag.id}) }}"
+                title="Edit"
+                aria-label="Edit"
+              >
+                <i class="bi bi-pencil"></i>
+              </a>
             </td>
           </tr>
         {% else %}
           <tr>
-            <td colspan="4" class="text-center text-muted py-4">No tags yet.</td>
+            <td colspan="5" class="text-center text-muted py-4">
+              {{ filter.isActive ? 'No tags match the current filters.' : 'No tags yet.' }}
+            </td>
           </tr>
         {% endfor %}
       </tbody>

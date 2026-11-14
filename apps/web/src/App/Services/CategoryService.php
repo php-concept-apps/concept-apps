@@ -5,14 +5,37 @@ namespace Concept\App\Services;
 use Concept\App\Dto\Category\StoreCategoryDto;
 use Concept\App\Dto\Category\UpdateCategoryDto;
 use Concept\App\Exceptions\ModelNotFoundException;
+use Concept\App\Http\Listing\CategoryListFilter;
+use Concept\App\Http\Listing\SortQuery;
 use Concept\App\Models\Category;
 use Concept\App\Slug\SlugService;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
 
 final class CategoryService
 {
     private const string ERR_NOT_FOUND = 'Category not found.';
+
+    public const string SORT_DEFAULT = Category::FIELD_ID;
+
+    /** @var list<string> */
+    public const array SORTABLE = [
+        Category::FIELD_ID,
+        Category::FIELD_NAME,
+        Category::FIELD_SLUG,
+        Category::FIELD_SORT_ORDER,
+        Category::FIELD_UPDATED_AT,
+    ];
+
+    /** @var array<string, string> */
+    private const array SORT_COLUMNS = [
+        Category::FIELD_ID => Category::TABLE_NAME . '.' . Category::FIELD_ID,
+        Category::FIELD_NAME => Category::TABLE_NAME . '.' . Category::FIELD_NAME,
+        Category::FIELD_SLUG => Category::TABLE_NAME . '.' . Category::FIELD_SLUG,
+        Category::FIELD_SORT_ORDER => Category::TABLE_NAME . '.' . Category::FIELD_SORT_ORDER,
+        Category::FIELD_UPDATED_AT => Category::TABLE_NAME . '.' . Category::FIELD_UPDATED_AT,
+    ];
 
     public function __construct(
         private readonly Category $category,
@@ -20,13 +43,39 @@ final class CategoryService
     ) {}
 
     /** @return LengthAwarePaginator<int, Category> */
-    public function paginate(int $perPage): LengthAwarePaginator
+    public function paginate(int $perPage, SortQuery $sort, CategoryListFilter $filter): LengthAwarePaginator
     {
-        return $this->category->newQuery()
-            ->orderBy(Category::FIELD_SORT_ORDER)
-            ->orderBy(Category::FIELD_NAME)
-            ->paginate($perPage)
-            ->withQueryString();
+        $query = $this->category->newQuery();
+        $this->applyFilter($query, $filter);
+        $query->orderBy(self::SORT_COLUMNS[$sort->column], $sort->direction);
+
+        if ($sort->column !== Category::FIELD_ID) {
+            $query->orderByDesc(Category::TABLE_NAME . '.' . Category::FIELD_ID);
+        }
+
+        return $query->paginate($perPage)->withQueryString();
+    }
+
+    /** @param Builder<Category> $query */
+    private function applyFilter(Builder $query, CategoryListFilter $filter): void
+    {
+        if ($filter->name !== null) {
+            $like = '%' . addcslashes($filter->name, '%_\\') . '%';
+            $query->where(Category::TABLE_NAME . '.' . Category::FIELD_NAME, 'like', $like);
+        }
+
+        if ($filter->slug !== null) {
+            $like = '%' . addcslashes($filter->slug, '%_\\') . '%';
+            $query->where(Category::TABLE_NAME . '.' . Category::FIELD_SLUG, 'like', $like);
+        }
+
+        if ($filter->sortOrder !== null) {
+            $query->where(Category::TABLE_NAME . '.' . Category::FIELD_SORT_ORDER, $filter->sortOrder);
+        }
+
+        if ($filter->updatedAt !== null) {
+            $query->whereDate(Category::TABLE_NAME . '.' . Category::FIELD_UPDATED_AT, $filter->updatedAt);
+        }
     }
 
     /** @return Collection<int, Category> */
