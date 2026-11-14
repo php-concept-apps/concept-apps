@@ -23,7 +23,7 @@ final class PostService
     public const array SORTABLE = [
         Post::FIELD_ID,
         Post::FIELD_TITLE,
-        'category',
+        Post::RELATION_CATEGORY,
         Post::FIELD_STATUS,
         Post::FIELD_PUBLISHED_AT,
         Post::FIELD_UPDATED_AT,
@@ -33,7 +33,7 @@ final class PostService
     private const array SORT_COLUMNS = [
         Post::FIELD_ID => 'posts.' . Post::FIELD_ID,
         Post::FIELD_TITLE => 'posts.' . Post::FIELD_TITLE,
-        'category' => 'categories.' . Category::FIELD_NAME,
+        Post::RELATION_CATEGORY => 'categories.' . Category::FIELD_NAME,
         Post::FIELD_STATUS => 'posts.' . Post::FIELD_STATUS,
         Post::FIELD_PUBLISHED_AT => 'posts.' . Post::FIELD_PUBLISHED_AT,
         Post::FIELD_UPDATED_AT => 'posts.' . Post::FIELD_UPDATED_AT,
@@ -47,9 +47,13 @@ final class PostService
     /** @return LengthAwarePaginator<int, Post> */
     public function paginate(int $perPage, SortQuery $sort): LengthAwarePaginator
     {
-        $query = $this->post->newQuery()->with(['category', 'author', 'tags']);
+        $query = $this->post->newQuery()->with([
+            Post::RELATION_CATEGORY,
+            Post::RELATION_AUTHOR,
+            Post::RELATION_TAGS,
+        ]);
 
-        if ($sort->column === 'category') {
+        if ($sort->column === Post::RELATION_CATEGORY) {
             $query
                 ->leftJoin(
                     Category::TABLE_NAME,
@@ -76,7 +80,7 @@ final class PostService
 
     public function findOrFail(int $id): Post
     {
-        $post = $this->post->newQuery()->with('tags')->whereKey($id)->first();
+        $post = $this->post->newQuery()->with(Post::RELATION_TAGS)->whereKey($id)->first();
         if ($post === null) {
             throw new ModelNotFoundException(self::ERR_NOT_FOUND);
         }

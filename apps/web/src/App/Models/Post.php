@@ -29,6 +29,12 @@ final class Post extends Model
     public const string FIELD_UPDATED_AT = 'updated_at';
     public const string FIELD_DELETED_AT = 'deleted_at';
 
+    public const string RELATION_AUTHOR = 'author';
+    public const string RELATION_CATEGORY = 'category';
+    public const string RELATION_TAGS = 'tags';
+
+    public const string INPUT_TAG_IDS = 'tag_ids';
+
     protected $table = self::TABLE_NAME;
 
     /** @var list<string> */

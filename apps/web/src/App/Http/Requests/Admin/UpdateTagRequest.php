@@ -3,6 +3,7 @@
 namespace Concept\App\Http\Requests\Admin;
 
 use Concept\App\Dto\Tag\UpdateTagDto;
+use Concept\App\Models\Tag;
 use Concept\Extensions\FormRequest\Requests\FormRequest;
 
 /** @extends FormRequest<UpdateTagDto> */
@@ -13,8 +14,8 @@ final class UpdateTagRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'name' => ['required', 'min:1', 'max:80'],
-            'slug' => ['nullable', 'max:100'],
+            Tag::FIELD_NAME => ['required', 'min:1', 'max:80'],
+            Tag::FIELD_SLUG => ['nullable', 'max:100'],
         ];
     }
 }

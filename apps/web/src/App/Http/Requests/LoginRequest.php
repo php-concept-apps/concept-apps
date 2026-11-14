@@ -3,6 +3,7 @@
 namespace Concept\App\Http\Requests;
 
 use Concept\App\Dto\LoginDto;
+use Concept\App\Models\User;
 use Concept\Extensions\FormRequest\Requests\FormRequest;
 
 /** @extends FormRequest<LoginDto> */
@@ -13,8 +14,8 @@ final class LoginRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'email' => ['required', 'email'],
-            'password' => ['required'],
+            User::FIELD_EMAIL => ['required', 'email'],
+            User::FIELD_PASSWORD => ['required'],
         ];
     }
 }
