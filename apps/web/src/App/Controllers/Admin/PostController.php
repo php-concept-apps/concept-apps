@@ -10,6 +10,7 @@ use Concept\App\Exceptions\DtoException;
 use Concept\App\Exceptions\ModelNotFoundException;
 use Concept\App\Exceptions\RuntimeException;
 use Concept\App\Foundation\ConfigKey;
+use Concept\App\Http\Listing\SortQuery;
 use Concept\App\Http\Requests\Admin\StorePostRequest;
 use Concept\App\Http\Requests\Admin\UpdatePostRequest;
 use Concept\App\Models\Category;
@@ -20,6 +21,7 @@ use Concept\Extensions\Http\Contracts\ResponseFactoryInterface;
 use Concept\Extensions\SessionSymfony\Contracts\FlashBagInterface;
 use Concept\Extensions\View\Contracts\ViewResponseFactoryInterface;
 use Psr\Http\Message\ResponseInterface;
+use Psr\Http\Message\ServerRequestInterface;
 
 final class PostController
 {
@@ -39,13 +41,23 @@ final class PostController
         private readonly ConfigInterface $config,
     ) {}
 
-    public function index(): ResponseInterface
+    public function index(ServerRequestInterface $request): ResponseInterface
     {
+        $sort = SortQuery::from(
+            $request->getQueryParams(),
+            PostService::SORTABLE,
+            PostService::SORT_DEFAULT,
+            SortQuery::DESC,
+        );
+
         return $this->view->create('@dashboard/posts/index', [
             'admin_nav' => 'posts',
             'posts' => $this->posts->paginate(
                 $this->config->getInt(ConfigKey::PAGINATION_PER_PAGE, self::DEFAULT_PER_PAGE),
+                $sort,
             ),
+            'sort_column' => $sort->column,
+            'sort_dir' => $sort->direction,
         ]);
     }
 

@@ -29,42 +29,65 @@
     {% endif %}
   </div>
   <div class="card-body table-responsive p-0">
-    <table class="table table-striped table-hover mb-0">
+    <table class="table table-striped table-hover mb-0 align-middle">
       <thead>
         <tr>
-          <th>ID</th>
-          <th>Title</th>
-          <th>Category</th>
-          <th>Status</th>
-          <th>Published</th>
+          {% include '@dashboard/partials/_sortable_th.twig' with { column: 'id', label: 'ID', sort_column: sort_column, sort_dir: sort_dir } %}
+          {% include '@dashboard/partials/_sortable_th.twig' with { column: 'title', label: 'Title', sort_column: sort_column, sort_dir: sort_dir } %}
+          {% include '@dashboard/partials/_sortable_th.twig' with { column: 'category', label: 'Category', sort_column: sort_column, sort_dir: sort_dir } %}
+          <th>Tags</th>
+          {% include '@dashboard/partials/_sortable_th.twig' with { column: 'status', label: 'Status', sort_column: sort_column, sort_dir: sort_dir } %}
+          {% include '@dashboard/partials/_sortable_th.twig' with { column: 'published_at', label: 'Published', sort_column: sort_column, sort_dir: sort_dir } %}
+          {% include '@dashboard/partials/_sortable_th.twig' with { column: 'updated_at', label: 'Updated', sort_column: sort_column, sort_dir: sort_dir } %}
           <th class="text-end">Actions</th>
         </tr>
       </thead>
       <tbody>
         {% for post in posts %}
           <tr>
-            <td>#{{ post.id }}</td>
+            <td class="text-muted">#{{ post.id }}</td>
             <td>
               <a href="{{ uri('admin.posts.edit', {id: post.id}) }}">{{ post.title }}</a>
               <div class="small text-muted">{{ post.slug }}</div>
             </td>
             <td>{{ post.category ? post.category.name : '—' }}</td>
             <td>
+              {% if post.tags is not empty %}
+                <div class="d-flex flex-wrap gap-1">
+                  {% for tag in post.tags %}
+                    <span class="badge text-bg-light border fw-normal">{{ tag.name }}</span>
+                  {% endfor %}
+                </div>
+              {% else %}
+                <span class="text-muted">—</span>
+              {% endif %}
+            </td>
+            <td>
               {% set badge = post.status.value == 'published' ? 'success' : (post.status.value == 'archived' ? 'secondary' : 'warning') %}
               <span class="badge text-bg-{{ badge }}">{{ post.status.value }}</span>
             </td>
-            <td>{{ post.published_at ? post.published_at|date('Y-m-d H:i') : '—' }}</td>
+            <td class="text-nowrap">{{ post.published_at ? post.published_at|date('Y-m-d H:i') : '—' }}</td>
+            <td class="text-nowrap">{{ post.updated_at ? post.updated_at|date('Y-m-d H:i') : '—' }}</td>
             <td class="text-end text-nowrap">
-              <a class="btn btn-outline-secondary btn-sm" href="{{ uri('admin.posts.edit', {id: post.id}) }}">Edit</a>
               <form action="{{ uri('admin.posts.destroy', {id: post.id}) }}" method="post" class="d-inline" onsubmit="return confirm('Delete this post?')">
                 <input type="hidden" name="_csrf_token" value="{{ csrf_token }}">
-                <button type="submit" class="btn btn-outline-danger btn-sm">Delete</button>
+                <button type="submit" class="btn btn-outline-danger btn-sm" title="Delete" aria-label="Delete">
+                  <i class="bi bi-trash"></i>
+                </button>
               </form>
+              <a
+                class="btn btn-outline-secondary btn-sm"
+                href="{{ uri('admin.posts.edit', {id: post.id}) }}"
+                title="Edit"
+                aria-label="Edit"
+              >
+                <i class="bi bi-pencil"></i>
+              </a>
             </td>
           </tr>
         {% else %}
           <tr>
-            <td colspan="6" class="text-center text-muted py-4">No posts yet.</td>
+            <td colspan="8" class="text-center text-muted py-4">No posts yet.</td>
           </tr>
         {% endfor %}
       </tbody>

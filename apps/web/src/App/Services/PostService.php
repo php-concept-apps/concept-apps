@@ -6,6 +6,8 @@ use Concept\App\Dto\Post\StorePostDto;
 use Concept\App\Dto\Post\UpdatePostDto;
 use Concept\App\Enums\PostStatus;
 use Concept\App\Exceptions\ModelNotFoundException;
+use Concept\App\Http\Listing\SortQuery;
+use Concept\App\Models\Category;
 use Concept\App\Models\Post;
 use Concept\App\Models\User;
 use Concept\App\Slug\SlugService;
@@ -15,27 +17,64 @@ final class PostService
 {
     private const string ERR_NOT_FOUND = 'Post not found.';
 
+    public const string SORT_DEFAULT = Post::FIELD_ID;
+
+    /** @var list<string> */
+    public const array SORTABLE = [
+        Post::FIELD_ID,
+        Post::FIELD_TITLE,
+        'category',
+        Post::FIELD_STATUS,
+        Post::FIELD_PUBLISHED_AT,
+        Post::FIELD_UPDATED_AT,
+    ];
+
+    /** @var array<string, string> */
+    private const array SORT_COLUMNS = [
+        Post::FIELD_ID => 'posts.' . Post::FIELD_ID,
+        Post::FIELD_TITLE => 'posts.' . Post::FIELD_TITLE,
+        'category' => 'categories.' . Category::FIELD_NAME,
+        Post::FIELD_STATUS => 'posts.' . Post::FIELD_STATUS,
+        Post::FIELD_PUBLISHED_AT => 'posts.' . Post::FIELD_PUBLISHED_AT,
+        Post::FIELD_UPDATED_AT => 'posts.' . Post::FIELD_UPDATED_AT,
+    ];
+
     public function __construct(
+        private readonly Post $post,
         private readonly SlugService $slugs,
     ) {}
 
     /** @return LengthAwarePaginator<int, Post> */
-    public function paginate(int $perPage): LengthAwarePaginator
+    public function paginate(int $perPage, SortQuery $sort): LengthAwarePaginator
     {
+        $query = $this->post->newQuery()->with(['category', 'author', 'tags']);
+
+        if ($sort->column === 'category') {
+            $query
+                ->leftJoin(
+                    Category::TABLE_NAME,
+                    'posts.' . Post::FIELD_CATEGORY_ID,
+                    '=',
+                    'categories.' . Category::FIELD_ID,
+                )
+                ->select('posts.*');
+        }
+
+        $query->orderBy(self::SORT_COLUMNS[$sort->column], $sort->direction);
+
+        if ($sort->column !== Post::FIELD_ID) {
+            $query->orderByDesc('posts.' . Post::FIELD_ID);
+        }
+
         /** @var LengthAwarePaginator<int, Post> $posts */
-        $posts = Post::query()
-            ->with(['category', 'author', 'tags'])
-            ->orderByDesc(Post::FIELD_ID)
-            ->paginate($perPage)
-            ->withQueryString();
+        $posts = $query->paginate($perPage)->withQueryString();
 
         return $posts;
     }
 
     public function findOrFail(int $id): Post
     {
-        /** @var Post|null $post */
-        $post = Post::query()->with('tags')->whereKey($id)->first();
+        $post = $this->post->newQuery()->with('tags')->whereKey($id)->first();
         if ($post === null) {
             throw new ModelNotFoundException(self::ERR_NOT_FOUND);
         }
@@ -45,7 +84,7 @@ final class PostService
 
     public function create(StorePostDto $dto, User $author): Post
     {
-        $post = new Post();
+        $post = $this->post->newInstance();
         $this->fill($post, $dto);
         $post->setAttribute(Post::FIELD_USER_ID, $author->getId());
         $post->save();
@@ -102,7 +141,7 @@ final class PostService
 
     private function slugExists(string $slug, ?int $ignoreId): bool
     {
-        $query = Post::query()->where(Post::FIELD_SLUG, $slug);
+        $query = $this->post->newQuery()->where(Post::FIELD_SLUG, $slug);
         if ($ignoreId !== null) {
             $query->where(Post::FIELD_ID, '!=', $ignoreId);
         }

@@ -1,0 +1,18 @@
+{#
+  Expects: column, label, sort (SortQuery-like: .column / .direction via sort_column / sort_dir),
+  route (default admin.posts), class (optional)
+#}
+{% set is_active = sort_column == column %}
+{% set next_dir = is_active ? (sort_dir == 'asc' ? 'desc' : 'asc') : 'asc' %}
+<th{% if class is defined and class %} class="{{ class }}"{% endif %}>
+  <a
+    href="{{ uri(route|default('admin.posts')) }}?sort={{ column }}&dir={{ next_dir }}"
+    class="text-decoration-none text-body d-inline-flex align-items-center gap-1"
+    title="Sort by {{ label }}"
+  >
+    <span>{{ label }}</span>
+    {% if is_active %}
+      <i class="bi bi-caret-{{ sort_dir == 'asc' ? 'up' : 'down' }}-fill" aria-hidden="true"></i>
+    {% endif %}
+  </a>
+</th>
