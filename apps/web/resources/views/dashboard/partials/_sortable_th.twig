@@ -1,12 +1,13 @@
 {#
-  Expects: column, label, sort (SortQuery-like: .column / .direction via sort_column / sort_dir),
-  route (default admin.posts), class (optional)
+  Expects: column, label, sort_column, sort_dir
+  Optional: route (default admin.posts), filter_query, class
 #}
 {% set is_active = sort_column == column %}
 {% set next_dir = is_active ? (sort_dir == 'asc' ? 'desc' : 'asc') : 'asc' %}
+{% set sort_qs = 'sort=' ~ column ~ '&dir=' ~ next_dir %}
 <th{% if class is defined and class %} class="{{ class }}"{% endif %}>
   <a
-    href="{{ uri(route|default('admin.posts')) }}?sort={{ column }}&dir={{ next_dir }}"
+    href="{{ uri(route|default('admin.posts')) }}?{% if filter_query %}{{ filter_query }}&{% endif %}{{ sort_qs }}"
     class="text-decoration-none text-body d-inline-flex align-items-center gap-1"
     title="Sort by {{ label }}"
   >

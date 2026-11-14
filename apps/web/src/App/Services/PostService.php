@@ -6,12 +6,15 @@ use Concept\App\Dto\Post\StorePostDto;
 use Concept\App\Dto\Post\UpdatePostDto;
 use Concept\App\Enums\PostStatus;
 use Concept\App\Exceptions\ModelNotFoundException;
+use Concept\App\Http\Listing\PostListFilter;
 use Concept\App\Http\Listing\SortQuery;
 use Concept\App\Models\Category;
 use Concept\App\Models\Post;
+use Concept\App\Models\Tag;
 use Concept\App\Models\User;
 use Concept\App\Slug\SlugService;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
+use Illuminate\Database\Eloquent\Builder;
 
 final class PostService
 {
@@ -31,12 +34,12 @@ final class PostService
 
     /** @var array<string, string> */
     private const array SORT_COLUMNS = [
-        Post::FIELD_ID => 'posts.' . Post::FIELD_ID,
-        Post::FIELD_TITLE => 'posts.' . Post::FIELD_TITLE,
-        Post::RELATION_CATEGORY => 'categories.' . Category::FIELD_NAME,
-        Post::FIELD_STATUS => 'posts.' . Post::FIELD_STATUS,
-        Post::FIELD_PUBLISHED_AT => 'posts.' . Post::FIELD_PUBLISHED_AT,
-        Post::FIELD_UPDATED_AT => 'posts.' . Post::FIELD_UPDATED_AT,
+        Post::FIELD_ID => Post::TABLE_NAME . '.' . Post::FIELD_ID,
+        Post::FIELD_TITLE => Post::TABLE_NAME . '.' . Post::FIELD_TITLE,
+        Post::RELATION_CATEGORY => Category::TABLE_NAME . '.' . Category::FIELD_NAME,
+        Post::FIELD_STATUS => Post::TABLE_NAME . '.' . Post::FIELD_STATUS,
+        Post::FIELD_PUBLISHED_AT => Post::TABLE_NAME . '.' . Post::FIELD_PUBLISHED_AT,
+        Post::FIELD_UPDATED_AT => Post::TABLE_NAME . '.' . Post::FIELD_UPDATED_AT,
     ];
 
     public function __construct(
@@ -45,7 +48,7 @@ final class PostService
     ) {}
 
     /** @return LengthAwarePaginator<int, Post> */
-    public function paginate(int $perPage, SortQuery $sort): LengthAwarePaginator
+    public function paginate(int $perPage, SortQuery $sort, PostListFilter $filter): LengthAwarePaginator
     {
         $query = $this->post->newQuery()->with([
             Post::RELATION_CATEGORY,
@@ -53,24 +56,57 @@ final class PostService
             Post::RELATION_TAGS,
         ]);
 
+        $this->applyFilter($query, $filter);
+
         if ($sort->column === Post::RELATION_CATEGORY) {
             $query
                 ->leftJoin(
                     Category::TABLE_NAME,
-                    'posts.' . Post::FIELD_CATEGORY_ID,
+                    Post::TABLE_NAME . '.' . Post::FIELD_CATEGORY_ID,
                     '=',
-                    'categories.' . Category::FIELD_ID,
+                    Category::TABLE_NAME . '.' . Category::FIELD_ID,
                 )
-                ->select('posts.*');
+                ->select(Post::TABLE_NAME . '.*');
         }
 
         $query->orderBy(self::SORT_COLUMNS[$sort->column], $sort->direction);
 
         if ($sort->column !== Post::FIELD_ID) {
-            $query->orderByDesc('posts.' . Post::FIELD_ID);
+            $query->orderByDesc(Post::TABLE_NAME . '.' . Post::FIELD_ID);
         }
 
         return $query->paginate($perPage)->withQueryString();
+    }
+
+    /** @param Builder<Post> $query */
+    private function applyFilter(Builder $query, PostListFilter $filter): void
+    {
+        if ($filter->search !== null) {
+            $like = '%' . addcslashes($filter->search, '%_\\') . '%';
+            $query->where(static function(Builder $inner) use ($like): void {
+                $inner
+                    ->where(Post::TABLE_NAME . '.' . Post::FIELD_TITLE, 'like', $like)
+                    ->orWhere(Post::TABLE_NAME . '.' . Post::FIELD_SLUG, 'like', $like);
+            });
+        }
+
+        if ($filter->status !== null) {
+            $query->where(Post::TABLE_NAME . '.' . Post::FIELD_STATUS, $filter->status->value);
+        }
+
+        if ($filter->categoryId !== null) {
+            $query->where(Post::TABLE_NAME . '.' . Post::FIELD_CATEGORY_ID, $filter->categoryId);
+        }
+
+        if ($filter->tagId !== null) {
+            $tagId = $filter->tagId;
+            $query->whereHas(
+                Post::RELATION_TAGS,
+                static function(Builder $tags) use ($tagId): void {
+                    $tags->where(Tag::TABLE_NAME . '.' . Tag::FIELD_ID, $tagId);
+                },
+            );
+        }
     }
 
     public function count(): int

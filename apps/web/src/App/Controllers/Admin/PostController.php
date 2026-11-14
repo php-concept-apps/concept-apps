@@ -10,6 +10,7 @@ use Concept\App\Exceptions\DtoException;
 use Concept\App\Exceptions\ModelNotFoundException;
 use Concept\App\Exceptions\RuntimeException;
 use Concept\App\Foundation\ConfigKey;
+use Concept\App\Http\Listing\PostListFilter;
 use Concept\App\Http\Listing\SortQuery;
 use Concept\App\Http\Requests\Admin\StorePostRequest;
 use Concept\App\Http\Requests\Admin\UpdatePostRequest;
@@ -46,21 +47,29 @@ final class PostController
 
     public function index(ServerRequestInterface $request): ResponseInterface
     {
+        $query = $request->getQueryParams();
         $sort = SortQuery::from(
-            $request->getQueryParams(),
+            $query,
             PostService::SORTABLE,
             PostService::SORT_DEFAULT,
             SortQuery::DESC,
         );
+        $filter = PostListFilter::from($query);
 
         return $this->view->create('@dashboard/posts/index', [
             'admin_nav' => 'posts',
             'posts' => $this->posts->paginate(
                 $this->config->getInt(ConfigKey::PAGINATION_PER_PAGE, self::DEFAULT_PER_PAGE),
                 $sort,
+                $filter,
             ),
             'sort_column' => $sort->column,
             'sort_dir' => $sort->direction,
+            'filter' => $filter,
+            'filter_query' => http_build_query($filter->toQueryParams()),
+            'statuses' => PostStatus::cases(),
+            'categories' => $this->categories->all(),
+            'tags' => $this->tags->all(),
         ]);
     }
 

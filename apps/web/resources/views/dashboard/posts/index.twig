@@ -13,32 +13,103 @@
 {% endblock %}
 
 {% block content %}
-<div class="row mb-3">
-  <div class="col-12 text-end">
-    <a class="btn btn-primary" href="{{ uri('admin.posts.create') }}">
-      <i class="bi bi-plus-lg me-1"></i> New post
-    </a>
-  </div>
-</div>
-
 <div class="card">
   <div class="card-header">
-    <h3 class="card-title">All posts</h3>
-    {% if posts.total > 0 %}
-      <span class="badge text-bg-primary ms-2">{{ posts.total }}</span>
-    {% endif %}
+    <div class="card-title mb-0">
+      <form method="get" action="{{ uri('admin.posts') }}" class="d-flex flex-wrap gap-2 align-items-center">
+        <input type="hidden" name="sort" value="{{ sort_column }}">
+        <input type="hidden" name="dir" value="{{ sort_dir }}">
+        <div class="input-group input-group-sm" style="width: 14rem">
+          <span class="input-group-text">
+            <i class="bi bi-search" aria-hidden="true"></i>
+          </span>
+          <input
+            id="filter_q"
+            type="search"
+            name="q"
+            class="form-control"
+            value="{{ filter.search|default('') }}"
+            placeholder="Filter rows…"
+            aria-label="Filter by title or slug"
+          >
+        </div>
+        <select
+          id="filter_status"
+          name="status"
+          class="form-select form-select-sm"
+          style="width: 8rem"
+          aria-label="Filter by status"
+          onchange="this.form.requestSubmit()"
+        >
+          <option value="">Status</option>
+          {% for status in statuses %}
+            <option value="{{ status.value }}" {{ filter.status and filter.status.value == status.value ? 'selected' : '' }}>
+              {{ status.value }}
+            </option>
+          {% endfor %}
+        </select>
+        <select
+          id="filter_category_id"
+          name="category_id"
+          class="form-select form-select-sm"
+          style="width: 10rem"
+          aria-label="Filter by category"
+          onchange="this.form.requestSubmit()"
+        >
+          <option value="">Category</option>
+          {% for category in categories %}
+            <option value="{{ category.id }}" {{ filter.categoryId == category.id ? 'selected' : '' }}>
+              {{ category.name }}
+            </option>
+          {% endfor %}
+        </select>
+        <select
+          id="filter_tag_id"
+          name="tag_id"
+          class="form-select form-select-sm"
+          style="width: 9rem"
+          aria-label="Filter by tag"
+          onchange="this.form.requestSubmit()"
+        >
+          <option value="">Tag</option>
+          {% for tag in tags %}
+            <option value="{{ tag.id }}" {{ filter.tagId == tag.id ? 'selected' : '' }}>
+              {{ tag.name }}
+            </option>
+          {% endfor %}
+        </select>
+        <button type="submit" class="btn btn-sm btn-outline-secondary" title="Apply filters" aria-label="Apply filters">
+          <i class="bi bi-funnel" aria-hidden="true"></i>
+        </button>
+        {% if filter.isActive %}
+          <a
+            href="{{ uri('admin.posts') }}?sort={{ sort_column }}&dir={{ sort_dir }}"
+            class="btn btn-sm btn-outline-secondary"
+            title="Reset filters"
+            aria-label="Reset filters"
+          >
+            <i class="bi bi-x-lg" aria-hidden="true"></i>
+          </a>
+        {% endif %}
+      </form>
+    </div>
+    <div class="card-tools">
+      <a class="btn btn-primary btn-sm" href="{{ uri('admin.posts.create') }}">
+        <i class="bi bi-plus-lg me-1"></i> New post
+      </a>
+    </div>
   </div>
   <div class="card-body table-responsive p-0">
     <table class="table table-striped table-hover mb-0 align-middle">
       <thead>
         <tr>
-          {% include '@dashboard/partials/_sortable_th.twig' with { column: 'id', label: 'ID', sort_column: sort_column, sort_dir: sort_dir } %}
-          {% include '@dashboard/partials/_sortable_th.twig' with { column: 'title', label: 'Title', sort_column: sort_column, sort_dir: sort_dir } %}
-          {% include '@dashboard/partials/_sortable_th.twig' with { column: 'category', label: 'Category', sort_column: sort_column, sort_dir: sort_dir } %}
+          {% include '@dashboard/partials/_sortable_th.twig' with { column: 'id', label: 'ID', sort_column: sort_column, sort_dir: sort_dir, filter_query: filter_query } %}
+          {% include '@dashboard/partials/_sortable_th.twig' with { column: 'title', label: 'Title', sort_column: sort_column, sort_dir: sort_dir, filter_query: filter_query } %}
+          {% include '@dashboard/partials/_sortable_th.twig' with { column: 'category', label: 'Category', sort_column: sort_column, sort_dir: sort_dir, filter_query: filter_query } %}
           <th>Tags</th>
-          {% include '@dashboard/partials/_sortable_th.twig' with { column: 'status', label: 'Status', sort_column: sort_column, sort_dir: sort_dir } %}
-          {% include '@dashboard/partials/_sortable_th.twig' with { column: 'published_at', label: 'Published', sort_column: sort_column, sort_dir: sort_dir } %}
-          {% include '@dashboard/partials/_sortable_th.twig' with { column: 'updated_at', label: 'Updated', sort_column: sort_column, sort_dir: sort_dir } %}
+          {% include '@dashboard/partials/_sortable_th.twig' with { column: 'status', label: 'Status', sort_column: sort_column, sort_dir: sort_dir, filter_query: filter_query } %}
+          {% include '@dashboard/partials/_sortable_th.twig' with { column: 'published_at', label: 'Published', sort_column: sort_column, sort_dir: sort_dir, filter_query: filter_query } %}
+          {% include '@dashboard/partials/_sortable_th.twig' with { column: 'updated_at', label: 'Updated', sort_column: sort_column, sort_dir: sort_dir, filter_query: filter_query } %}
           <th class="text-end">Actions</th>
         </tr>
       </thead>
@@ -87,7 +158,9 @@
           </tr>
         {% else %}
           <tr>
-            <td colspan="8" class="text-center text-muted py-4">No posts yet.</td>
+            <td colspan="8" class="text-center text-muted py-4">
+              {{ filter.isActive ? 'No posts match the current filters.' : 'No posts yet.' }}
+            </td>
           </tr>
         {% endfor %}
       </tbody>
