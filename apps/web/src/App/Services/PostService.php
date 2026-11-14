@@ -107,6 +107,20 @@ final class PostService
                 },
             );
         }
+
+        if ($filter->publishedAt !== null) {
+            $query->whereDate(
+                Post::TABLE_NAME . '.' . Post::FIELD_PUBLISHED_AT,
+                $filter->publishedAt,
+            );
+        }
+
+        if ($filter->updatedAt !== null) {
+            $query->whereDate(
+                Post::TABLE_NAME . '.' . Post::FIELD_UPDATED_AT,
+                $filter->updatedAt,
+            );
+        }
     }
 
     public function count(): int

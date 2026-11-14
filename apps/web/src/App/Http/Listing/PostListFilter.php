@@ -4,6 +4,7 @@ namespace Concept\App\Http\Listing;
 
 use Concept\App\Enums\PostStatus;
 use Concept\App\Models\Post;
+use DateTimeImmutable;
 
 final class PostListFilter
 {
@@ -15,6 +16,8 @@ final class PostListFilter
         public readonly ?PostStatus $status = null,
         public readonly ?int $categoryId = null,
         public readonly ?int $tagId = null,
+        public readonly ?string $publishedAt = null,
+        public readonly ?string $updatedAt = null,
     ) {}
 
     /**
@@ -37,6 +40,8 @@ final class PostListFilter
             $status,
             self::positiveInt($query[Post::FIELD_CATEGORY_ID] ?? null),
             self::positiveInt($query[self::PARAM_TAG_ID] ?? null),
+            self::date($query[Post::FIELD_PUBLISHED_AT] ?? null),
+            self::date($query[Post::FIELD_UPDATED_AT] ?? null),
         );
     }
 
@@ -45,7 +50,9 @@ final class PostListFilter
         return $this->search !== null
             || $this->status !== null
             || $this->categoryId !== null
-            || $this->tagId !== null;
+            || $this->tagId !== null
+            || $this->publishedAt !== null
+            || $this->updatedAt !== null;
     }
 
     /**
@@ -69,6 +76,12 @@ final class PostListFilter
         if ($this->tagId !== null) {
             $params[self::PARAM_TAG_ID] = (string) $this->tagId;
         }
+        if ($this->publishedAt !== null) {
+            $params[Post::FIELD_PUBLISHED_AT] = $this->publishedAt;
+        }
+        if ($this->updatedAt !== null) {
+            $params[Post::FIELD_UPDATED_AT] = $this->updatedAt;
+        }
 
         return $params;
     }
@@ -83,5 +96,19 @@ final class PostListFilter
         }
 
         return null;
+    }
+
+    private static function date(mixed $value): ?string
+    {
+        if (!is_string($value) || $value === '') {
+            return null;
+        }
+
+        $date = DateTimeImmutable::createFromFormat('Y-m-d', $value);
+        if ($date === false || $date->format('Y-m-d') !== $value) {
+            return null;
+        }
+
+        return $value;
     }
 }

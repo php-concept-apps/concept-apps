@@ -13,86 +13,13 @@
 {% endblock %}
 
 {% block content %}
+<form id="posts-filter" method="get" action="{{ uri('admin.posts') }}" class="d-none">
+  <input type="hidden" name="sort" value="{{ sort_column }}">
+  <input type="hidden" name="dir" value="{{ sort_dir }}">
+</form>
+
 <div class="card">
   <div class="card-header">
-    <div class="card-title mb-0">
-      <form method="get" action="{{ uri('admin.posts') }}" class="d-flex flex-wrap gap-2 align-items-center">
-        <input type="hidden" name="sort" value="{{ sort_column }}">
-        <input type="hidden" name="dir" value="{{ sort_dir }}">
-        <div class="input-group input-group-sm" style="width: 14rem">
-          <span class="input-group-text">
-            <i class="bi bi-search" aria-hidden="true"></i>
-          </span>
-          <input
-            id="filter_q"
-            type="search"
-            name="q"
-            class="form-control"
-            value="{{ filter.search|default('') }}"
-            placeholder="Filter rows…"
-            aria-label="Filter by title or slug"
-          >
-        </div>
-        <select
-          id="filter_status"
-          name="status"
-          class="form-select form-select-sm"
-          style="width: 8rem"
-          aria-label="Filter by status"
-          onchange="this.form.requestSubmit()"
-        >
-          <option value="">Status</option>
-          {% for status in statuses %}
-            <option value="{{ status.value }}" {{ filter.status and filter.status.value == status.value ? 'selected' : '' }}>
-              {{ status.value }}
-            </option>
-          {% endfor %}
-        </select>
-        <select
-          id="filter_category_id"
-          name="category_id"
-          class="form-select form-select-sm"
-          style="width: 10rem"
-          aria-label="Filter by category"
-          onchange="this.form.requestSubmit()"
-        >
-          <option value="">Category</option>
-          {% for category in categories %}
-            <option value="{{ category.id }}" {{ filter.categoryId == category.id ? 'selected' : '' }}>
-              {{ category.name }}
-            </option>
-          {% endfor %}
-        </select>
-        <select
-          id="filter_tag_id"
-          name="tag_id"
-          class="form-select form-select-sm"
-          style="width: 9rem"
-          aria-label="Filter by tag"
-          onchange="this.form.requestSubmit()"
-        >
-          <option value="">Tag</option>
-          {% for tag in tags %}
-            <option value="{{ tag.id }}" {{ filter.tagId == tag.id ? 'selected' : '' }}>
-              {{ tag.name }}
-            </option>
-          {% endfor %}
-        </select>
-        <button type="submit" class="btn btn-sm btn-outline-secondary" title="Apply filters" aria-label="Apply filters">
-          <i class="bi bi-funnel" aria-hidden="true"></i>
-        </button>
-        {% if filter.isActive %}
-          <a
-            href="{{ uri('admin.posts') }}?sort={{ sort_column }}&dir={{ sort_dir }}"
-            class="btn btn-sm btn-outline-secondary"
-            title="Reset filters"
-            aria-label="Reset filters"
-          >
-            <i class="bi bi-x-lg" aria-hidden="true"></i>
-          </a>
-        {% endif %}
-      </form>
-    </div>
     <div class="card-tools">
       <a class="btn btn-primary btn-sm" href="{{ uri('admin.posts.create') }}">
         <i class="bi bi-plus-lg me-1"></i> New post
@@ -111,6 +38,117 @@
           {% include '@dashboard/partials/_sortable_th.twig' with { column: 'published_at', label: 'Published', sort_column: sort_column, sort_dir: sort_dir, filter_query: filter_query } %}
           {% include '@dashboard/partials/_sortable_th.twig' with { column: 'updated_at', label: 'Updated', sort_column: sort_column, sort_dir: sort_dir, filter_query: filter_query } %}
           <th class="text-end">Actions</th>
+        </tr>
+        <tr class="table-filters">
+          <th></th>
+          <th>
+            <input
+              form="posts-filter"
+              id="filter_q"
+              type="search"
+              name="q"
+              class="form-control form-control-sm"
+              value="{{ filter.search|default('') }}"
+              placeholder="Filter…"
+              aria-label="Filter by title or slug"
+            >
+          </th>
+          <th>
+            <select
+              form="posts-filter"
+              id="filter_category_id"
+              name="category_id"
+              class="form-select form-select-sm"
+              aria-label="Filter by category"
+              onchange="this.form.requestSubmit()"
+            >
+              <option value=""></option>
+              {% for category in categories %}
+                <option value="{{ category.id }}" {{ filter.categoryId == category.id ? 'selected' : '' }}>
+                  {{ category.name }}
+                </option>
+              {% endfor %}
+            </select>
+          </th>
+          <th>
+            <select
+              form="posts-filter"
+              id="filter_tag_id"
+              name="tag_id"
+              class="form-select form-select-sm"
+              aria-label="Filter by tag"
+              onchange="this.form.requestSubmit()"
+            >
+              <option value=""></option>
+              {% for tag in tags %}
+                <option value="{{ tag.id }}" {{ filter.tagId == tag.id ? 'selected' : '' }}>
+                  {{ tag.name }}
+                </option>
+              {% endfor %}
+            </select>
+          </th>
+          <th>
+            <select
+              form="posts-filter"
+              id="filter_status"
+              name="status"
+              class="form-select form-select-sm"
+              aria-label="Filter by status"
+              onchange="this.form.requestSubmit()"
+            >
+              <option value=""></option>
+              {% for status in statuses %}
+                <option value="{{ status.value }}" {{ filter.status and filter.status.value == status.value ? 'selected' : '' }}>
+                  {{ status.value }}
+                </option>
+              {% endfor %}
+            </select>
+          </th>
+          <th>
+            <input
+              form="posts-filter"
+              id="filter_published_at"
+              type="date"
+              name="published_at"
+              class="form-control form-control-sm"
+              value="{{ filter.publishedAt|default('') }}"
+              aria-label="Filter by published date"
+              onchange="this.form.requestSubmit()"
+            >
+          </th>
+          <th>
+            <input
+              form="posts-filter"
+              id="filter_updated_at"
+              type="date"
+              name="updated_at"
+              class="form-control form-control-sm"
+              value="{{ filter.updatedAt|default('') }}"
+              aria-label="Filter by updated date"
+              onchange="this.form.requestSubmit()"
+            >
+          </th>
+          <th class="text-end text-nowrap">
+            <button
+              form="posts-filter"
+              type="submit"
+              class="btn btn-outline-secondary btn-sm"
+              title="Apply filters"
+              aria-label="Apply filters"
+            >
+              <i class="bi bi-funnel" aria-hidden="true"></i>
+            </button>
+            {% if filter.isActive %}
+              <a
+                href="{{ uri('admin.posts') }}?sort={{ sort_column }}&dir={{ sort_dir }}"
+                class="btn btn-outline-secondary btn-sm"
+                title="Reset filters"
+                aria-label="Reset filters"
+              >
+                <i class="bi bi-x-lg" aria-hidden="true"></i>
+              </a>
+            {% endif %}
+          </th>
         </tr>
       </thead>
       <tbody>
