@@ -4,7 +4,7 @@ namespace Concept\App\Controllers;
 
 use Concept\App\Exceptions\ModelNotFoundException;
 use Concept\App\Foundation\ConfigKey;
-use Concept\App\Http\Listing\ListFilterSupport;
+use Concept\App\Listing\ListFilterSupport;
 use Concept\App\Models\Category;
 use Concept\App\Models\Post;
 use Concept\App\Models\Tag;

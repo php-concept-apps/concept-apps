@@ -1,6 +1,6 @@
 <?php declare(strict_types=1);
 
-namespace Concept\App\Http\Listing;
+namespace Concept\App\Listing;
 
 use Concept\App\Enums\PostStatus;
 use Concept\App\Models\Post;

@@ -1,15 +1,14 @@
 <?php declare(strict_types=1);
 
-namespace Concept\App\Http\Listing;
+namespace Concept\App\Listing;
 
-use Concept\App\Models\Category;
+use Concept\App\Models\Tag;
 
-final class CategoryListFilter
+final class TagListFilter
 {
     public function __construct(
         public readonly ?string $name = null,
         public readonly ?string $slug = null,
-        public readonly ?int $sortOrder = null,
         public readonly ?string $updatedAt = null,
     ) {}
 
@@ -19,10 +18,9 @@ final class CategoryListFilter
     public static function from(array $query): self
     {
         return new self(
-            ListFilterSupport::optionalString($query[Category::FIELD_NAME] ?? null),
-            ListFilterSupport::optionalString($query[Category::FIELD_SLUG] ?? null),
-            ListFilterSupport::optionalInt($query[Category::FIELD_SORT_ORDER] ?? null),
-            ListFilterSupport::optionalDate($query[Category::FIELD_UPDATED_AT] ?? null),
+            ListFilterSupport::optionalString($query[Tag::FIELD_NAME] ?? null),
+            ListFilterSupport::optionalString($query[Tag::FIELD_SLUG] ?? null),
+            ListFilterSupport::optionalDate($query[Tag::FIELD_UPDATED_AT] ?? null),
         );
     }
 
@@ -30,7 +28,6 @@ final class CategoryListFilter
     {
         return $this->name !== null
             || $this->slug !== null
-            || $this->sortOrder !== null
             || $this->updatedAt !== null;
     }
 
@@ -42,16 +39,13 @@ final class CategoryListFilter
         $params = [];
 
         if ($this->name !== null) {
-            $params[Category::FIELD_NAME] = $this->name;
+            $params[Tag::FIELD_NAME] = $this->name;
         }
         if ($this->slug !== null) {
-            $params[Category::FIELD_SLUG] = $this->slug;
-        }
-        if ($this->sortOrder !== null) {
-            $params[Category::FIELD_SORT_ORDER] = (string) $this->sortOrder;
+            $params[Tag::FIELD_SLUG] = $this->slug;
         }
         if ($this->updatedAt !== null) {
-            $params[Category::FIELD_UPDATED_AT] = $this->updatedAt;
+            $params[Tag::FIELD_UPDATED_AT] = $this->updatedAt;
         }
 
         return $params;
