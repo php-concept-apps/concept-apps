@@ -1,0 +1,57 @@
+<div class="col-lg-4 sidebar">
+  <div class="widgets-container" data-aos="fade-up" data-aos-delay="200">
+    <div class="search-widget widget-item">
+      <h3 class="widget-title">Search</h3>
+      <form action="{{ search_action|default(uri('blog')) }}" method="get">
+        <input type="text" name="q" value="{{ search|default('') }}" placeholder="Search…" aria-label="Search posts">
+        <button type="submit" title="Search"><i class="bi bi-search"></i></button>
+      </form>
+    </div>
+
+    <div class="recent-posts-widget widget-item">
+      <h3 class="widget-title">Recent Posts</h3>
+      {% for recent in recent_posts %}
+        {% set thumb = recent.cover_image ?: ('/assets/img/blog/blog-post-square-' ~ ((recent.id % 5) + 1) ~ '.webp') %}
+        <div class="post-item">
+          <img src="{{ thumb }}" alt="" class="flex-shrink-0">
+          <div>
+            <h4><a href="{{ uri('blog.show', {slug: recent.slug}) }}">{{ recent.title }}</a></h4>
+            {% if recent.published_at %}
+              <time datetime="{{ recent.published_at|date('Y-m-d') }}">{{ recent.published_at|date('M j, Y') }}</time>
+            {% endif %}
+          </div>
+        </div>
+      {% else %}
+        <p class="text-muted mb-0">No posts yet.</p>
+      {% endfor %}
+    </div>
+
+    <div class="categories-widget widget-item">
+      <h3 class="widget-title">Categories</h3>
+      <ul class="mt-3">
+        {% for item in sidebar_categories %}
+          {% if item.published_posts_count > 0 %}
+            <li>
+              <a href="{{ uri('blog.category', {slug: item.slug}) }}">
+                {{ item.name }} <span>({{ item.published_posts_count }})</span>
+              </a>
+            </li>
+          {% endif %}
+        {% else %}
+          <li class="text-muted">No categories yet.</li>
+        {% endfor %}
+      </ul>
+    </div>
+
+    <div class="tags-widget widget-item">
+      <h3 class="widget-title">Tags</h3>
+      <ul>
+        {% for item in sidebar_tags %}
+          <li><a href="{{ uri('blog.tag', {slug: item.slug}) }}">{{ item.name }}</a></li>
+        {% else %}
+          <li class="text-muted">No tags yet.</li>
+        {% endfor %}
+      </ul>
+    </div>
+  </div>
+</div>

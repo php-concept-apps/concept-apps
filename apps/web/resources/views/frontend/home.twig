@@ -1,22 +1,61 @@
 {% extends '@frontend/layouts/base.twig' %}
 
 {% block title %}Home · {{ config('app.name') }}{% endblock %}
-{% block meta_description %}Concept 2 web assembly scaffold{% endblock %}
-{% block body_class %}starter-page-page{% endblock %}
-
-{% block page_title %}
-  {% include '@frontend/partials/page-title.twig' with {
-    page_heading: 'Home',
-    breadcrumbs: [
-      { label: 'Home', current: true },
-    ],
-  } %}
-{% endblock %}
+{% block meta_description %}{{ config('app.name') }} — blog and more{% endblock %}
+{% block body_class %}index-page{% endblock %}
 
 {% block content %}
-<section id="starter-section" class="starter-section section">
-  <div class="container" data-aos="fade-up">
-    <p>Web scaffold is running on the Arsha template. Blog domain comes next.</p>
+<section id="hero" class="hero section dark-background">
+  <div class="container">
+    <div class="row gy-4">
+      <div class="col-lg-6 order-2 order-lg-1 d-flex flex-column justify-content-center" data-aos="zoom-out">
+        <h1>{{ config('app.name') }}</h1>
+        <p>Ideas, notes, and updates from the blog.</p>
+        <div class="d-flex">
+          <a href="{{ uri('blog') }}" class="btn-get-started">Browse blog</a>
+        </div>
+      </div>
+      <div class="col-lg-6 order-1 order-lg-2 hero-img" data-aos="zoom-out" data-aos-delay="200">
+        <img src="/assets/img/hero-img.png" class="img-fluid animated" alt="">
+      </div>
+    </div>
   </div>
 </section>
+
+{% if recent_posts is defined and recent_posts is not empty %}
+<section id="recent-blog-posts" class="recent-blog-posts section">
+  <div class="container section-title" data-aos="fade-up">
+    <h2>Recent Posts</h2>
+    <p>Latest from the blog</p>
+  </div>
+  <div class="container">
+    <div class="row gy-4">
+      {% for post in recent_posts %}
+        {% set cover = post.cover_image ?: ('/assets/img/blog/blog-post-' ~ ((post.id % 4) + 1) ~ '.webp') %}
+        <div class="col-lg-4" data-aos="fade-up" data-aos-delay="{{ loop.index0 * 100 }}">
+          <article>
+            <div class="post-img">
+              <img src="{{ cover }}" alt="" class="img-fluid">
+            </div>
+            <p class="post-category">{{ post.category ? post.category.name : 'Blog' }}</p>
+            <h2 class="title">
+              <a href="{{ uri('blog.show', {slug: post.slug}) }}">{{ post.title }}</a>
+            </h2>
+            <div class="d-flex align-items-center">
+              <div class="post-meta">
+                {% if post.author %}<p class="post-author">{{ post.author.name }}</p>{% endif %}
+                {% if post.published_at %}
+                  <p class="post-date">
+                    <time datetime="{{ post.published_at|date('Y-m-d') }}">{{ post.published_at|date('M j, Y') }}</time>
+                  </p>
+                {% endif %}
+              </div>
+            </div>
+          </article>
+        </div>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+{% endif %}
 {% endblock %}

@@ -1,0 +1,91 @@
+{% extends '@frontend/layouts/base.twig' %}
+
+{% block title %}{{ post.title }} · {{ config('app.name') }}{% endblock %}
+{% block meta_description %}{{ post.excerpt ?: post.title }}{% endblock %}
+{% block body_class %}blog-details-page{% endblock %}
+
+{% block page_title %}
+  {% include '@frontend/partials/page-title.twig' with {
+    page_heading: post.title,
+    breadcrumbs: [
+      { label: 'Home', url: uri('home') },
+      { label: 'Blog', url: uri('blog') },
+      { label: post.title, current: true },
+    ],
+  } %}
+{% endblock %}
+
+{% block content %}
+{% set cover = post.cover_image ?: ('/assets/img/blog/blog-post-' ~ ((post.id % 4) + 1) ~ '.webp') %}
+<div class="container">
+  <div class="row">
+    <div class="col-lg-8">
+      <section id="blog-details" class="blog-details section">
+        <div class="container" data-aos="fade-up">
+          <article class="article">
+            <div class="hero-img" data-aos="zoom-in">
+              <img src="{{ cover }}" alt="{{ post.title }}" class="img-fluid" loading="lazy">
+              <div class="meta-overlay">
+                <div class="meta-categories">
+                  {% if post.category %}
+                    <a href="{{ uri('blog.category', {slug: post.category.slug}) }}" class="category">{{ post.category.name }}</a>
+                  {% endif %}
+                </div>
+              </div>
+            </div>
+
+            <div class="article-content" data-aos="fade-up" data-aos-delay="100">
+              <div class="content-header">
+                <h1 class="title">{{ post.title }}</h1>
+                <div class="author-info">
+                  <div class="author-details">
+                    <div class="info">
+                      <h4>{{ post.author ? post.author.name : 'Author' }}</h4>
+                    </div>
+                  </div>
+                  <div class="post-meta">
+                    {% if post.published_at %}
+                      <span class="date">
+                        <i class="bi bi-calendar3"></i>
+                        {{ post.published_at|date('M j, Y') }}
+                      </span>
+                    {% endif %}
+                  </div>
+                </div>
+              </div>
+
+              <div class="content">
+                {% if post.excerpt %}
+                  <p class="lead">{{ post.excerpt }}</p>
+                {% endif %}
+                {{ post.body|nl2br }}
+              </div>
+
+              {% if post.tags is not empty %}
+                <div class="meta-bottom">
+                  <div class="tags-section">
+                    <h4>Tags</h4>
+                    <div class="tags">
+                      {% for item in post.tags %}
+                        <a href="{{ uri('blog.tag', {slug: item.slug}) }}" class="tag">{{ item.name }}</a>
+                      {% endfor %}
+                    </div>
+                  </div>
+                </div>
+              {% endif %}
+            </div>
+          </article>
+        </div>
+      </section>
+    </div>
+
+    {% include '@frontend/blog/partials/sidebar.twig' with {
+      search: null,
+      search_action: uri('blog'),
+      recent_posts: recent_posts,
+      sidebar_categories: sidebar_categories,
+      sidebar_tags: sidebar_tags,
+    } %}
+  </div>
+</div>
+{% endblock %}

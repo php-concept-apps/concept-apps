@@ -17,6 +17,8 @@ final class Category extends Model
     public const string FIELD_CREATED_AT = 'created_at';
     public const string FIELD_UPDATED_AT = 'updated_at';
 
+    public const string RELATION_POSTS = 'posts';
+
     protected $table = self::TABLE_NAME;
 
     /** @var list<string> */

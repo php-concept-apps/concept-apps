@@ -1,5 +1,6 @@
 <?php declare(strict_types=1);
 
+use Concept\App\Controllers\BlogController;
 use Concept\App\Controllers\HomeController;
 use Concept\App\Middleware\HandleCsrfExceptionMiddleware;
 use Concept\App\Middleware\HandleValidationExceptionMiddleware;
@@ -20,4 +21,9 @@ $router->lazyMiddlewares([
 
 $router->group('', function(RouteGroup $router): void {
     $router->get('/', [HomeController::class, 'index'])->setName('home');
+
+    $router->get('/blog', [BlogController::class, 'index'])->setName('blog');
+    $router->get('/blog/category/{slug}', [BlogController::class, 'category'])->setName('blog.category');
+    $router->get('/blog/tag/{slug}', [BlogController::class, 'tag'])->setName('blog.tag');
+    $router->get('/blog/{slug}', [BlogController::class, 'show'])->setName('blog.show');
 });

@@ -8,12 +8,12 @@
     <nav id="navmenu" class="navmenu">
       <ul>
         <li><a href="{{ uri('home') }}" class="{% if app_nav|default('home') == 'home' %}active{% endif %}">Home</a></li>
-        <li><a href="{{ uri('home') }}" class="{% if app_nav|default('') == 'blog' %}active{% endif %}">Blog</a></li>
+        <li><a href="{{ uri('blog') }}" class="{% if app_nav|default('') == 'blog' %}active{% endif %}">Blog</a></li>
       </ul>
       <i class="mobile-nav-toggle d-xl-none bi bi-list"></i>
     </nav>
 
-    <a class="btn-getstarted" href="{{ uri('home') }}">Get Started</a>
+    <a class="btn-getstarted" href="{{ uri('blog') }}">Read blog</a>
 
   </div>
 </header>

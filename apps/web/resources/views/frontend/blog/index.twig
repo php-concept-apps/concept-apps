@@ -1,0 +1,102 @@
+{% extends '@frontend/layouts/base.twig' %}
+
+{% block title %}{{ page_heading }} · {{ config('app.name') }}{% endblock %}
+{% block meta_description %}{{ page_heading }} — {{ config('app.name') }} blog{% endblock %}
+{% block body_class %}blog-page{% endblock %}
+
+{% block page_title %}
+  {% set crumbs = [{ label: 'Home', url: uri('home') }, { label: 'Blog', url: uri('blog') }] %}
+  {% if category %}
+    {% set crumbs = crumbs|merge([{ label: category.name, current: true }]) %}
+  {% elseif tag %}
+    {% set crumbs = crumbs|merge([{ label: tag.name, current: true }]) %}
+  {% else %}
+    {% set crumbs = [{ label: 'Home', url: uri('home') }, { label: 'Blog', current: true }] %}
+  {% endif %}
+  {% include '@frontend/partials/page-title.twig' with {
+    page_heading: page_heading,
+    breadcrumbs: crumbs,
+  } %}
+{% endblock %}
+
+{% block content %}
+<div class="container">
+  <div class="row">
+    <div class="col-lg-8">
+      <section id="blog-posts" class="blog-posts section">
+        <div class="container" data-aos="fade-up" data-aos-delay="100">
+          <div class="row gy-4">
+            {% for post in posts %}
+              {% set cover = post.cover_image ?: ('/assets/img/blog/blog-post-' ~ ((post.id % 4) + 1) ~ '.webp') %}
+              <div class="col-lg-6">
+                <article>
+                  <div class="post-img">
+                    <img src="{{ cover }}" alt="" class="img-fluid">
+                  </div>
+                  <h2 class="title">
+                    <a href="{{ uri('blog.show', {slug: post.slug}) }}">{{ post.title }}</a>
+                  </h2>
+                  <div class="meta-top">
+                    <ul>
+                      {% if post.author %}
+                        <li class="d-flex align-items-center">
+                          <i class="bi bi-person"></i>
+                          <span>{{ post.author.name }}</span>
+                        </li>
+                      {% endif %}
+                      {% if post.published_at %}
+                        <li class="d-flex align-items-center">
+                          <i class="bi bi-clock"></i>
+                          <time datetime="{{ post.published_at|date('Y-m-d') }}">{{ post.published_at|date('M j, Y') }}</time>
+                        </li>
+                      {% endif %}
+                      {% if post.category %}
+                        <li class="d-flex align-items-center">
+                          <i class="bi bi-folder"></i>
+                          <a href="{{ uri('blog.category', {slug: post.category.slug}) }}">{{ post.category.name }}</a>
+                        </li>
+                      {% endif %}
+                    </ul>
+                  </div>
+                  <div class="content">
+                    {% if post.excerpt %}
+                      <p>{{ post.excerpt }}</p>
+                    {% endif %}
+                    <div class="read-more">
+                      <a href="{{ uri('blog.show', {slug: post.slug}) }}">Read More</a>
+                    </div>
+                  </div>
+                </article>
+              </div>
+            {% else %}
+              <div class="col-12">
+                <p class="text-muted">
+                  {% if search %}
+                    No posts match “{{ search }}”.
+                  {% else %}
+                    No published posts yet.
+                  {% endif %}
+                </p>
+              </div>
+            {% endfor %}
+          </div>
+        </div>
+      </section>
+
+      {% include '@frontend/blog/partials/_pagination.twig' with { items: posts } %}
+    </div>
+
+    {% set search_action = category
+      ? uri('blog.category', {slug: category.slug})
+      : (tag ? uri('blog.tag', {slug: tag.slug}) : uri('blog'))
+    %}
+    {% include '@frontend/blog/partials/sidebar.twig' with {
+      search: search,
+      search_action: search_action,
+      recent_posts: recent_posts,
+      sidebar_categories: sidebar_categories,
+      sidebar_tags: sidebar_tags,
+    } %}
+  </div>
+</div>
+{% endblock %}

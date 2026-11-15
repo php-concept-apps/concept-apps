@@ -1,0 +1,33 @@
+{% if items.lastPage > 1 %}
+  <section id="pagination-2" class="pagination-2 section">
+    <div class="container">
+      <div class="d-flex justify-content-center">
+        <ul>
+          <li class="{{ items.onFirstPage ? 'disabled' : '' }}">
+            {% if items.onFirstPage %}
+              <span><i class="bi bi-chevron-left"></i></span>
+            {% else %}
+              <a href="{{ items.previousPageUrl }}" aria-label="Previous"><i class="bi bi-chevron-left"></i></a>
+            {% endif %}
+          </li>
+          {% for element in items.linkCollection %}
+            {% if element.url is empty %}
+              <li><span>{{ element.label|raw }}</span></li>
+            {% else %}
+              <li>
+                <a href="{{ element.url }}" class="{{ element.active ? 'active' : '' }}">{{ element.label|raw }}</a>
+              </li>
+            {% endif %}
+          {% endfor %}
+          <li class="{{ items.currentPage == items.lastPage ? 'disabled' : '' }}">
+            {% if items.currentPage == items.lastPage %}
+              <span><i class="bi bi-chevron-right"></i></span>
+            {% else %}
+              <a href="{{ items.nextPageUrl }}" aria-label="Next"><i class="bi bi-chevron-right"></i></a>
+            {% endif %}
+          </li>
+        </ul>
+      </div>
+    </div>
+  </section>
+{% endif %}
