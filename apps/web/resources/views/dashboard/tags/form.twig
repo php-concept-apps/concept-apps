@@ -36,9 +36,9 @@
         </div>
       </div>
     </div>
-    <div class="card-footer d-flex gap-2">
-      <button type="submit" class="btn btn-primary">{{ is_edit ? 'Save' : 'Create' }}</button>
+    <div class="card-footer d-flex gap-2 justify-content-end">
       <a href="{{ uri('admin.tags') }}" class="btn btn-outline-secondary">Cancel</a>
+      <button type="submit" class="btn btn-primary">{{ is_edit ? 'Save' : 'Create' }}</button>
     </div>
   </form>
 </div>
