@@ -25,7 +25,6 @@ final class TagController
     private const string MSG_UPDATED = 'Tag updated.';
     private const string MSG_DELETED = 'Tag deleted.';
     private const string ERR_DTO = 'Tag request did not produce a DTO.';
-    private const int DEFAULT_PER_PAGE = 15;
 
     public function __construct(
         private readonly ViewResponseFactoryInterface $view,
@@ -49,7 +48,7 @@ final class TagController
         return $this->view->create('@dashboard/tags/index', [
             'admin_nav' => 'tags',
             'tags' => $this->tags->paginate(
-                $this->config->getInt(ConfigKey::PAGINATION_PER_PAGE, self::DEFAULT_PER_PAGE),
+                $this->config->getInt(ConfigKey::PAGINATION_PER_PAGE),
                 $sort,
                 $filter,
             ),

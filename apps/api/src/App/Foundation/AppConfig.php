@@ -29,12 +29,12 @@ final class AppConfig
         return [
             'driver' => $this->config->getString(ConfigKey::DB_DRIVER),
             'host' => $this->config->getString(ConfigKey::DB_HOST),
-            'port' => $this->config->getInt(ConfigKey::DB_PORT, 3306),
+            'port' => $this->config->getInt(ConfigKey::DB_PORT),
             'database' => $this->config->getString(ConfigKey::DB_DATABASE),
             'username' => $this->config->getString(ConfigKey::DB_USERNAME),
             'password' => $this->config->getString(ConfigKey::DB_PASSWORD),
-            'charset' => $this->config->getString(ConfigKey::DB_CHARSET, 'utf8mb4'),
-            'collation' => $this->config->getString(ConfigKey::DB_COLLATION, 'utf8mb4_unicode_ci'),
+            'charset' => $this->config->getString(ConfigKey::DB_CHARSET),
+            'collation' => $this->config->getString(ConfigKey::DB_COLLATION),
             'prefix' => $this->config->getString(ConfigKey::DB_PREFIX),
         ];
     }

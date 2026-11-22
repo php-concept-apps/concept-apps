@@ -33,11 +33,11 @@ final class ApplicationStackBootstrap
             ->setKeyPatterns($config->getStringList(ConfigKey::MASKING_KEY_PATTERNS))
             ->setRules($config->getClassList(ConfigKey::MASKING_RULES, DataMaskerRuleInterface::class));
 
-        $logFileName = $config->getString(ConfigKey::LOG_FILE, 'worker.log');
-        $logMaxFiles = $config->getInt(ConfigKey::LOG_MAX_FILES, 14);
+        $logFileName = $config->getString(ConfigKey::LOG_FILE);
+        $logMaxFiles = $config->getInt(ConfigKey::LOG_MAX_FILES);
         $stack->add(new LoggingBrick())->builder()
-            ->setLevel($config->getString(ConfigKey::LOG_LEVEL, 'INFO'))
-            ->setChannel($config->getString(ConfigKey::LOG_NAME, 'worker'))
+            ->setLevel($config->getString(ConfigKey::LOG_LEVEL))
+            ->setChannel($config->getString(ConfigKey::LOG_NAME))
             ->toRotatingFile($pathManager->get(PathName::LOGS, $logFileName), $logMaxFiles)
             ->withMasking();
 

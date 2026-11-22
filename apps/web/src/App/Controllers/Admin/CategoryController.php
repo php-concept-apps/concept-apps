@@ -25,7 +25,6 @@ final class CategoryController
     private const string MSG_UPDATED = 'Category updated.';
     private const string MSG_DELETED = 'Category deleted.';
     private const string ERR_DTO = 'Category request did not produce a DTO.';
-    private const int DEFAULT_PER_PAGE = 15;
 
     public function __construct(
         private readonly ViewResponseFactoryInterface $view,
@@ -49,7 +48,7 @@ final class CategoryController
         return $this->view->create('@dashboard/categories/index', [
             'admin_nav' => 'categories',
             'categories' => $this->categories->paginate(
-                $this->config->getInt(ConfigKey::PAGINATION_PER_PAGE, self::DEFAULT_PER_PAGE),
+                $this->config->getInt(ConfigKey::PAGINATION_PER_PAGE),
                 $sort,
                 $filter,
             ),

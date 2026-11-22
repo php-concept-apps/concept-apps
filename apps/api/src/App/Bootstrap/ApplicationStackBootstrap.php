@@ -48,15 +48,15 @@ final class ApplicationStackBootstrap
             ->setKeyPatterns($config->getStringList(ConfigKey::MASKING_KEY_PATTERNS))
             ->setRules($config->getClassList(ConfigKey::MASKING_RULES, DataMaskerRuleInterface::class));
 
-        $logFileName = $config->getString(ConfigKey::LOG_FILE, 'api.log');
-        $logMaxFiles = $config->getInt(ConfigKey::LOG_MAX_FILES, 14);
+        $logFileName = $config->getString(ConfigKey::LOG_FILE);
+        $logMaxFiles = $config->getInt(ConfigKey::LOG_MAX_FILES);
         $stack->add(new LoggingBrick())->builder()
-            ->setLevel($config->getString(ConfigKey::LOG_LEVEL, 'INFO'))
-            ->setChannel($config->getString(ConfigKey::LOG_NAME, 'api'))
+            ->setLevel($config->getString(ConfigKey::LOG_LEVEL))
+            ->setChannel($config->getString(ConfigKey::LOG_NAME))
             ->toRotatingFile($pathManager->get(PathName::LOGS, $logFileName), $logMaxFiles)
             ->withMasking();
 
-        $casterCacheDir = $config->getString(ConfigKey::CASTER_CACHE_DIR, 'valinor');
+        $casterCacheDir = $config->getString(ConfigKey::CASTER_CACHE_DIR);
         $stack->add(new CastingBrick())->builder()
             ->setCacheDir($pathManager->get(PathName::CACHE, $casterCacheDir))
             ->setDebug($debug);
@@ -65,7 +65,7 @@ final class ApplicationStackBootstrap
             ->setRules($config->getClassMap(ConfigKey::VALIDATOR_RULES, RuleInterface::class))
             ->setGlobalExcept($config->getStringList(ConfigKey::FORM_REQUEST_GLOBAL_EXCEPT));
         if ($config->getBool(ConfigKey::VALIDATOR_LOG_ENABLED)) {
-            $validationLogFile = $config->getString(ConfigKey::VALIDATOR_LOG_FILE, 'validation.log');
+            $validationLogFile = $config->getString(ConfigKey::VALIDATOR_LOG_FILE);
             $validation->withLogging($pathManager->get(PathName::LOGS, $validationLogFile));
         }
         $validation->withMasking();
@@ -73,13 +73,13 @@ final class ApplicationStackBootstrap
         $database = $stack->add(new DatabaseBrick())->builder()
             ->setConnection($appConfig->dbConnection())
             ->setMigrations($pathManager->rootList($config->getStringList(ConfigKey::MIGRATIONS_PATHS)))
-            ->setMigrationsTable($config->getString(ConfigKey::MIGRATIONS_TABLE, 'migrations'))
+            ->setMigrationsTable($config->getString(ConfigKey::MIGRATIONS_TABLE))
             ->withMasking();
 
         if ($config->getBool(ConfigKey::DB_LOG_ENABLED)) {
             $database->withQueryLogging(
-                $pathManager->get(PathName::LOGS, $config->getString(ConfigKey::DB_LOG_FILE, 'query.log')),
-                $config->getInt(ConfigKey::DB_LOG_MAX_FILES, 7),
+                $pathManager->get(PathName::LOGS, $config->getString(ConfigKey::DB_LOG_FILE)),
+                $config->getInt(ConfigKey::DB_LOG_MAX_FILES),
             );
         }
 
@@ -91,8 +91,8 @@ final class ApplicationStackBootstrap
             ->appendResolvers($config->getClassList(ConfigKey::ROUTES_RESOLVERS, ArgumentResolverInterface::class));
 
         $stack->add(new ConsoleBrick())->builder()
-            ->setName($config->getString(ConfigKey::APP_NAME, 'Concept API'))
-            ->setVersion($config->getString(ConfigKey::APP_VERSION, '0.1.0'))
+            ->setName($config->getString(ConfigKey::APP_NAME))
+            ->setVersion($config->getString(ConfigKey::APP_VERSION))
             ->setCommands($config->getClassList(ConfigKey::COMMANDS, Command::class));
 
         $stack->add(new ErrorHandlingBrick())->builder()

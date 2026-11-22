@@ -9,12 +9,11 @@ use League\Container\Container;
 
 final class ApplicationRuntimeBootstrap
 {
-    private const string DEFAULT_TIMEZONE = 'UTC';
 
     public function boot(Container $container): void
     {
         $config = ContainerDependency::get($container, ConfigInterface::class);
 
-        date_default_timezone_set($config->getString(ConfigKey::APP_TIMEZONE, self::DEFAULT_TIMEZONE));
+        date_default_timezone_set($config->getString(ConfigKey::APP_TIMEZONE));
     }
 }

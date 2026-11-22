@@ -18,7 +18,6 @@ use Psr\Http\Message\ServerRequestInterface;
 
 final class BlogController
 {
-    private const int DEFAULT_PER_PAGE = 10;
 
     public function __construct(
         private readonly ViewResponseFactoryInterface $view,
@@ -117,7 +116,7 @@ final class BlogController
 
     private function perPage(): int
     {
-        return $this->config->getInt(ConfigKey::PAGINATION_PER_PAGE, self::DEFAULT_PER_PAGE);
+        return $this->config->getInt(ConfigKey::PAGINATION_PER_PAGE);
     }
 
     private function notFound(): ResponseInterface

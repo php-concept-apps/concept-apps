@@ -42,15 +42,15 @@ final class ApplicationStackBootstrap
             ->setKeyPatterns($config->getStringList(ConfigKey::MASKING_KEY_PATTERNS))
             ->setRules($config->getClassList(ConfigKey::MASKING_RULES, DataMaskerRuleInterface::class));
 
-        $logFileName = $config->getString(ConfigKey::LOG_FILE, 'landing.log');
-        $logMaxFiles = $config->getInt(ConfigKey::LOG_MAX_FILES, 14);
+        $logFileName = $config->getString(ConfigKey::LOG_FILE);
+        $logMaxFiles = $config->getInt(ConfigKey::LOG_MAX_FILES);
         $stack->add(new LoggingBrick())->builder()
-            ->setLevel($config->getString(ConfigKey::LOG_LEVEL, 'INFO'))
-            ->setChannel($config->getString(ConfigKey::LOG_NAME, 'landing'))
+            ->setLevel($config->getString(ConfigKey::LOG_LEVEL))
+            ->setChannel($config->getString(ConfigKey::LOG_NAME))
             ->toRotatingFile($pathManager->get(PathName::LOGS, $logFileName), $logMaxFiles)
             ->withMasking();
 
-        $casterCacheDir = $config->getString(ConfigKey::CASTER_CACHE_DIR, 'valinor');
+        $casterCacheDir = $config->getString(ConfigKey::CASTER_CACHE_DIR);
         $stack->add(new CastingBrick())->builder()
             ->setCacheDir($pathManager->get(PathName::CACHE, $casterCacheDir))
             ->setDebug($debug);
@@ -59,7 +59,7 @@ final class ApplicationStackBootstrap
             ->setRules($config->getClassMap(ConfigKey::VALIDATOR_RULES, RuleInterface::class))
             ->setGlobalExcept($config->getStringList(ConfigKey::FORM_REQUEST_GLOBAL_EXCEPT));
         if ($config->getBool(ConfigKey::VALIDATOR_LOG_ENABLED)) {
-            $validationLogFile = $config->getString(ConfigKey::VALIDATOR_LOG_FILE, 'validation.log');
+            $validationLogFile = $config->getString(ConfigKey::VALIDATOR_LOG_FILE);
             $validation->withLogging($pathManager->get(PathName::LOGS, $validationLogFile));
         }
         $validation->withMasking();
@@ -75,7 +75,7 @@ final class ApplicationStackBootstrap
             ->withFormRequests()
             ->withTypedRouteParameters();
 
-        $viewCacheDir = $config->getString(ConfigKey::VIEW_CACHE_DIR, 'views');
+        $viewCacheDir = $config->getString(ConfigKey::VIEW_CACHE_DIR);
         $twig = new ViewTwigBrick();
         $twig->builder()
             ->setViewsPath($pathManager->get(PathName::VIEWS))

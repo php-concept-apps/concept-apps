@@ -32,7 +32,6 @@ final class PostController
     private const string MSG_DELETED = 'Post deleted.';
     private const string ERR_DTO = 'Post request did not produce a DTO.';
     private const string ERR_AUTHOR = 'Authenticated author is required.';
-    private const int DEFAULT_PER_PAGE = 15;
 
     public function __construct(
         private readonly ViewResponseFactoryInterface $view,
@@ -59,7 +58,7 @@ final class PostController
         return $this->view->create('@dashboard/posts/index', [
             'admin_nav' => 'posts',
             'posts' => $this->posts->paginate(
-                $this->config->getInt(ConfigKey::PAGINATION_PER_PAGE, self::DEFAULT_PER_PAGE),
+                $this->config->getInt(ConfigKey::PAGINATION_PER_PAGE),
                 $sort,
                 $filter,
             ),

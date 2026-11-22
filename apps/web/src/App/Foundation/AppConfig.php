@@ -29,13 +29,13 @@ final class AppConfig
     {
         return [
             'cookie_lifetime' => $this->config->getInt(ConfigKey::SESSION_COOKIE_LIFETIME),
-            'cookie_path' => $this->config->getString(ConfigKey::SESSION_COOKIE_PATH, '/'),
+            'cookie_path' => $this->config->getString(ConfigKey::SESSION_COOKIE_PATH),
             'cookie_secure' => $this->config->getBool(ConfigKey::SESSION_COOKIE_SECURE),
-            'cookie_httponly' => $this->config->getBool(ConfigKey::SESSION_COOKIE_HTTPONLY, true),
+            'cookie_httponly' => $this->config->getBool(ConfigKey::SESSION_COOKIE_HTTPONLY),
             'cookie_domain' => $this->config->getString(ConfigKey::SESSION_COOKIE_DOMAIN),
-            'cookie_samesite' => $this->config->getString(ConfigKey::SESSION_COOKIE_SAMESITE, 'Lax'),
-            'use_only_cookies' => $this->config->getBool(ConfigKey::SESSION_OPTIONS_USE_ONLY_COOKIES, true),
-            'use_strict_mode' => $this->config->getBool(ConfigKey::SESSION_OPTIONS_USE_STRICT_MODE, true),
+            'cookie_samesite' => $this->config->getString(ConfigKey::SESSION_COOKIE_SAMESITE),
+            'use_only_cookies' => $this->config->getBool(ConfigKey::SESSION_OPTIONS_USE_ONLY_COOKIES),
+            'use_strict_mode' => $this->config->getBool(ConfigKey::SESSION_OPTIONS_USE_STRICT_MODE),
         ];
     }
 
@@ -71,12 +71,12 @@ final class AppConfig
         return [
             'driver' => $this->config->getString(ConfigKey::DB_DRIVER),
             'host' => $this->config->getString(ConfigKey::DB_HOST),
-            'port' => $this->config->getInt(ConfigKey::DB_PORT, 3306),
+            'port' => $this->config->getInt(ConfigKey::DB_PORT),
             'database' => $this->config->getString(ConfigKey::DB_DATABASE),
             'username' => $this->config->getString(ConfigKey::DB_USERNAME),
             'password' => $this->config->getString(ConfigKey::DB_PASSWORD),
-            'charset' => $this->config->getString(ConfigKey::DB_CHARSET, 'utf8mb4'),
-            'collation' => $this->config->getString(ConfigKey::DB_COLLATION, 'utf8mb4_unicode_ci'),
+            'charset' => $this->config->getString(ConfigKey::DB_CHARSET),
+            'collation' => $this->config->getString(ConfigKey::DB_COLLATION),
             'prefix' => $this->config->getString(ConfigKey::DB_PREFIX),
         ];
     }

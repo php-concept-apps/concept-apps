@@ -24,8 +24,6 @@ final class ProductController
     private const string QUERY_CATEGORY_ID = 'category_id';
     private const string QUERY_Q = 'q';
 
-    private const int DEFAULT_PER_PAGE = 20;
-    private const int DEFAULT_MAX_PER_PAGE = 100;
 
     private const string ERR_NOT_FOUND = 'Product not found';
     private const string ERR_CATEGORY_NOT_FOUND = 'Category not found';
@@ -297,8 +295,8 @@ final class ProductController
      */
     private function resolvePerPage(array $params): int
     {
-        $default = $this->config->getInt(ConfigKey::PAGINATION_PER_PAGE, self::DEFAULT_PER_PAGE);
-        $max = $this->config->getInt(ConfigKey::PAGINATION_MAX_PER_PAGE, self::DEFAULT_MAX_PER_PAGE);
+        $default = $this->config->getInt(ConfigKey::PAGINATION_PER_PAGE);
+        $max = $this->config->getInt(ConfigKey::PAGINATION_MAX_PER_PAGE);
 
         $requested = $params[self::QUERY_PER_PAGE] ?? $default;
         if (!is_numeric($requested)) {

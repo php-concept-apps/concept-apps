@@ -28,28 +28,28 @@ final class ApplicationStackBootstrap
 
         $stack = ConceptStack::create();
 
-        $logFileName = $config->getString(ConfigKey::LOG_FILE, 'cli.log');
-        $logMaxFiles = $config->getInt(ConfigKey::LOG_MAX_FILES, 14);
+        $logFileName = $config->getString(ConfigKey::LOG_FILE);
+        $logMaxFiles = $config->getInt(ConfigKey::LOG_MAX_FILES);
         $stack->add(new LoggingBrick())->builder()
-            ->setLevel($config->getString(ConfigKey::LOG_LEVEL, 'INFO'))
-            ->setChannel($config->getString(ConfigKey::LOG_NAME, 'cli'))
+            ->setLevel($config->getString(ConfigKey::LOG_LEVEL))
+            ->setChannel($config->getString(ConfigKey::LOG_NAME))
             ->toRotatingFile($pathManager->get(PathName::LOGS, $logFileName), $logMaxFiles);
 
         $database = $stack->add(new DatabaseBrick())->builder()
             ->setConnection($appConfig->dbConnection())
             ->setMigrations($pathManager->rootList($config->getStringList(ConfigKey::MIGRATIONS_PATHS)))
-            ->setMigrationsTable($config->getString(ConfigKey::MIGRATIONS_TABLE, 'migrations'));
+            ->setMigrationsTable($config->getString(ConfigKey::MIGRATIONS_TABLE));
 
         if ($config->getBool(ConfigKey::DB_LOG_ENABLED)) {
             $database->withQueryLogging(
-                $pathManager->get(PathName::LOGS, $config->getString(ConfigKey::DB_LOG_FILE, 'query.log')),
-                $config->getInt(ConfigKey::DB_LOG_MAX_FILES, 7),
+                $pathManager->get(PathName::LOGS, $config->getString(ConfigKey::DB_LOG_FILE)),
+                $config->getInt(ConfigKey::DB_LOG_MAX_FILES),
             );
         }
 
         $stack->add(new ConsoleBrick())->builder()
-            ->setName($config->getString(ConfigKey::APP_NAME, 'Concept CLI'))
-            ->setVersion($config->getString(ConfigKey::APP_VERSION, '0.1.0'))
+            ->setName($config->getString(ConfigKey::APP_NAME))
+            ->setVersion($config->getString(ConfigKey::APP_VERSION))
             ->setCommands($config->getClassList(ConfigKey::COMMANDS, Command::class))
             ->withLogging();
 
