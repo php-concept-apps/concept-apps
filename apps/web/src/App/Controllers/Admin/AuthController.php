@@ -2,7 +2,7 @@
 
 namespace Concept\App\Controllers\Admin;
 
-use Concept\App\Auth\AuthService;
+use Concept\App\Services\AuthService;
 use Concept\App\Dto\LoginDto;
 use Concept\App\Exceptions\DtoException;
 use Concept\App\Http\Requests\LoginRequest;

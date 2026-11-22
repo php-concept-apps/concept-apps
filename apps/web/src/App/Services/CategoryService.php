@@ -8,7 +8,7 @@ use Concept\App\Exceptions\ModelNotFoundException;
 use Concept\App\Listing\CategoryListFilter;
 use Concept\App\Listing\SortQuery;
 use Concept\App\Models\Category;
-use Concept\App\Slug\SlugService;
+use Concept\App\Services\SlugService;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;

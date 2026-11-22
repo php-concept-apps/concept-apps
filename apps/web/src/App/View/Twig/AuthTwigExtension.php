@@ -2,7 +2,7 @@
 
 namespace Concept\App\View\Twig;
 
-use Concept\App\Auth\AuthService;
+use Concept\App\Services\AuthService;
 use Twig\Extension\AbstractExtension;
 use Twig\TwigFunction;
 

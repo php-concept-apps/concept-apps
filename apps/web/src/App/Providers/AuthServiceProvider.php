@@ -2,7 +2,7 @@
 
 namespace Concept\App\Providers;
 
-use Concept\App\Auth\AuthService;
+use Concept\App\Services\AuthService;
 use Concept\App\Models\User;
 use Concept\Core\Container\ContainerDependency;
 use Concept\Extensions\SessionSymfony\Contracts\SessionInterface;

@@ -1,6 +1,6 @@
 <?php declare(strict_types=1);
 
-namespace Concept\App\Auth;
+namespace Concept\App\Services;
 
 use Concept\App\Models\User;
 use Concept\Extensions\SessionSymfony\Contracts\SessionInterface;

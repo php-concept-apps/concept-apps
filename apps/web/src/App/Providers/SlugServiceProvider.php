@@ -2,7 +2,7 @@
 
 namespace Concept\App\Providers;
 
-use Concept\App\Slug\SlugService;
+use Concept\App\Services\SlugService;
 use Concept\Core\Container\ContainerDependency;
 use Cocur\Slugify\Slugify;
 use Cocur\Slugify\SlugifyInterface;

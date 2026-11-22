@@ -4,7 +4,7 @@ namespace Concept\App\Database\Seeders;
 
 use Concept\App\Enums\PostStatus;
 use Concept\App\Exceptions\RuntimeException;
-use Concept\App\Slug\SlugService;
+use Concept\App\Services\SlugService;
 use Concept\Extensions\DatabaseEloquent\Contracts\SeederInterface;
 use Faker\Factory as FakerFactory;
 use Faker\Generator;

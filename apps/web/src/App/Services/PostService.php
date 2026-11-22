@@ -12,7 +12,7 @@ use Concept\App\Models\Category;
 use Concept\App\Models\Post;
 use Concept\App\Models\Tag;
 use Concept\App\Models\User;
-use Concept\App\Slug\SlugService;
+use Concept\App\Services\SlugService;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Database\Eloquent\Builder;
 

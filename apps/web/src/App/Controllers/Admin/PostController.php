@@ -2,7 +2,7 @@
 
 namespace Concept\App\Controllers\Admin;
 
-use Concept\App\Auth\AuthService;
+use Concept\App\Services\AuthService;
 use Concept\App\Dto\Post\StorePostDto;
 use Concept\App\Dto\Post\UpdatePostDto;
 use Concept\App\Enums\PostStatus;
