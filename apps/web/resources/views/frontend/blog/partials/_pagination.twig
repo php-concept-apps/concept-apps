@@ -5,13 +5,29 @@
         <ul>
           <li class="{{ items.onFirstPage ? 'disabled' : '' }}">
             {% if items.onFirstPage %}
-              <span><i class="bi bi-chevron-left"></i></span>
+              <span><i class="bi bi-chevron-double-left"></i></span>
             {% else %}
-              <a href="{{ items.previousPageUrl }}" aria-label="Previous"><i class="bi bi-chevron-left"></i></a>
+              <a href="{{ items.url(1) }}" aria-label="First"><i class="bi bi-chevron-double-left"></i></a>
             {% endif %}
           </li>
           {% for element in items.linkCollection %}
-            {% if element.url is empty %}
+            {% if loop.first %}
+              <li class="{{ element.url is empty ? 'disabled' : '' }}">
+                {% if element.url is empty %}
+                  <span><i class="bi bi-chevron-left"></i></span>
+                {% else %}
+                  <a href="{{ element.url }}" aria-label="Previous"><i class="bi bi-chevron-left"></i></a>
+                {% endif %}
+              </li>
+            {% elseif loop.last %}
+              <li class="{{ element.url is empty ? 'disabled' : '' }}">
+                {% if element.url is empty %}
+                  <span><i class="bi bi-chevron-right"></i></span>
+                {% else %}
+                  <a href="{{ element.url }}" aria-label="Next"><i class="bi bi-chevron-right"></i></a>
+                {% endif %}
+              </li>
+            {% elseif element.url is empty %}
               <li><span>{{ element.label|raw }}</span></li>
             {% else %}
               <li>
@@ -21,9 +37,9 @@
           {% endfor %}
           <li class="{{ items.currentPage == items.lastPage ? 'disabled' : '' }}">
             {% if items.currentPage == items.lastPage %}
-              <span><i class="bi bi-chevron-right"></i></span>
+              <span><i class="bi bi-chevron-double-right"></i></span>
             {% else %}
-              <a href="{{ items.nextPageUrl }}" aria-label="Next"><i class="bi bi-chevron-right"></i></a>
+              <a href="{{ items.url(items.lastPage) }}" aria-label="Last"><i class="bi bi-chevron-double-right"></i></a>
             {% endif %}
           </li>
         </ul>

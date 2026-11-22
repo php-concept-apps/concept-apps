@@ -2463,7 +2463,8 @@ section,
   transition: 0.3s;
 }
 
-.pagination-2 li a {
+.pagination-2 li a,
+.pagination-2 li span {
   color: color-mix(in srgb, var(--default-color), transparent 40%);
   padding: 7px 16px;
   display: flex;
@@ -2471,14 +2472,14 @@ section,
   justify-content: center;
 }
 
+.pagination-2 li span.disabled {
+  cursor: default;
+}
+
+.pagination-2 li span.active,
 .pagination-2 li a.active,
 .pagination-2 li a:hover {
   background: var(--accent-color);
-  color: var(--contrast-color);
-}
-
-.pagination-2 li a.active a,
-.pagination-2 li a:hover a {
   color: var(--contrast-color);
 }
 
