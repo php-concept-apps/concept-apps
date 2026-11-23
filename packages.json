@@ -1,0 +1,12 @@
+{
+    "org": "php-concept-apps",
+    "monorepo": "concept-apps",
+    "packages": {
+        "apps/api": "app-api",
+        "apps/bff": "app-bff",
+        "apps/cli": "app-cli",
+        "apps/landing": "app-landing",
+        "apps/web": "app-web",
+        "apps/worker": "app-worker"
+    }
+}

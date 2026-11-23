@@ -6,18 +6,39 @@ Each app under `apps/<name>` is a complete stack recipe — not a step-by-step t
 
 | Repo | Role |
 |------|------|
-| **concept-apps** (this) | Ready-made assemblies (`apps/bff`, `apps/api`, …) |
+| **Monorepo (source of truth)** | [php-concept-apps/concept-apps](https://github.com/php-concept-apps/concept-apps) |
+| **Split assemblies** | [php-concept-apps/app-*](https://github.com/php-concept-apps) (`app-api`, `app-web`, …) |
 | [concept-recipes](https://github.com/php-concept/concept-recipes) | Archived linear “create an app” walkthrough |
+
+Composer names: `php-concept/app-api`, `php-concept/app-web`, …
 
 ## Layout
 
 ```
-apps/           # one directory = one assembly
-docker/         # shared Apache/PHP config
-composer.json   # Packagist (readers / CI)
+apps/           # one directory = one assembly → split app-*
+packages.json   # monorepo path → split repo name
+docker/         # shared Apache/PHP config (monorepo only)
+composer.json   # Packagist / CI at monorepo root
+scripts/        # align + create-split / split fallback
 ```
 
 Feature scaffolds live in sibling **[concept-components](https://github.com/php-concept-components/concept-components)** (`php-concept/component-*`, opt-in per app via Composer).
+
+## Release (tag → Split)
+
+```bash
+./scripts/create-split-repos.sh   # once
+# SPLIT_PUSH_TOKEN on this monorepo (PAT write to app-*)
+
+git tag vX.Y.Z && git push origin vX.Y.Z
+# CI → php-concept-apps/app-* (+ same tag)
+```
+
+```bash
+gh secret set SPLIT_PUSH_TOKEN --repo php-concept-apps/concept-apps
+```
+
+See [scripts/README.md](scripts/README.md).
 
 ## Composer (mode C)
 
