@@ -3,18 +3,18 @@
 # Bump php-concept/* require constraints across apps (prod composer.json),
 # keep composer-dev path "versions" in sync, then refresh prod locks.
 #
-# Defaults (no specs): bump all extension-* and brick-* already in each app
-# from sibling monorepo git tags (../concept-extensions, ../concept-bricks).
-# Leaves core-2 / stack alone unless passed explicitly.
+# Defaults (no specs): bump extension-*, brick-*, component-* already in each app
+# from sibling monorepo git tags (../concept-extensions, ../concept-bricks,
+# ../concept-components). Leaves core-2 / stack alone unless passed explicitly.
 #
 # Usage (prefer inside Docker — needs network for Packagist/GitHub on update):
 #   docker compose exec php ./scripts/align-package-deps.sh
-#   docker compose exec php ./scripts/align-package-deps.sh --extensions ^3.0 --bricks ^3.0
+#   docker compose exec php ./scripts/align-package-deps.sh --extensions ^3.0 --bricks ^3.0 --components ^1.0
 #   docker compose exec php ./scripts/align-package-deps.sh --dry-run
 #   docker compose exec php ./scripts/align-package-deps.sh --no-update
 #   docker compose exec php ./scripts/align-package-deps.sh --app web
 #   docker compose exec php ./scripts/align-package-deps.sh extension-config:^3.0
-#   docker compose exec php ./scripts/align-package-deps.sh --set php-concept/extension-=^3.0
+#   docker compose exec php ./scripts/align-package-deps.sh --set php-concept/component-=^1.0
 #
 # Spec: name[:constraint]  — one package
 #   name       — extension-config | php-concept/extension-config
@@ -30,8 +30,10 @@ SPECS=()
 SETS=()
 EXTENSIONS_CONSTRAINT=""
 BRICKS_CONSTRAINT=""
+COMPONENTS_CONSTRAINT=""
 DO_EXTENSIONS=0
 DO_BRICKS=0
+DO_COMPONENTS=0
 
 while [[ $# -gt 0 ]]; do
     case "$1" in
@@ -66,13 +68,22 @@ while [[ $# -gt 0 ]]; do
                 shift
             fi
             ;;
+        --components)
+            DO_COMPONENTS=1
+            if [[ $# -ge 2 && "$2" != -* && "$2" != *:* ]]; then
+                COMPONENTS_CONSTRAINT="$2"
+                shift 2
+            else
+                shift
+            fi
+            ;;
         --set)
             [[ $# -ge 2 ]] || { echo "--set needs prefix=constraint" >&2; exit 1; }
             SETS+=("$2")
             shift 2
             ;;
         -h|--help)
-            sed -n '3,22p' "$0"
+            sed -n '3,23p' "$0"
             exit 0
             ;;
         -*)
@@ -128,10 +139,11 @@ constraint_from_repo() {
     tag_to_caret "$tag"
 }
 
-# No explicit work requested → bump both families from sibling tags
-if [[ ${#SPECS[@]} -eq 0 && ${#SETS[@]} -eq 0 && $DO_EXTENSIONS -eq 0 && $DO_BRICKS -eq 0 ]]; then
+# No explicit work requested → bump all three families from sibling tags
+if [[ ${#SPECS[@]} -eq 0 && ${#SETS[@]} -eq 0 && $DO_EXTENSIONS -eq 0 && $DO_BRICKS -eq 0 && $DO_COMPONENTS -eq 0 ]]; then
     DO_EXTENSIONS=1
     DO_BRICKS=1
+    DO_COMPONENTS=1
 fi
 
 if [[ $DO_EXTENSIONS -eq 1 ]]; then
@@ -158,6 +170,19 @@ if [[ $DO_BRICKS -eq 1 ]]; then
         BRICKS_CONSTRAINT="$(normalize_constraint "$BRICKS_CONSTRAINT")"
     fi
     SETS+=("php-concept/brick-=${BRICKS_CONSTRAINT}")
+fi
+
+if [[ $DO_COMPONENTS -eq 1 ]]; then
+    if [[ -z "$COMPONENTS_CONSTRAINT" ]]; then
+        COMPONENTS_CONSTRAINT="$(constraint_from_repo "$ROOT/../concept-components" || true)"
+        if [[ -z "$COMPONENTS_CONSTRAINT" ]]; then
+            echo "No ../concept-components tag; pass --components ^X.Y" >&2
+            exit 1
+        fi
+    else
+        COMPONENTS_CONSTRAINT="$(normalize_constraint "$COMPONENTS_CONSTRAINT")"
+    fi
+    SETS+=("php-concept/component-=${COMPONENTS_CONSTRAINT}")
 fi
 
 export BUMP_ROOT="$ROOT"

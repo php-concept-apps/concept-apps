@@ -77,6 +77,16 @@
                     "php-concept/brick-view-plates": "3.0.0"
                 }
             }
+        },
+        {
+            "type": "path",
+            "url": "/var/www/concept-components/packages/*",
+            "options": {
+                "symlink": true,
+                "versions": {
+                    "php-concept/component-auth-api-token": "1.0.0"
+                }
+            }
         }
     ],
     "require": {
@@ -92,8 +102,7 @@
     },
     "autoload": {
         "psr-4": {
-            "Concept\\": "src/",
-            "Concept\\Components\\": "../../components/"
+            "Concept\\": "src/"
         }
     },
     "config": {

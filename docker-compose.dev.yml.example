@@ -34,6 +34,7 @@ services:
       - ../concept-stack:/var/www/concept-stack
       - ../concept-extensions:/var/www/concept-extensions
       - ../concept-bricks:/var/www/concept-bricks
+      - ../concept-components:/var/www/concept-components
       - ./docker/php/error-reporting.ini:/usr/local/etc/php/conf.d/error-reporting.ini
     environment:
       - COMPOSER=composer-dev.json
@@ -54,6 +55,7 @@ services:
       - ../concept-stack:/var/www/concept-stack
       - ../concept-extensions:/var/www/concept-extensions
       - ../concept-bricks:/var/www/concept-bricks
+      - ../concept-components:/var/www/concept-components
       - ./docker/apache/vhost-bff.conf:/etc/apache2/sites-available/000-default.conf
       - ./docker/php/error-reporting.ini:/usr/local/etc/php/conf.d/error-reporting.ini
     environment:
@@ -75,6 +77,7 @@ services:
       - ../concept-stack:/var/www/concept-stack
       - ../concept-extensions:/var/www/concept-extensions
       - ../concept-bricks:/var/www/concept-bricks
+      - ../concept-components:/var/www/concept-components
       - ./docker/apache/vhost-api.conf:/etc/apache2/sites-available/000-default.conf
       - ./docker/php/error-reporting.ini:/usr/local/etc/php/conf.d/error-reporting.ini
     environment:
@@ -96,6 +99,7 @@ services:
       - ../concept-stack:/var/www/concept-stack
       - ../concept-extensions:/var/www/concept-extensions
       - ../concept-bricks:/var/www/concept-bricks
+      - ../concept-components:/var/www/concept-components
       - ./docker/apache/vhost-landing.conf:/etc/apache2/sites-available/000-default.conf
       - ./docker/php/error-reporting.ini:/usr/local/etc/php/conf.d/error-reporting.ini
     environment:
@@ -117,6 +121,7 @@ services:
       - ../concept-stack:/var/www/concept-stack
       - ../concept-extensions:/var/www/concept-extensions
       - ../concept-bricks:/var/www/concept-bricks
+      - ../concept-components:/var/www/concept-components
       - ./docker/apache/vhost-web.conf:/etc/apache2/sites-available/000-default.conf
       - ./docker/php/error-reporting.ini:/usr/local/etc/php/conf.d/error-reporting.ini
     environment:
@@ -136,6 +141,7 @@ services:
       - ../concept-stack:/var/www/concept-stack
       - ../concept-extensions:/var/www/concept-extensions
       - ../concept-bricks:/var/www/concept-bricks
+      - ../concept-components:/var/www/concept-components
       - ./docker/php/error-reporting.ini:/usr/local/etc/php/conf.d/error-reporting.ini
     environment:
       COMPOSER: composer-dev.json
@@ -154,6 +160,7 @@ services:
       - ../concept-stack:/var/www/concept-stack
       - ../concept-extensions:/var/www/concept-extensions
       - ../concept-bricks:/var/www/concept-bricks
+      - ../concept-components:/var/www/concept-components
       - ./docker/php/error-reporting.ini:/usr/local/etc/php/conf.d/error-reporting.ini
     environment:
       COMPOSER: composer-dev.json

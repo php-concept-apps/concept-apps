@@ -4,7 +4,7 @@ JSON API assembly: HTTP + validation + log masking + Eloquent database + console
 No session or views. App-owned JSON envelope (`ApiResponseFactory`).
 
 Catalog schema for load tests: `categories` (tree) → `products` (+ JSON attrs) ↔ `tags` (M2M).  
-Auth component `AuthApiToken` (shared `concept-apps/components/`, opt-in via `config/components.php`):  
+Auth component `AuthApiToken` (`php-concept/component-auth-api-token`, opt-in via `config/components.php`):  
 Bearer opaque tokens (`users` + `api_tokens`, sha256 hash; plaintext once at login).
 
 ## Endpoints

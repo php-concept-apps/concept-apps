@@ -77,6 +77,16 @@
                     "php-concept/brick-view-plates": "3.0.0"
                 }
             }
+        },
+        {
+            "type": "path",
+            "url": "/var/www/concept-components/packages/*",
+            "options": {
+                "symlink": true,
+                "versions": {
+                    "php-concept/component-auth-api-token": "1.0.0"
+                }
+            }
         }
     ],
     "require": {
@@ -95,12 +105,12 @@
         "php-concept/extension-config": "^3.0",
         "php-concept/extension-json": "^3.0",
         "php-concept/extension-path-manager": "^3.0",
-        "php-concept/stack": "^2.0"
+        "php-concept/stack": "^2.0",
+        "php-concept/component-auth-api-token": "^1.0"
     },
     "autoload": {
         "psr-4": {
-            "Concept\\": "src/",
-            "Concept\\Components\\": "../../components/"
+            "Concept\\": "src/"
         }
     },
     "config": {

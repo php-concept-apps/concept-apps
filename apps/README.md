@@ -13,4 +13,6 @@ One directory = one assembly.
 
 Each app owns its `composer.json`, `bootstrap/`, `routes/`, and entrypoint.
 
+Shared feature scaffolds live in sibling **concept-components** (`php-concept/component-*`). Opt-in per app via Composer (e.g. `apps/api` → `component-auth-api-token`).
+
 **Convention:** every app ships `phpstan.neon` (level 10) + `composer phpstan` (`require-dev`).

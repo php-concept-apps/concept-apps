@@ -7,7 +7,6 @@ parameters:
         - public
         - routes
         - src
-        - ../../components
 
     excludePaths:
         - vendor/*

@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "2adb7fe353f4b50acb6dff773d8c58d8",
+    "content-hash": "bc17b6868c8a0ce6d169b5447afa7d04",
     "packages": [
         {
             "name": "brick/math",
@@ -2483,6 +2483,48 @@
                 "source": "https://github.com/php-concept-bricks/brick-validation-rakit/tree/v3.0.0"
             },
             "time": "2026-11-23T06:36:59+00:00"
+        },
+        {
+            "name": "php-concept/component-auth-api-token",
+            "version": "v1.0.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/php-concept-components/component-auth-api-token.git",
+                "reference": "7a1ac9633f686dd281ead49ec65ce22c5b67edc4"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/php-concept-components/component-auth-api-token/zipball/7a1ac9633f686dd281ead49ec65ce22c5b67edc4",
+                "reference": "7a1ac9633f686dd281ead49ec65ce22c5b67edc4",
+                "shasum": ""
+            },
+            "require": {
+                "illuminate/database": "^13.1",
+                "php": "^8.4",
+                "php-concept/core-2": "^1.0",
+                "php-concept/extension-components": "^3.0",
+                "php-concept/extension-form-request": "^3.0",
+                "php-concept/extension-http": "^3.0",
+                "psr/http-message": "^2.0",
+                "psr/http-server-middleware": "^1.0",
+                "symfony/console": "^7.2|^8.0"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Concept\\Components\\AuthApiToken\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "description": "Concept component — Bearer API token authentication scaffold",
+            "support": {
+                "issues": "https://github.com/php-concept-components/component-auth-api-token/issues",
+                "source": "https://github.com/php-concept-components/component-auth-api-token/tree/v1.0.0"
+            },
+            "time": "2026-11-23T07:23:56+00:00"
         },
         {
             "name": "php-concept/core-2",

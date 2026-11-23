@@ -19,8 +19,7 @@
     },
     "autoload": {
         "psr-4": {
-            "Concept\\": "src/",
-            "Concept\\Components\\": "../../components/"
+            "Concept\\": "src/"
         }
     },
     "scripts": {
