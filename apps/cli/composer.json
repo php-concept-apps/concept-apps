@@ -1,17 +1,17 @@
 {
     "name": "php-concept/app-cli",
-    "description": "Concept 2 — CLI assembly (console + database, no HTTP/session/view)",
+    "description": "Concept 2 \u2014 CLI assembly (console + database, no HTTP/session/view)",
     "type": "project",
     "license": "MIT",
     "require": {
         "php": "^8.4",
-        "php-concept/brick-console-symfony": "^1.0",
-        "php-concept/brick-database-eloquent": "^1.0",
-        "php-concept/brick-logger-monolog": "^1.0",
+        "php-concept/brick-console-symfony": "^3.0",
+        "php-concept/brick-database-eloquent": "^3.0",
+        "php-concept/brick-logger-monolog": "^3.0",
         "php-concept/core-2": "^1.0",
-        "php-concept/extension-config": "^1.0",
-        "php-concept/extension-error-handler-whoops": "^1.0",
-        "php-concept/extension-path-manager": "^1.0",
+        "php-concept/extension-config": "^3.0",
+        "php-concept/extension-error-handler-whoops": "^3.0",
+        "php-concept/extension-path-manager": "^3.0",
         "php-concept/stack": "^2.0"
     },
     "require-dev": {
