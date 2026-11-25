@@ -3,6 +3,9 @@
 Backend-for-frontend assembly: HTTP JSON API + validation + log masking.  
 No database, session, or views.
 
+Packagist: [`php-concept/app-bff`](https://packagist.org/packages/php-concept/app-bff).  
+Split repo: [php-concept-apps/app-bff](https://github.com/php-concept-apps/app-bff).
+
 ## Endpoints
 
 | Method | Path | Notes |
@@ -10,18 +13,15 @@ No database, session, or views.
 | `GET` | `/api/health` | liveness |
 | `POST` | `/api/echo` | FormRequest (`name`, `email`) |
 
-## Run (maintainer)
-
-Symlink DX is intended **inside Docker** (`composer-dev.json` path repos → `/var/www/concept-*`).
+## Run
 
 ```bash
-# from monorepo root
-cp docker-compose.dev.yml.example docker-compose.yml
-cp apps/bff/composer-dev.json.example apps/bff/composer-dev.json
-cp apps/bff/.env.example apps/bff/.env
-docker compose up -d --build bff   # bff + depends_on db (not api/php)
+composer create-project php-concept/app-bff
+# or: git clone https://github.com/php-concept-apps/app-bff.git && cd app-bff
+
+cp .env.example .env
+docker compose up -d --build
 docker compose exec bff composer install
-docker compose exec bff composer phpstan
 
 curl -s http://localhost:8080/api/health
 curl -s -X POST http://localhost:8080/api/echo \
@@ -29,4 +29,4 @@ curl -s -X POST http://localhost:8080/api/echo \
   -d '{"name":"Ada","email":"ada@example.com"}'
 ```
 
-Readers: `composer install` (Packagist) in `apps/bff`, then point the web server at `apps/bff/public`.
+Monorepo (all apps + shared `docker/`): [concept-apps](https://github.com/php-concept-apps/concept-apps).
